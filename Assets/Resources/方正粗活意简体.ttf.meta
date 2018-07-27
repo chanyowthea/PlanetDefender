@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 6df8e1c46961b9143945e9d2cd3057c8
+timeCreated: 1526813037
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: FZCuHuoYi-M25S
+  fontNames:
+  - FZCuHuoYi-M25S
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
