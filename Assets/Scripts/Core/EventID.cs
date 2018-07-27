@@ -2,7 +2,6 @@
 {
     Hello, 
     // player
-    RotatePlanet, 
     AttackFromPlanet, 
     CreateTurret,
     CreateTurretSuccess,

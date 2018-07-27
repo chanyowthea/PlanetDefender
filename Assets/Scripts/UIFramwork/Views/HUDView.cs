@@ -67,7 +67,6 @@ public class HUDView : BaseView
         _scoreCount = value;
         if (_scoreCount >= _targetScore)
         {
-            EventDispatcher.instance.DispatchEvent(EventID.RotatePlanet, false);
             EventDispatcher.instance.DispatchEvent(EventID.End);
             EventDispatcher.instance.DispatchEvent(EventID.AddGold, _targetScore);
             var v = ViewManager.instance.Open<EndView>();
@@ -92,18 +91,6 @@ public class HUDView : BaseView
             return;
         }
         EventDispatcher.instance.DispatchEvent(EventID.AttackFromPlanet);
-    }
-
-    public void OnRotateStart()
-    {
-        Debug.Log("OnRotateStart");
-        EventDispatcher.instance.DispatchEvent(EventID.RotatePlanet, true);
-    }
-
-    public void OnRotateEnd()
-    {
-        Debug.Log("OnRotateEnd");
-        EventDispatcher.instance.DispatchEvent(EventID.RotatePlanet, false);
     }
 
     public void OnClickBuild()

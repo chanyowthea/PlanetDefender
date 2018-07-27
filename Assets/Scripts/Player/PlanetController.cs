@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UIFramwork;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class PlanetController : MonoSingleton<PlanetController>
 {
@@ -11,7 +12,6 @@ public class PlanetController : MonoSingleton<PlanetController>
 
     private void Start()
     {
-        EventDispatcher.instance.RegisterEvent(EventID.RotatePlanet, this, "Rotate");
         EventDispatcher.instance.RegisterEvent(EventID.CreateTurret, this, "CreateTurret");
         EventDispatcher.instance.RegisterEvent(EventID.AddHealth, this, "AddHealth");
     }
@@ -19,7 +19,6 @@ public class PlanetController : MonoSingleton<PlanetController>
     private void OnDestroy()
     {
         EventDispatcher.instance.UnRegisterEvent(EventID.AddHealth, this, "AddHealth");
-        EventDispatcher.instance.UnRegisterEvent(EventID.RotatePlanet, this, "Rotate");
         EventDispatcher.instance.UnRegisterEvent(EventID.CreateTurret, this, "CreateTurret");
     }
 
@@ -46,7 +45,7 @@ public class PlanetController : MonoSingleton<PlanetController>
         }
         else
         {
-            _planet.hp = _planet._maxHP; 
+            _planet.hp = _planet._maxHP;
         }
     }
 
@@ -60,6 +59,14 @@ public class PlanetController : MonoSingleton<PlanetController>
         if (Input.GetKeyDown(KeyCode.C))
         {
             _planet.CreatCannonQuick();
+        }
+        if (CrossPlatformInputManager.GetButtonDown("Rotate"))
+        {
+            Rotate(true);
+        }
+        if (CrossPlatformInputManager.GetButtonUp("Rotate"))
+        {
+            Rotate(false);
         }
     }
 

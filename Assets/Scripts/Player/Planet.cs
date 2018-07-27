@@ -30,7 +30,6 @@ public class Planet : MonoBehaviour
             _hp = value;
             if (hp <= 0)
             {
-                EventDispatcher.instance.DispatchEvent(EventID.RotatePlanet, false);
                 var v = ViewManager.instance.Open<EndView>();
                 v.SetData("Mission Failed! ");
                 EventDispatcher.instance.DispatchEvent(EventID.End);
