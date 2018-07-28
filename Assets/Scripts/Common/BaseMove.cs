@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class BaseMove : MonoBehaviour
 {
-    public float _moveSpeed = 1;
-    public Vector3 _moveDir;
+    public float _MoveSpeed = 1;
+    protected Vector3 _MoveDir;
 
     protected virtual void Update()
     {
-        transform.position += _moveDir * _moveSpeed * Time.timeScale;
+        transform.position += _MoveDir * _MoveSpeed * Time.timeScale;
     }
 }

@@ -57,11 +57,7 @@ public class Cannon : Turrect, IShot
         }
         _lastFireTime = Time.time;
         var bullet = GameObject.Instantiate(GameAssets.instance._bulletPrefab);
-        bullet._moveDir = transform.up;
-        bullet._startPos = firePos;
-        bullet._moveSpeed = _bulletMoveSpeed;
-        bullet._attack = _attack;
-        bullet._Faction = EFaction.Ours;
+        bullet.SetData(firePos, transform.up, _bulletMoveSpeed, _attack, EFaction.Ours); 
     }
 
     // attack by other 

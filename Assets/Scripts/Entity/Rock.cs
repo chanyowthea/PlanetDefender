@@ -35,18 +35,13 @@ public class Rock : Army
         HP = MaxHP;
         gameObject.name = "" + GetHashCode();
     }
-
-    public override void Init()
-    {
-        base.Init();
-
-    }
-
+    
     public void SetData(Vector3 pos, float moveSpeed, Vector3 moveDir)
     {
         transform.position = pos;
         _MoveSpeed = moveSpeed;
         _MoveDir = moveDir;
+        Init(); 
     }
 
     protected override void Update()
@@ -84,6 +79,6 @@ public class Rock : Army
             return;
         }
 
-        HP -= BattleUtil.CalcDamage(bullet._attack, _Defense);
+        HP -= BattleUtil.CalcDamage(bullet.Attack, _Defense);
     }
 }

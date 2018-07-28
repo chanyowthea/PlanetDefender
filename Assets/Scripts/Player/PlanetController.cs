@@ -84,7 +84,7 @@ public class PlanetController : MonoSingleton<PlanetController>
         var gold = collider.gameObject.GetComponent<Gold>();
         if (gold != null)
         {
-            EventDispatcher.instance.DispatchEvent(EventID.AddGold, gold.hp);
+            EventDispatcher.instance.DispatchEvent(EventID.AddGold, gold.HP);
         }
     }
 

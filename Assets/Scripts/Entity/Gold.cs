@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Gold : BaseMove
+public class Gold : Entity
 {
     public float _radius = 1.41f / 2;
-    int _hp;
-    public int hp
+    public override int HP
     {
         set
         {
             _hpText.text = value.ToString();
-            _hp = value;
-            if (hp <= 0)
+            base.HP = value;
+            if (HP <= 0)
             {
                 Destroy(this.gameObject);
             }
         }
         get
         {
-            return _hp;
+            return base.HP;
         }
     }
 
@@ -30,14 +29,27 @@ public class Gold : BaseMove
     void Awake()
     {
         transform.SetParent(GameAssets.goldParent.transform);
-        hp = 5;
+    }
+
+    public void SetData(Vector3 pos, Vector3 moveDir, float moveSpeed)
+    {
+        transform.position = pos;
+        _MoveDir = moveDir;
+        _MoveSpeed = moveSpeed;
+        Init();
+    }
+
+    public override void Init()
+    {
+        base.Init();
+        HP = 5;
     }
 
     protected override void Update()
     {
         base.Update();
         // 两个点中到星球的距离更近的点
-        Vector3 neearestPos = Vector3.Min(transform.position - _moveDir * _radius - PlanetController.instance.transform.position,
+        Vector3 neearestPos = Vector3.Min(transform.position - _MoveDir * _radius - PlanetController.instance.transform.position,
             transform.position - PlanetController.instance.transform.position);
         if (!PlanetController.instance.IsInVisualField(neearestPos))
         {
@@ -67,6 +79,6 @@ public class Gold : BaseMove
             return;
         }
 
-        hp -= BattleUtil.CalcDamage(bullet._attack, _defense);
+        HP -= BattleUtil.CalcDamage(bullet.Attack, _defense);
     }
 }

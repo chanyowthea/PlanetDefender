@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : BaseMove
+public class Bullet : Entity
 {
-    //public IShot _parent;
-    public EFaction _Faction;
-    public Vector3 _startPos;
     public float _radius = 0.075f;
-    public int _attack = 1;
+    public int Attack { protected set; get; }
     [SerializeField] GameObject _bulletTf;
 
     void Awake()
@@ -16,18 +13,27 @@ public class Bullet : BaseMove
         transform.SetParent(GameAssets.bulletParent.transform);
     }
 
-    private void Start()
+    public override void Init()
     {
-        transform.position = _startPos;
+        base.Init();
 
-        var angle = Vector3.Angle(transform.up, _moveDir);
-        if (_moveDir.x > 0)
+        var angle = Vector3.Angle(transform.up, _MoveDir);
+        if (_MoveDir.x > 0)
         {
             angle = 360 - angle;
         }
-        Debug.Log("moveDir=" + _moveDir + ", angle=" + angle);
         var v3 = V3RotateAround(transform.up, -transform.forward, angle);
         _bulletTf.transform.localEulerAngles = new Vector3(0, 0, angle);
+    }
+
+    public void SetData(Vector3 pos, Vector3 moveDir, float moveSpeed, int attack, EFaction faction)
+    {
+        transform.position = pos;
+        _MoveDir = moveDir;
+        _MoveSpeed = moveSpeed;
+        Attack = attack;
+        Faction = faction;
+        Init(); 
     }
 
     public Vector3 V3RotateAround(Vector3 source, Vector3 axis, float angle)
@@ -55,7 +61,7 @@ public class Bullet : BaseMove
     void OnTriggerEnter(Collider collider)
     {
         var entity = collider.GetComponent<Entity>();
-        if (entity != null && entity.Faction != _Faction)
+        if (entity != null && entity.Faction != Faction)
         {
             GameObject.Destroy(this.gameObject);
         }
