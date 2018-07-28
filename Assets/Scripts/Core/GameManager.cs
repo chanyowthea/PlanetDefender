@@ -40,16 +40,16 @@ public class GameManager : MonoSingleton<GameManager>
 {
     private void Start()
     {
-		Screen.autorotateToLandscapeLeft = true; 
-		Screen.autorotateToLandscapeRight = true; 
-		Screen.autorotateToPortrait = false; 
-		Screen.autorotateToPortraitUpsideDown = false; 
-        EventDispatcher.instance.RegisterEvent(EventID.End, this, "OnEnd"); 
-        GameData.instance.Init(); 
-        Time.timeScale = 0; 
+        Screen.autorotateToLandscapeLeft = true;
+        Screen.autorotateToLandscapeRight = true;
+        Screen.autorotateToPortrait = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+        EventDispatcher.instance.RegisterEvent(EventID.End, this, "OnEnd");
+        GameData.instance.Init();
+        Time.timeScale = 0;
         ViewManager.instance.Open<StartView>();
     }
-    
+
     public void OnEnd()
     {
         Time.timeScale = 0;
@@ -57,15 +57,15 @@ public class GameManager : MonoSingleton<GameManager>
         GameObject.Destroy(GameAssets.goldParent);
         GameObject.Destroy(GameAssets.rockParent);
         ArchiveManager.instance.DeleteAllData();
-        PlanetController.instance._Reset(); 
+        PlanetController.instance._Reset();
         GameData.instance.Clear();
         GameData.instance.Init();
     }
 
     public void AddHealth()
-        { 
-        
-        }
+    {
+
+    }
 
     private void OnDestroy()
     {
@@ -75,5 +75,13 @@ public class GameManager : MonoSingleton<GameManager>
     private void OnApplicationQuit()
     {
         ArchiveManager.instance.SaveAllData();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            ArchiveManager.instance.DeleteAllData();
+        }
     }
 }

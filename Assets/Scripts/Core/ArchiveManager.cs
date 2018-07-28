@@ -11,7 +11,7 @@ public class ArchiveManager : TSingleton<ArchiveManager>
         // 设置初始金币值
         if (!PlayerPrefs.HasKey(_goldCountKey))
         {
-            PlayerPrefs.SetInt(_goldCountKey, 20);
+            PlayerPrefs.SetInt(_goldCountKey, 20000);
         }
         return PlayerPrefs.GetInt(_goldCountKey);
     }

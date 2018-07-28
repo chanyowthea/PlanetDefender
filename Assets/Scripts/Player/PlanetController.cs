@@ -39,13 +39,13 @@ public class PlanetController : MonoSingleton<PlanetController>
 
     void AddHealth(int value)
     {
-        if (_planet.hp + value < _planet._maxHP)
+        if (_planet.HP + value < _planet.MaxHP)
         {
-            _planet.hp += value;
+            _planet.HP += value;
         }
         else
         {
-            _planet.hp = _planet._maxHP;
+            _planet.HP = _planet.MaxHP;
         }
     }
 
@@ -128,7 +128,7 @@ public class PlanetController : MonoSingleton<PlanetController>
         {
             return 0;
         }
-        return _planet.hp;
+        return _planet.HP;
     }
 
     public bool IsHpLessThanMax()
@@ -137,7 +137,7 @@ public class PlanetController : MonoSingleton<PlanetController>
         {
             return false;
         }
-        return _planet.hp < _planet._maxHP;
+        return _planet.HP < _planet.MaxHP;
     }
 
 #if UNITY_EDITOR

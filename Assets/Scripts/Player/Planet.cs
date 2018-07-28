@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UIFramwork;
 
-public class Planet : MonoBehaviour
+public class Planet : Army
 {
     [SerializeField] protected GameObject _cannonPivotPrefab;
 
@@ -17,18 +17,17 @@ public class Planet : MonoBehaviour
     [SerializeField] protected int _minCannonGap = 60;
     public int minCannonGap { get { return _minCannonGap; } }
 
-    [SerializeField] protected float _visualField = 10;
-    public float visualField { get { return _visualField; } }
-
+    public Dictionary<int, GameObject> cannonPivotDict { get; private set; }
+    protected List<int> _allDegrees = new List<int>();
     [SerializeField] Text _hpText;
-    int _hp;
-    public int hp
+
+    public override int HP
     {
         set
         {
-            _hpText.text = value + "/" + _maxHP;
-            _hp = value;
-            if (hp <= 0)
+            _hpText.text = value + "/" + MaxHP;
+            base.HP = value;
+            if (HP <= 0)
             {
                 var v = ViewManager.instance.Open<EndView>();
                 v.SetData("Mission Failed! ");
@@ -37,15 +36,9 @@ public class Planet : MonoBehaviour
         }
         get
         {
-            return _hp;
+            return base.HP;
         }
     }
-    public int _maxHP = 10;
-    public int _defense = 2;
-
-    public Dictionary<int, GameObject> cannonPivotDict { get; private set; }
-    protected List<int> _allDegrees = new List<int>();
-
     public void Awake()
     {
         cannonPivotDict = new Dictionary<int, GameObject>();
@@ -61,9 +54,10 @@ public class Planet : MonoBehaviour
         Init();
     }
 
-    public void Init()
+    public override void Init()
     {
-        hp = _maxHP;
+        base.Init(); 
+        HP = MaxHP;
         transform.localEulerAngles = Vector3.zero;
         foreach (var item in cannonPivotDict)
         {
@@ -225,6 +219,6 @@ public class Planet : MonoBehaviour
             return;
         }
 
-        hp -= BattleUtil.CalcDamage(rock._attack, _defense);
+        HP -= BattleUtil.CalcDamage(rock.attack, _Defense);
     }
 }

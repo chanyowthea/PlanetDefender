@@ -3,56 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Rock : BaseMove
+public class Rock : Army
 {
     public float _radius = 1.41f / 2;
 
-    int _hp; 
-    public int hp 
+    [SerializeField] Text _hpText;
+    public override int HP
     {
         set
         {
             _hpText.text = value.ToString();
-            _hp = value;
-            if (hp <= 0)
+            base.HP = value;
+            if (HP <= 0)
             {
-                EventDispatcher.instance.DispatchEvent(EventID.AddScore, _maxHP);
+                EventDispatcher.instance.DispatchEvent(EventID.AddScore, MaxHP);
                 Destroy(this.gameObject);
             }
         }
         get
         {
-            return _hp; 
+            return base.HP;
         }
     }
-    public int _maxHP = 2;
-
-    [SerializeField] Text _hpText;
-    public int _attack = 3;
-    public int _defense = 1;
 
     [SerializeField] SpriteRenderer _sprite;
+    public int attack { private set; get;}
+
     void Awake()
     {
         transform.SetParent(GameAssets.rockParent.transform);
-        hp = _maxHP;
-        gameObject.name = "" + GetHashCode(); 
+        HP = MaxHP;
+        gameObject.name = "" + GetHashCode();
     }
 
-    public Material mat
+    public override void Init()
     {
-        set
-        {
-            _sprite.material = value; 
-        }
+        base.Init();
+
+    }
+
+    public void SetData(Vector3 pos, float moveSpeed, Vector3 moveDir)
+    {
+        transform.position = pos;
+        _MoveSpeed = moveSpeed;
+        _MoveDir = moveDir;
     }
 
     protected override void Update()
     {
         base.Update();
         // 两个点中到星球的距离更近的点
-        Vector3 neearestPos = Vector3.Min(transform.position - _moveDir * _radius - PlanetController.instance.transform.position, 
-            transform.position - PlanetController.instance.transform.position); 
+        Vector3 neearestPos = Vector3.Min(transform.position - _MoveDir * _radius - PlanetController.instance.transform.position,
+            transform.position - PlanetController.instance.transform.position);
         if (!PlanetController.instance.IsInVisualField(neearestPos))
         {
             Destroy(this.gameObject);
@@ -65,7 +67,7 @@ public class Rock : BaseMove
         // 撞到星球就消失
         if (collider.gameObject.GetComponent<PlanetController>() != null)
         {
-            EventDispatcher.instance.DispatchEvent(EventID.AddScore, _maxHP);
+            EventDispatcher.instance.DispatchEvent(EventID.AddScore, MaxHP);
             Destroy(this.gameObject);
         }
         // 撞到子弹会扣血
@@ -79,9 +81,9 @@ public class Rock : BaseMove
     {
         if (bullet == null)
         {
-            return; 
+            return;
         }
 
-        hp -= BattleUtil.CalcDamage(bullet._attack, _defense);
+        HP -= BattleUtil.CalcDamage(bullet._attack, _Defense);
     }
 }

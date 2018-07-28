@@ -10,7 +10,7 @@ public class RockSource : MonoBehaviour
 
     private void Start()
     {
-        EventManager.instance._rockSrcs.Add(this); 
+        EventManager.instance._rockSrcs.Add(this);
     }
 
     void Update()
@@ -22,9 +22,8 @@ public class RockSource : MonoBehaviour
         _lastTime = Time.time;
         var r = GameObject.Instantiate(GameAssets.instance._rockPrefab);
         r.transform.position = this.transform.position;
-        //r.transform.localScale = Vector3.one * RandomUtil.instance.random.Next(1, 10);
-        r._moveSpeed = 0.02f;
-        r._moveDir = Vector3.Normalize(PlanetController.instance.transform.position -
+        var dir = Vector3.Normalize(PlanetController.instance.transform.position -
             new Vector3(1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 0));
+        r.SetData(transform.position, 0.02f, dir);
     }
 }
