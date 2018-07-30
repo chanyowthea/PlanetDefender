@@ -5,6 +5,12 @@ using UIFramwork;
 
 public class StartView : BaseView
 {
+    private void Start()
+    {
+        var data = ConfigDataManager.instance.GetData<TurrectCSV>("2");
+        Debug.Log("data.Name=" + data._Name); 
+    }
+
     public void OnClickStart(int level)
     {
         Time.timeScale = 1;

@@ -23,7 +23,7 @@ public class Cannon : Turrect, IShot
             {
                 if (_onDie != null)
                 {
-                    _onDie(_degree);
+                    _onDie(_Degree);
                 }
                 Destroy(this.gameObject);
             }
@@ -34,14 +34,20 @@ public class Cannon : Turrect, IShot
         }
     }
 
-    protected virtual void Start()
+    void Start()
     {
         EventDispatcher.instance.RegisterEvent(EventID.AttackFromPlanet, this, "Attack");
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
         EventDispatcher.instance.UnRegisterEvent(EventID.AttackFromPlanet, this, "Attack");
+    }
+
+    public void SetData(int degree, EFaction faction)
+    {
+        _Degree = degree; 
+        Faction = faction;
     }
 
     void Attack()
@@ -51,13 +57,13 @@ public class Cannon : Turrect, IShot
 
     public void Fire()
     {
-        if (Time.time - _lastFireTime <= _fireCoolDownTime)
+        if (Time.time - _LastFireTime <= _FireCoolDownTime)
         {
             return;
         }
-        _lastFireTime = Time.time;
+        _LastFireTime = Time.time;
         var bullet = GameObject.Instantiate(GameAssets.instance._bulletPrefab);
-        bullet.SetData(firePos, transform.up, _bulletMoveSpeed, _attack, EFaction.Ours); 
+        bullet.SetData(FirePos, transform.up, _BulletMoveSpeed, _Attack, EFaction.Ours);
     }
 
     // attack by other 
@@ -66,7 +72,7 @@ public class Cannon : Turrect, IShot
         var c = collider.gameObject.GetComponent<Rock>();
         if (c != null)
         {
-			HP -= BattleUtil.CalcDamage(c.attack, _Defense);
+            HP -= BattleUtil.CalcDamage(c.attack, _Defense);
         }
     }
 }

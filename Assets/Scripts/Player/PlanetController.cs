@@ -143,7 +143,7 @@ public class PlanetController : MonoSingleton<PlanetController>
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, _planet.visualField);
+        Gizmos.DrawWireSphere(transform.position, _planet.VisualField);
     }
 #endif
 }

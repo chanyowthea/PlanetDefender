@@ -1,0 +1,9 @@
+﻿ID,Name,Attack,Defense,Picture
+唯一标识,名称,,,
+1,BowTower,1,1,ArcherTowner
+2,火炮,2,1,Cannon
+3,雷电枪,3,1,
+4,电热炮,3,2,
+5,电磁炮,4,2,
+6,激光炮,5,2,
+7,微波导弹,6,1,

@@ -63,7 +63,14 @@ public class Bullet : Entity
         var entity = collider.GetComponent<Entity>();
         if (entity != null && entity.Faction != Faction)
         {
+            Debug.LogFormat("entity.name={0}, faction={1}", entity.name, entity.Faction);
+            Debug.LogFormat("bullet.name={0}, faction={1}", this.gameObject.name, this.Faction);
             GameObject.Destroy(this.gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        Debug.LogError("OnDestroy Bullet");
     }
 }

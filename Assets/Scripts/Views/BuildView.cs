@@ -69,9 +69,9 @@ public class BuildView : BaseView
             }
 
             // 是60的整数倍
-            if (cannon._degree % 60 == 0)
+            if (cannon._Degree % 60 == 0)
             {
-                int index = cannon._degree / 60;
+                int index = cannon._Degree / 60;
                 if (index >= 0 && index < _btns.Length)
                 {
                     OnBuild(index); 
@@ -112,14 +112,15 @@ public class BuildView : BaseView
             {
                 var c = cs[i];
                 // 已经建造了不可再建造
-                if (c._degree == index * 60)
+                if (c._Degree == index * 60)
                 {
                     return; 
                 }
             }
         }
 
-        EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, index * 60);
+        ViewManager.instance.Open<TurrectSelectView>(); 
+        //EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, index * 60);
     }
 
     void BuildSuccess(int degree)

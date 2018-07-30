@@ -27,7 +27,7 @@ namespace Scene
         void CreateRock(Vector3 pos)
         {
             var r = GameObject.Instantiate(GameAssets.instance._rockPrefab);
-            r.SetData(pos, 0.02f, Vector3.Normalize(PlanetController.instance.transform.position - pos)); 
+            //r.SetData(pos, 0.02f, Vector3.Normalize(PlanetController.instance.transform.position - pos)); 
         }
     }
 }

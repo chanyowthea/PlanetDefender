@@ -28,10 +28,10 @@ using UnityEngine;
 
 
 // -- BUG
+// 两个rock parent和 gold parent
+// 没有出现rock
 
 
-
-// 玩家数据存储,隔一段时间存储一下
 // 方案2 点击进入升级界面,拉近摄像机,显示可以装载的炮塔位置
 // 排行榜
 
@@ -47,6 +47,7 @@ public class GameManager : MonoSingleton<GameManager>
         EventDispatcher.instance.RegisterEvent(EventID.End, this, "OnEnd");
         GameData.instance.Init();
         Time.timeScale = 0;
+        ConfigDataManager.instance.LoadCSV<TurrectCSV>("Turrect"); 
         ViewManager.instance.Open<StartView>();
     }
 

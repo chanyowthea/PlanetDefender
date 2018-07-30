@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Rock : Army
+public class Rock : Entity
 {
     public float _radius = 1.41f / 2;
 
@@ -36,11 +36,12 @@ public class Rock : Army
         gameObject.name = "" + GetHashCode();
     }
     
-    public void SetData(Vector3 pos, float moveSpeed, Vector3 moveDir)
+    public void SetData(Vector3 pos, float moveSpeed, Vector3 moveDir, EFaction faction)
     {
         transform.position = pos;
         _MoveSpeed = moveSpeed;
         _MoveDir = moveDir;
+        Faction = faction;
         Init(); 
     }
 
@@ -52,6 +53,7 @@ public class Rock : Army
             transform.position - PlanetController.instance.transform.position);
         if (!PlanetController.instance.IsInVisualField(neearestPos))
         {
+            Debug.Log("Update=");
             Destroy(this.gameObject);
         }
     }
@@ -62,6 +64,7 @@ public class Rock : Army
         // 撞到星球就消失
         if (collider.gameObject.GetComponent<PlanetController>() != null)
         {
+            Debug.LogError("Rock OnTriggerEnter");
             EventDispatcher.instance.DispatchEvent(EventID.AddScore, MaxHP);
             Destroy(this.gameObject);
         }
@@ -80,5 +83,10 @@ public class Rock : Army
         }
 
         HP -= BattleUtil.CalcDamage(bullet.Attack, _Defense);
+    }
+
+    private void OnDestroy()
+    {
+        Debug.LogError("Rock OnDestroy");
     }
 }

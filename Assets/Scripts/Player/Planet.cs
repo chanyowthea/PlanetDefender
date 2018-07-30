@@ -16,6 +16,15 @@ public class Planet : Army
 
     [SerializeField] protected int _minCannonGap = 60;
     public int minCannonGap { get { return _minCannonGap; } }
+    
+    [SerializeField] float _VisualField;
+    public override float VisualField
+    {
+        get
+        {
+            return _VisualField;
+        }
+    }
 
     public Dictionary<int, GameObject> cannonPivotDict { get; private set; }
     protected List<int> _allDegrees = new List<int>();
@@ -57,6 +66,7 @@ public class Planet : Army
     public override void Init()
     {
         base.Init(); 
+        Faction = EFaction.Ours;
         HP = MaxHP;
         transform.localEulerAngles = Vector3.zero;
         foreach (var item in cannonPivotDict)
@@ -103,7 +113,7 @@ public class Planet : Army
         a.transform.localScale = Vector3.one;
         a.transform.localPosition = new Vector3(0, radius + GameConfig.instance._cannonHalfHeight_Common, 0);
         a.transform.localRotation = Quaternion.identity;
-        a.GetComponent<Cannon>()._degree = degree;
+        a.GetComponent<Cannon>().SetData(degree, EFaction.Ours);
         c.transform.localEulerAngles = new Vector3(0, 0, degree);
         Debug.Log("degree=" + degree);
 
@@ -157,13 +167,6 @@ public class Planet : Army
         // 将最小的点增加360再加入列表
         // 为了计算这个点0度和这个点360度的中点距离位置
         occupiedDegrees.Add(occupiedDegrees[0] + 360);
-        //if (occupiedDegrees.Count == 1)
-        //{
-        //    minDegree = 0;
-        //    maxDegree = 360;
-        //}
-        //else
-        //{
         minDegree = occupiedDegrees[0];
         maxDegree = occupiedDegrees[1];
         int gap = 0;
@@ -182,7 +185,6 @@ public class Planet : Army
                 gap = newGap;
             }
         }
-        //}
 
         // 查找empty表中距离中点最近的点
         int middleDegree = (minDegree + maxDegree) / 2;
@@ -204,7 +206,7 @@ public class Planet : Army
     public bool IsInVisualField(Vector3 pos)
     {
         float distance = Vector3.Distance(pos, transform.position);
-        return distance <= visualField;
+        return distance <= VisualField;
     }
 
     void OnTriggerEnter(Collider collider)
