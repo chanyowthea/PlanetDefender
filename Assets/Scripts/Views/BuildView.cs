@@ -121,6 +121,7 @@ public class BuildView : BaseView
 
         ViewManager.instance.Open<TurrectSelectView>(); 
         //EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, index * 60);
+        Debug.Log("OnClickBuild index=" + index); 
     }
 
     void BuildSuccess(int degree)

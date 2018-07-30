@@ -5,7 +5,7 @@ using UnityEngine;
 public class ResourcesManager : TSingleton<ResourcesManager>
 {
     public Dictionary<string, UnityEngine.Object> _LoadedAssetDict = new Dictionary<string, Object>();
-    public const string _PicturePrefix = "Pictures/";
+    public const string _PicturePrefix = "Textures/";
 
     UnityEngine.Object Load(string path)
     {
