@@ -1,55 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
-using System.IO;
 
-namespace GameTest
+public class Test : MonoBehaviour
 {
-    class AudioResource : IObjectPoolCallback
-    {
-        public int _Number; 
-        
-        public void OnAllocated()
-        {
-            _Number = 0; 
-        }
+    private System.Object _Lock = new System.Object();
 
-        public void OnCollected()
-        {
-            _Number = -1; 
-        }
+    void Start()
+    {
+        Thread t = new Thread(InputThread);
+        t.Start();
+
+        Thread t1 = new Thread(InputThread);
+        t1.Start();
     }
 
-    public class Test : MonoBehaviour
+    void InputThread()
     {
-        ObjectPool<AudioResource> _AudioPool = new ObjectPool<AudioResource>(); 
-        
-        private void Start()
+        lock (_Lock)
         {
-            List<AudioResource> list = new List<AudioResource>(); 
-            for (int i = 0; i < 3; i++)
+            while (true)
             {
-                var a = _AudioPool.AllocObject();
-                Debug.Log("1 alloc " + a._Number); 
-                a._Number = (i + 1) * 5;
-                Debug.Log("1 list " + a._Number);
-                list.Add(a); 
-            }
-
-            for (int i = 0, length = list.Count; i < length; i++)
-            {
-                _AudioPool.CollectObject(list[i]); 
-            }
-            list.Clear();
-
-            for (int i = 0; i < 4; i++)
-            {
-                var a = _AudioPool.AllocObject();
-                Debug.Log("2 alloc " + a._Number);
-                a._Number = (i + 1) * 6;
-                Debug.Log("2 list " + a._Number);
-                list.Add(a);
+                Debug.Log("enter lock");
             }
         }
+        Debug.Log("other thread");
     }
 }

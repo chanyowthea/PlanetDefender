@@ -1,15 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UIFramwork;
+using UIFramework;
 using UnityEngine.UI;
 
-public class EndView : BaseView
+class EndView : BaseUI
 {
     [SerializeField] Text _resultText;
+
+    public EndView()
+    {
+        _NaviData._Type = EUIType.FullScreen;
+        _NaviData._Layer = EUILayer.FullScreen;
+        _NaviData._IsCloseCoexistingUI = true;
+    }
+
+    public override void Open(NavigationData data = null)
+    {
+        base.Open(data);
+        UIManager.Instance.Close<TopResidentUI>();
+    }
+
     public void OnClickEnd()
     {
-        ViewManager.instance.Open<StartView>(true);
+        UIManager.Instance.Open<StartView>(null, true);
     }
 
     public void SetData(string result)

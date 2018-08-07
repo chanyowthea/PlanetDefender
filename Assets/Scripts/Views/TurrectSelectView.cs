@@ -1,18 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UIFramwork;
+using UIFramework;
 using UnityEngine.UI;
 
-public class TurrectSelectView : BaseView
+class TurrectSelectView : BaseUI
 {
     [SerializeField] RectTransform _ContentRtf;
     [SerializeField] TurrectSelectItem _ItemPrefab;
     List<TurrectSelectItem> _Items = new List<TurrectSelectItem>();
-
-    public override void Open()
+    
+    public TurrectSelectView()
     {
-        base.Open();
+        _NaviData._Type = EUIType.FullScreen;
+        _NaviData._Layer = EUILayer.FullScreen;
+        _NaviData._IsCloseCoexistingUI = true;
+    }
+
+    public override void Open(NavigationData data)
+    {
+        base.Open(data);
         _ItemPrefab.gameObject.SetActive(false); 
         var list = ConfigDataManager.instance.GetDataList<TurrectCSV>();
         for (int i = 0, length = list.Count; i < length; i++)
@@ -30,7 +37,7 @@ public class TurrectSelectView : BaseView
         }
     }
 
-    public override void Close()
+    internal override void Close()
     {
         for (int i = 0, length = _Items.Count; i < length; i++)
         {
@@ -42,10 +49,8 @@ public class TurrectSelectView : BaseView
         base.Close();
     }
 
-    // 有没有办法直接用内部的Close就直接能实现功能，不用下面这行代码
-    // UI框架需要重构
     public void OnClickBack()
     {
-        ViewManager.instance.Close(GetHashCode());
+        UIManager.Instance.Close(this);
     }
 }

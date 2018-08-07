@@ -87,6 +87,6 @@ public class Rock : Entity
 
     private void OnDestroy()
     {
-        Debug.LogError("Rock OnDestroy");
+        //Debug.LogError("Rock OnDestroy");
     }
 }

@@ -1,57 +1,46 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UIFramwork;
-using UnityEngine.UI; 
+using UnityEngine.UI;
+using UIFramework;
 
-public class BuildView : BaseView
+class BuildView : BaseUI
 {
     [SerializeField] Button[] _btns;
     [SerializeField] Image[] _imgs;
-    [SerializeField] Text _goldText;
     [SerializeField] RectTransform _planetRtf;
-    int _goldCount;
-	float _lastTimeScale; 
+    float _lastTimeScale;
 
-    private void Start()
+    public BuildView()
     {
-        EventDispatcher.instance.RegisterEvent(EventID.UpdateGold, this, "UpdateGold");
-        EventDispatcher.instance.RegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
-    }
-
-    private void OnDestroy()
-    {
-        EventDispatcher.instance.UnRegisterEvent(EventID.UpdateGold, this, "UpdateGold");
-        EventDispatcher.instance.UnRegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
+        _NaviData._Type = EUIType.FullScreen;
+        _NaviData._Layer = EUILayer.FullScreen;
+        _NaviData._IsCloseCoexistingUI = true;
     }
 
     void UpdateView()
     {
-        _goldText.text = _goldCount.ToString();
+
     }
 
-    public void UpdateGold(int value)
+    public override void Open(NavigationData data)
     {
-        _goldCount = value;
-        UpdateView();
-    }
+        base.Open(data);
+        EventDispatcher.instance.RegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
 
-    public override void Open()
-    {
-        base.Open();
         _planetRtf.localEulerAngles = PlanetController.instance.transform.localEulerAngles;
-		_lastTimeScale = Time.timeScale; 
-        Time.timeScale = 0; 
+        _lastTimeScale = Time.timeScale;
+        Time.timeScale = 0;
 
         if (_btns.Length != _imgs.Length)
         {
             Debug.LogError("the length of btns and imgs is not corresponding! please check your configuration first! ");
-            return; 
+            return;
         }
 
         for (int i = 0, length = _btns.Length; i < length; i++)
         {
-            OnBuild(i, false); 
+            OnBuild(i, false);
         }
 
         var cannons = PlanetController.instance.GetAllCannons();
@@ -60,12 +49,12 @@ public class BuildView : BaseView
             var c = cannons[i];
             if (c == null)
             {
-                continue; 
+                continue;
             }
             var cannon = c.GetComponentInChildren<Cannon>();
             if (cannon == null)
             {
-                continue; 
+                continue;
             }
 
             // 是60的整数倍
@@ -74,33 +63,27 @@ public class BuildView : BaseView
                 int index = cannon._Degree / 60;
                 if (index >= 0 && index < _btns.Length)
                 {
-                    OnBuild(index); 
+                    OnBuild(index);
                 }
             }
         }
 
         for (int i = 0, length = _btns.Length; i < length; i++)
         {
-            int index = i; 
-            _btns[i].onClick.AddListener(() => OnClickBuild(index)); 
+            int index = i;
+            _btns[i].onClick.AddListener(() => OnClickBuild(index));
         }
-
-        UpdateGold(GameData.instance.goldCount); 
     }
 
-    public override void Close()
+    internal override void Close()
     {
-		Time.timeScale = _lastTimeScale;
+        EventDispatcher.instance.UnRegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
+        Time.timeScale = _lastTimeScale;
         for (int i = 0, length = _btns.Length; i < length; i++)
         {
             _btns[i].onClick.RemoveAllListeners();
         }
         base.Close();
-    }
-     
-    public void OnClickBack()
-    {
-        ViewManager.instance.Close(GetHashCode()); 
     }
 
     void OnClickBuild(int index)
@@ -114,19 +97,19 @@ public class BuildView : BaseView
                 // 已经建造了不可再建造
                 if (c._Degree == index * 60)
                 {
-                    return; 
+                    return;
                 }
             }
         }
 
-        ViewManager.instance.Open<TurrectSelectView>(); 
+        UIManager.Instance.Open<TurrectSelectView>();
         //EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, index * 60);
-        Debug.Log("OnClickBuild index=" + index); 
+        Debug.Log("OnClickBuild index=" + index);
     }
 
     void BuildSuccess(int degree)
     {
-        OnBuild(degree / 60); 
+        OnBuild(degree / 60);
     }
 
     void OnBuild(int index, bool isBuild = true)

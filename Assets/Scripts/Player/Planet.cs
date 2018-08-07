@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UIFramwork;
+using UIFramework;
 
 public class Planet : Army
 {
@@ -38,7 +38,7 @@ public class Planet : Army
             base.HP = value;
             if (HP <= 0)
             {
-                var v = ViewManager.instance.Open<EndView>();
+                var v = UIManager.Instance.Open<EndView>();
                 v.SetData("Mission Failed! ");
                 EventDispatcher.instance.DispatchEvent(EventID.End);
             }
@@ -67,6 +67,9 @@ public class Planet : Army
     {
         base.Init(); 
         Faction = EFaction.Ours;
+
+        // TODO 使用表加载
+        MaxHP = 10; 
         HP = MaxHP;
         transform.localEulerAngles = Vector3.zero;
         foreach (var item in cannonPivotDict)
@@ -82,7 +85,7 @@ public class Planet : Army
         int cost = 20;
         if (GameData.instance.goldCount < cost)
         {
-            var v = ViewManager.instance.Open<TipsView>();
+            var v = UIManager.Instance.Open<MessageView>();
             v.SetData("金币不足,建造失败");
             return;
         }
@@ -92,7 +95,7 @@ public class Planet : Army
         // 位置已被占用,建造失败
         if (cannonPivotDict.ContainsKey(degree))
         {
-            var v = ViewManager.instance.Open<TipsView>();
+            var v = UIManager.Instance.Open<MessageView>();
             v.SetData("位置已被占用,建造失败");
             Debug.LogFormat("degree {0} has been occupied! ", degree);
             return;

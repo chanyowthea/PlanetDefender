@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using UIFramwork;
+using UIFramework;
 using UnityEngine;
 
 // 名字: 保卫星球
@@ -47,8 +47,9 @@ public class GameManager : MonoSingleton<GameManager>
         EventDispatcher.instance.RegisterEvent(EventID.End, this, "OnEnd");
         GameData.instance.Init();
         Time.timeScale = 0;
-        ConfigDataManager.instance.LoadCSV<TurrectCSV>("Turrect"); 
-        ViewManager.instance.Open<StartView>();
+        ConfigDataManager.instance.LoadCSV<TurrectCSV>("Turrect");
+        ConfigDataManager.instance.LoadCSV<UICSV>("UI");
+        UIManager.Instance.Open<StartView>();
     }
 
     public void OnEnd()

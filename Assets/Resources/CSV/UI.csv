@@ -1,0 +1,9 @@
+Type,Path
+唯一标识,路径
+BuildView,BuildView
+HUDView,HUDView
+EndView,EndView
+MessageView,MessageView
+TopResidentUI,TopResidentUI
+StartView,StartView
+TurrectSelectView,TurrectSelectView

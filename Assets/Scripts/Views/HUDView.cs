@@ -1,40 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UIFramwork;
+using UIFramework;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class HUDView : BaseView
+class HUDView : BaseUI
 {
     [SerializeField] Text _targetScoreText;
     [SerializeField] Text _scoreText;
     int _scoreCount;
-    [SerializeField] Text _goldText;
-    int _goldCount;
     const string _scoreFormat = "Target Scores: {0}";
     int _targetScore;
 
-    private void Start()
+    public HUDView()
     {
-        EventDispatcher.instance.RegisterEvent(EventID.UpdateGold, this, "UpdateGold");
+        _NaviData._Type = EUIType.FullScreen;
+        _NaviData._Layer = EUILayer.FullScreen;
+        _NaviData._IsCloseCoexistingUI = false;
+    }
+
+    public override void Open(NavigationData data)
+    {
+        base.Open(data);
+        UIManager.Instance.Open<TopResidentUI>();
         EventDispatcher.instance.RegisterEvent(EventID.UpdateScore, this, "UpdateScore");
     }
 
-    private void OnDestroy()
+    internal override void Close()
     {
         EventDispatcher.instance.UnRegisterEvent(EventID.UpdateScore, this, "UpdateScore");
-        EventDispatcher.instance.UnRegisterEvent(EventID.UpdateGold, this, "UpdateGold");
-    }
-
-    public override void Open()
-    {
-        base.Open();
-        UpdateGold(GameData.instance.goldCount);
-    }
-
-    public override void Close()
-    {
         if (_addHealthRoutine != null)
         {
             StopCoroutine(_addHealthRoutine);
@@ -51,15 +46,8 @@ public class HUDView : BaseView
 
     void UpdateView()
     {
-        _goldText.text = _goldCount.ToString();
         _scoreText.text = _scoreCount.ToString();
         _targetScoreText.text = string.Format(_scoreFormat, _targetScore);
-    }
-
-    public void UpdateGold(int value)
-    {
-        _goldCount = value;
-        UpdateView();
     }
 
     public void UpdateScore(int value)
@@ -69,7 +57,7 @@ public class HUDView : BaseView
         {
             EventDispatcher.instance.DispatchEvent(EventID.End);
             EventDispatcher.instance.DispatchEvent(EventID.AddGold, _targetScore);
-            var v = ViewManager.instance.Open<EndView>();
+            var v = UIManager.Instance.Open<EndView>();
             v.SetData(string.Format("Mission Accomplished! \nGet {0} Golds! ", _targetScore));
         }
         UpdateView();
@@ -78,15 +66,14 @@ public class HUDView : BaseView
     public void OnClickBack()
     {
         EventDispatcher.instance.DispatchEvent(EventID.End);
-//        ViewManager.instance.Close(this.GetHashCode());
-		ViewManager.instance.Open<StartView>(true); 
+		UIManager.Instance.Open<StartView>(null, true); 
     }
 
     public void OnClickAttack()
     {
         if (PlanetController.instance.GetAllCannons().Length == 0)
         {
-            var tips = ViewManager.instance.Open<TipsView>();
+            var tips = UIManager.Instance.Open<MessageView>();
             tips.SetData("请建造炮塔后再进行攻击");
             return;
         }
@@ -95,7 +82,7 @@ public class HUDView : BaseView
 
     public void OnClickBuild()
     {
-        ViewManager.instance.Open<BuildView>();
+        UIManager.Instance.Open<BuildView>();
     }
 
     public void OnClickPause()
@@ -139,7 +126,7 @@ public class HUDView : BaseView
             }
             else
             {
-                var v=  ViewManager.instance.Open<TipsView>(); 
+                var v=  UIManager.Instance.Open<MessageView>(); 
                 v.SetData("金币不足！"); 
             }
         }

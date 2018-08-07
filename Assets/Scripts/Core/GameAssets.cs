@@ -15,7 +15,6 @@ public class GameAssets : MonoSingleton<GameAssets>
     public Material _rockMat_Default;
 
     [Header("Configs")]
-    public ViewLibrary _viewLibrary;
 
 
     static GameObject _bulletParent;

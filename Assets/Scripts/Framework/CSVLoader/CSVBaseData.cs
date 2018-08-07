@@ -6,7 +6,8 @@ using System.Text;
 
 public abstract class CSVBaseData
 {
-    public abstract void ParseData(long index, int fieldCount, string[] headers, string[] values);
+    public abstract void ParseData
+        (long index, int fieldCount, string[] headers, string[] values);
     public abstract string GetPrimaryKey();
     public T As<T>() where T : CSVBaseData
     {
