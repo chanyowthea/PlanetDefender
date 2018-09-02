@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UIFramework;
+using UnityEngine.SceneManagement;
 
 class StartView : BaseUI
 {
@@ -15,8 +16,6 @@ class StartView : BaseUI
     public override void Open(NavigationData data = null)
     {
         base.Open(data);
-        var csv = ConfigDataManager.instance.GetData<TurrectCSV>("2");
-        Debug.Log("data.Name=" + csv._Name);
     }
 
     internal override void Show()
@@ -27,8 +26,8 @@ class StartView : BaseUI
 
     public void OnClickStart(int level)
     {
-        Time.timeScale = 1;
-        var v = UIManager.Instance.Open<HUDView>();
-        v.SetData(5 * level * level); 
+        UIManager.Instance.Close(this); 
+        UIManager.Instance.ChangeScene(); 
+        SceneManager.LoadScene(GameConfig.instance._PlaySceneName);
     }
 }

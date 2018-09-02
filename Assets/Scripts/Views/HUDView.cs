@@ -4,14 +4,15 @@ using UnityEngine;
 using UIFramework;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 class HUDView : BaseUI
 {
     [SerializeField] Text _targetScoreText;
     [SerializeField] Text _scoreText;
-    int _scoreCount;
+    int _scoreCount; 
+    int _CurLevel; 
     const string _scoreFormat = "Target Scores: {0}";
-    int _targetScore;
 
     public HUDView()
     {
@@ -27,6 +28,12 @@ class HUDView : BaseUI
         EventDispatcher.instance.RegisterEvent(EventID.UpdateScore, this, "UpdateScore");
     }
 
+    internal override void Show()
+    {
+        base.Show();
+        Time.timeScale = 1; 
+    }
+
     internal override void Close()
     {
         EventDispatcher.instance.UnRegisterEvent(EventID.UpdateScore, this, "UpdateScore");
@@ -38,27 +45,38 @@ class HUDView : BaseUI
         base.Close();
     }
 
-    public void SetData(int targetScore)
+    public void SetData(int level)
     {
-        _targetScore = targetScore;
+        _CurLevel = level;
         UpdateView();
     }
 
     void UpdateView()
     {
         _scoreText.text = _scoreCount.ToString();
-        _targetScoreText.text = string.Format(_scoreFormat, _targetScore);
+        LevelCSV csv = ConfigDataManager.instance.GetData<LevelCSV>(_CurLevel.ToString());
+        if (csv != null)
+        {
+            _targetScoreText.text = string.Format(_scoreFormat, csv._TargetScore);
+        }
     }
 
     public void UpdateScore(int value)
     {
         _scoreCount = value;
-        if (_scoreCount >= _targetScore)
+        LevelCSV csv = ConfigDataManager.instance.GetData<LevelCSV>(_CurLevel.ToString());
+        if (csv == null)
+        {
+            Debug.LogError(string.Format("cannot find csv data with id {0}. ", _CurLevel)); 
+            return;
+        }
+
+        if (_scoreCount >= csv._TargetScore)
         {
             EventDispatcher.instance.DispatchEvent(EventID.End);
-            EventDispatcher.instance.DispatchEvent(EventID.AddGold, _targetScore);
+            EventDispatcher.instance.DispatchEvent(EventID.AddGold, _CurLevel);
             var v = UIManager.Instance.Open<EndView>();
-            v.SetData(string.Format("Mission Accomplished! \nGet {0} Golds! ", _targetScore));
+            v.SetData(string.Format("Mission Accomplished! \nGet {0} Golds! ", _CurLevel));
         }
         UpdateView();
     }
@@ -66,7 +84,7 @@ class HUDView : BaseUI
     public void OnClickBack()
     {
         EventDispatcher.instance.DispatchEvent(EventID.End);
-		UIManager.Instance.Open<StartView>(null, true); 
+        SceneManager.LoadScene(GameConfig.instance._LauncherSceneName); 
     }
 
     public void OnClickAttack()

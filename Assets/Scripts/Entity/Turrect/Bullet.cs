@@ -71,6 +71,5 @@ public class Bullet : Entity
 
     private void OnDestroy()
     {
-        Debug.LogError("OnDestroy Bullet");
     }
 }

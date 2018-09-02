@@ -34,6 +34,8 @@ public class Cannon : Turrect, IShot
         }
     }
 
+    public int TurrectID{ private set; get; }
+
     void Start()
     {
         EventDispatcher.instance.RegisterEvent(EventID.AttackFromPlanet, this, "Attack");
@@ -41,13 +43,31 @@ public class Cannon : Turrect, IShot
 
     void OnDestroy()
     {
+        if (_hpSprite.sprite != null)
+        {
+            GameObject.Destroy(_hpSprite.sprite);
+        }
         EventDispatcher.instance.UnRegisterEvent(EventID.AttackFromPlanet, this, "Attack");
     }
 
-    public void SetData(int degree, EFaction faction)
+    public void SetData(int degree, EFaction faction, int turrectId)
     {
+        _hpSprite.sprite = null; 
         _Degree = degree; 
         Faction = faction;
+
+        var csv = ConfigDataManager.instance.GetData<TurrectCSV>(turrectId.ToString());
+        if (csv == null)
+        {
+            Debug.LogError("CreateCannon csv is empty! ");
+            return;
+        }
+        var sprite = ResourcesManager.instance.GetSprite(csv._Picture);
+        if (sprite != null)
+        {
+            _hpSprite.sprite = GameObject.Instantiate(sprite);
+        }
+        TurrectID = turrectId; 
     }
 
     void Attack()

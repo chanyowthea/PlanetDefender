@@ -40,16 +40,13 @@ public class GameManager : MonoSingleton<GameManager>
 {
     private void Start()
     {
-        Screen.autorotateToLandscapeLeft = true;
-        Screen.autorotateToLandscapeRight = true;
-        Screen.autorotateToPortrait = false;
-        Screen.autorotateToPortraitUpsideDown = false;
         EventDispatcher.instance.RegisterEvent(EventID.End, this, "OnEnd");
         GameData.instance.Init();
         Time.timeScale = 0;
         ConfigDataManager.instance.LoadCSV<TurrectCSV>("Turrect");
-        ConfigDataManager.instance.LoadCSV<UICSV>("UI");
-        UIManager.Instance.Open<StartView>();
+        ConfigDataManager.instance.LoadCSV<LevelCSV>("Level");
+        var v = UIManager.Instance.Open<HUDView>();
+        v.SetData(5 * 1 * 1); // TODO
     }
 
     public void OnEnd()
@@ -84,6 +81,10 @@ public class GameManager : MonoSingleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             ArchiveManager.instance.DeleteAllData();
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, 0, 1);
         }
     }
 }

@@ -9,6 +9,7 @@ public class TurrectCSV : CSVBaseData
     public int _Attack;
     public int _Defense;
     public string _Picture;
+    public int _Price; 
 
     public override string GetPrimaryKey()
     {
@@ -22,5 +23,6 @@ public class TurrectCSV : CSVBaseData
         _Attack = ReadInt("Attack", headers, values); 
         _Defense = ReadInt("Defense", headers, values);
         _Picture = ReadString("Picture", headers, values);
+        _Price = ReadInt("Price", headers, values);
     }
 }

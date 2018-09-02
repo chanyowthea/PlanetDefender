@@ -16,7 +16,7 @@ public class Planet : Army
 
     [SerializeField] protected int _minCannonGap = 60;
     public int minCannonGap { get { return _minCannonGap; } }
-    
+
     [SerializeField] float _VisualField;
     public override float VisualField
     {
@@ -65,11 +65,11 @@ public class Planet : Army
 
     public override void Init()
     {
-        base.Init(); 
+        base.Init();
         Faction = EFaction.Ours;
 
         // TODO 使用表加载
-        MaxHP = 10; 
+        MaxHP = 10;
         HP = MaxHP;
         transform.localEulerAngles = Vector3.zero;
         foreach (var item in cannonPivotDict)
@@ -79,10 +79,16 @@ public class Planet : Army
         cannonPivotDict.Clear();
     }
 
-    public void CreateCannon(int degree)
+    public void CreateCannon(int degree, int turrectId)
     {
         // 金币不足,建造失败
-        int cost = 20;
+        var csv = ConfigDataManager.instance.GetData<TurrectCSV>(turrectId.ToString());
+        if (csv == null)
+        {
+            Debug.LogError("CreateCannon csv is empty! ");
+            return; 
+        }
+        int cost = csv._Price;
         if (GameData.instance.goldCount < cost)
         {
             var v = UIManager.Instance.Open<MessageView>();
@@ -103,7 +109,7 @@ public class Planet : Army
 
         // 建造成功扣除金币
         EventDispatcher.instance.DispatchEvent(EventID.AddGold, -cost);
-        EventDispatcher.instance.DispatchEvent(EventID.CreateTurretSuccess, degree);
+        EventDispatcher.instance.DispatchEvent(EventID.CreateTurretSuccess, degree, turrectId);
 
         var c = GameObject.Instantiate(_cannonPivotPrefab);
         c.name = "Pivot_" + degree;
@@ -116,7 +122,7 @@ public class Planet : Army
         a.transform.localScale = Vector3.one;
         a.transform.localPosition = new Vector3(0, radius + GameConfig.instance._cannonHalfHeight_Common, 0);
         a.transform.localRotation = Quaternion.identity;
-        a.GetComponent<Cannon>().SetData(degree, EFaction.Ours);
+        a.GetComponent<Cannon>().SetData(degree, EFaction.Ours, turrectId);
         c.transform.localEulerAngles = new Vector3(0, 0, degree);
         Debug.Log("degree=" + degree);
 
@@ -136,7 +142,7 @@ public class Planet : Army
 
     public void CreatCannonQuick()
     {
-        CreateCannon(FindCannonToBeBuiltPos());
+        CreateCannon(FindCannonToBeBuiltPos(), 1);
     }
 
     // 炮塔建造策略

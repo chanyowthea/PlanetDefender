@@ -40,7 +40,7 @@ class BuildView : BaseUI
 
         for (int i = 0, length = _btns.Length; i < length; i++)
         {
-            OnBuild(i, false);
+            OnBuild(i, 0, false);
         }
 
         var cannons = PlanetController.instance.GetAllCannons();
@@ -63,7 +63,7 @@ class BuildView : BaseUI
                 int index = cannon._Degree / 60;
                 if (index >= 0 && index < _btns.Length)
                 {
-                    OnBuild(index);
+                    OnBuild(index, cannon.TurrectID);
                 }
             }
         }
@@ -102,19 +102,31 @@ class BuildView : BaseUI
             }
         }
 
-        UIManager.Instance.Open<TurrectSelectView>();
+        var view = UIManager.Instance.Open<TurrectSelectView>();
+        view.SetData(index * 60); 
         //EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, index * 60);
         Debug.Log("OnClickBuild index=" + index);
     }
 
-    void BuildSuccess(int degree)
+    void BuildSuccess(int degree, int turrectId)
     {
-        OnBuild(degree / 60);
+        OnBuild(degree / 60, turrectId);
     }
 
-    void OnBuild(int index, bool isBuild = true)
+    void OnBuild(int index, int turrectId, bool isBuild = true)
     {
         _btns[index].gameObject.SetActive(!isBuild);
-        _imgs[index].gameObject.SetActive(isBuild);
+        var image = _imgs[index];
+        image.gameObject.SetActive(isBuild);
+        if (turrectId != 0)
+        {
+            var csv = ConfigDataManager.instance.GetData<TurrectCSV>(turrectId.ToString());
+            if (csv == null)
+            {
+                Debug.LogError("CreateCannon csv is empty! ");
+                return;
+            }
+            image.sprite = ResourcesManager.instance.GetSprite(csv._Picture); 
+        }
     }
 }

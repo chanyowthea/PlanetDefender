@@ -7,6 +7,7 @@ public class GameData : TSingleton<GameData>
 {
     public int goldCount { private set; get; }
     public int scoreCount { private set; get; }
+    public int TargetScore { private set; get; }
 
     public override void Init()
     {
@@ -34,5 +35,10 @@ public class GameData : TSingleton<GameData>
     {
         scoreCount += value;
         EventDispatcher.instance.DispatchEvent(EventID.UpdateScore, scoreCount);
+    }
+
+    public void SetTargetScore(int score)
+    {
+        TargetScore = score; 
     }
 }

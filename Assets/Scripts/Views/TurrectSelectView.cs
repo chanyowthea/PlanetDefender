@@ -9,7 +9,8 @@ class TurrectSelectView : BaseUI
     [SerializeField] RectTransform _ContentRtf;
     [SerializeField] TurrectSelectItem _ItemPrefab;
     List<TurrectSelectItem> _Items = new List<TurrectSelectItem>();
-    
+    int _Degree;
+
     public TurrectSelectView()
     {
         _NaviData._Type = EUIType.FullScreen;
@@ -20,7 +21,25 @@ class TurrectSelectView : BaseUI
     public override void Open(NavigationData data)
     {
         base.Open(data);
-        _ItemPrefab.gameObject.SetActive(false); 
+    }
+
+    internal override void Close()
+    {
+        for (int i = 0, length = _Items.Count; i < length; i++)
+        {
+            var item = _Items[i];
+            item.ClearData();
+            GameObject.Destroy(item.gameObject);
+        }
+        _Items.Clear();
+        base.Close();
+    }
+
+    public void SetData(int degree)
+    {
+        _Degree = degree;
+
+        _ItemPrefab.gameObject.SetActive(false);
         var list = ConfigDataManager.instance.GetDataList<TurrectCSV>();
         for (int i = 0, length = list.Count; i < length; i++)
         {
@@ -30,23 +49,11 @@ class TurrectSelectView : BaseUI
                 continue;
             }
             var item = GameObject.Instantiate(_ItemPrefab, _ContentRtf);
-            item.gameObject.SetActive(true); 
+            item.gameObject.SetActive(true);
             item.transform.localScale = Vector3.one;
-            item.SetData(info.GetPrimaryKey());
+            item.SetData(info.GetPrimaryKey(), _Degree);
             _Items.Add(item);
         }
-    }
-
-    internal override void Close()
-    {
-        for (int i = 0, length = _Items.Count; i < length; i++)
-        {
-            var item = _Items[i];
-            item.ClearData(); 
-            GameObject.Destroy(item.gameObject); 
-        }
-        _Items.Clear(); 
-        base.Close();
     }
 
     public void OnClickBack()

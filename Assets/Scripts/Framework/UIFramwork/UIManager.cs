@@ -377,6 +377,11 @@ namespace UIFramework
 
         public void PopupLastFullScreenUI()
         {
+            // there must be one window in the scene at least. 
+            if (_OpenedFullScreenUI.Count - 1 <= 0)
+            {
+                return;
+            }
             CloseByClassName(CurFullScreenUI.GetType(), CurFullScreenUI);
         }
 
@@ -390,6 +395,42 @@ namespace UIFramework
             where T : BaseUI
         {
             CloseInternal<T>(ui);
+        }
+
+        public void ChangeScene()
+        {
+            for (int i = 0, length = _ResidentUI.Count; i < length; i++)
+            {
+                var ui = _ResidentUI[i];
+                ui.Close(); 
+            }
+            _ResidentUI.Clear();
+
+            foreach (var item in _CoexistingUI)
+            {
+                var uis = item.Value;
+                for (int i = 0, length = uis.Count; i < length; i++)
+                {
+                    var ui = uis[i];
+                    ui.Close(); 
+                }
+                uis.Clear(); 
+            }
+            _CoexistingUI.Clear();
+
+            for (int i = 0, length = _OpenedFullScreenUI.Count; i < length; i++)
+            {
+                var ui = _OpenedFullScreenUI[i];
+                ui.Close();
+            }
+            _OpenedFullScreenUI.Clear();
+
+            for (int i = 0, length = _IndependentUI.Count; i < length; i++)
+            {
+                var ui = _IndependentUI[i];
+                ui.Close();
+            }
+            _IndependentUI.Clear();
         }
     }
 }

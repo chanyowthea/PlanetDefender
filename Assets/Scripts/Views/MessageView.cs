@@ -32,7 +32,6 @@ class MessageView : BaseUI
             _routine = null;
         }
         base.Close();
-        Debug.LogError("TipsView.Close");
     }
 
     public void SetData(string s)

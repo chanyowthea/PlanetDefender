@@ -32,9 +32,9 @@ public class PlanetController : MonoSingleton<PlanetController>
         _planet.rotate.enabled = value;
     }
 
-    void CreateTurret(int degree)
+    void CreateTurret(int degree, int turrectId)
     {
-        _planet.CreateCannon(degree);
+        _planet.CreateCannon(degree, turrectId);
     }
 
     void AddHealth(int value)
