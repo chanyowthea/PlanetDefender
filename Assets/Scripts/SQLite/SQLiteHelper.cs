@@ -1,164 +1,272 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using Mono.Data.Sqlite;
-using System.Data;
 using System;
-using System.Reflection;
-using Object = UnityEngine.Object;
+using System.Threading;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 
-public class Sqlite
+public class SQLiteHelper
 {
-    //Sqlite连接前缀
-    private const string DB_CONNECTION_PREFIX = "URI=file:";
-    //连接器
-    private IDbConnection m_dbConn;
-    //查询命令
-    private IDbCommand m_command;
-    //事物
-    private IDbTransaction m_dbTrans;
-
-
-    public Sqlite(string path)
+    string connectionString = "";
+    const char _Identifier = '@';
+    public SQLiteHelper(string database)
     {
-        OpenDataBase(path);
-    }
-
-    private void OpenDataBase(string path)
-    {
-        m_dbConn = new SqliteConnection(DB_CONNECTION_PREFIX + path);
-        m_dbConn.Open();
-        m_command = m_dbConn.CreateCommand();
-    }
-
-
-    //查询函数
-    //IConfig是自定义的配置类接口，最好使数据库中的配置类都继承同一个接口，方便以后扩展
-    public IEnumerable ExcuteSelectQuery<T>(string sqlQuery) where T : IConfig
-    {
-        return ExcuteSelectQuery(sqlQuery, typeof(T));
-    }
-
-
-    //查询函数,这里使用反射 反序列数据，简化对对象的赋值操作
-    public IEnumerable ExcuteSelectQuery(string sqlQuery, Type type)
-    {
-        //使用事物
-        BeginTrans();
-        //查询语句
-        m_command.CommandText = sqlQuery;
-        //查询结果
-        IDataReader reader = m_command.ExecuteReader();
-
-        //反序列化操作 所定义的变量
-        PropertyInfo[] newpropertys = null;
-        PropertyInfo[] oldpropertys = null;
-        bool init = false;
-
-        while (reader.Read())
+        string dir = "";
+#if UNITY_EDITOR
+        dir = Application.dataPath + "/DataBase/";
+        connectionString = "data source=" + dir + string.Format("{0}.db", database);
+#elif UNITY_ANDROID
+        path = Application.persistentDataPath + "/DataBase/"; 
+        connectionString = "URI=file:" + path + string.Format("{0}.db", database);
+#endif
+        if (!Directory.Exists(dir))
         {
-            //创建类对象
-            IConfig config = Activator.CreateInstance(type) as IConfig;
-            for (int i = 0; i < reader.FieldCount; i++)
-            {
-                if (!init)
-                {
-                    //newpropertys将类的属性 顺序的对应到数据库中的列名，方便后续的赋值操作
-                    if (newpropertys == null)
-                    {
-                        newpropertys = new PropertyInfo[reader.FieldCount];
-                    }
-                    //获取类的所有属性
-                    if (oldpropertys == null)
-                    {
-                        oldpropertys = type.GetProperties(BindingFlags.Public | BindingFlags.SetProperty | BindingFlags.Instance);
-                    }
-                    //当前数据的列名
-                    string filedName = reader.GetName(i);
+            Directory.CreateDirectory(dir);
+        }
+    }
 
-                    bool find = false;
-                    PropertyInfo pro = null;
-                    //查找与列名相同的自定义特性名称，相同则把查询到的数据值赋值到对象中
-                    for (int j = 0; j < oldpropertys.Length; j++)
-                    {
-                        pro = oldpropertys[j];
-                        //获取自定义特性
-                        object[] objs = pro.GetCustomAttributes(typeof(ConfigFieldAttribute), false);
-                        if (objs.Length == 0)
-                        {
-                            continue;
-                        }
-                        //特性的列名是否与数据库中列名相同
-                        ConfigFieldAttribute cfgfield = objs[0] as ConfigFieldAttribute;
-                        if (cfgfield.filedName == filedName)
-                        {
-                            find = true;
-                            break;
-                        }
-                    }
-                    newpropertys[i] = find ? pro : null;
-                }
-                //已经排好序的类属性数组
-                PropertyInfo info = newpropertys[i];
-                if (info == null)
-                {
-                    continue;
-                }
-                //对象的属性赋值
-                info.SetValue(config, reader.GetValue(i), null);
+    public void ExecuteNonQuery(string queryString)
+    {
+        using (SqliteConnection dbConnection = new SqliteConnection(connectionString))
+        {
+            try
+            {
+                dbConnection.Open();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("ExecuteNonQuery ex.Message=" + e.Message);
             }
 
-            if (!init)
+            using (SqliteCommand dbCommand = dbConnection.CreateCommand())
             {
-                init = true;
+                dbCommand.CommandText = queryString;
+                try
+                {
+                    dbCommand.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError("ExecuteNonQuery ex.Message=" + ex.Message);
+                }
             }
-            yield return config;
         }
-        Commit();
-        reader.Close();
     }
 
-    //使用事物
-    public void BeginTrans()
+    public List<List<object>> ExecuteReader(string queryString)
     {
-        m_dbTrans = m_dbConn.BeginTransaction();
-        m_command.Transaction = m_dbTrans;
-    }
-
-    //事物回滚
-    public void Rollback()
-    {
-        m_dbTrans.Rollback();
-    }
-
-    //事物生效
-    public void Commit()
-    {
-        m_dbTrans.Commit();
-    }
-
-    //执行其他sql语句
-    public void ExcuteQuery(string sqlQuery)
-    {
-        m_command.CommandText = sqlQuery;
-        m_command.ExecuteNonQuery();
-    }
-
-
-    //关闭连接
-    public void Close()
-    {
-        if (m_dbTrans != null)
+        var result = new List<List<object>>();
+        using (SqliteConnection dbConnection = new SqliteConnection(connectionString))
         {
-            m_dbTrans.Dispose();
-            m_dbTrans = null;
+            try
+            {
+                dbConnection.Open();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+
+            using (SqliteCommand command = dbConnection.CreateCommand())
+            {
+                command.CommandText = queryString;
+                try
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // 参数个数
+                            var buffer = new object[reader.FieldCount];
+                            // 读取所有值
+                            reader.GetValues(buffer);
+                            result.Add(buffer.ToList());
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError("ExecuteQuery ex.Message=" + ex.Message);
+                }
+            }
         }
-        if (m_command != null)
+        return result;
+    }
+
+    // 获取表中符合条件的记录数
+    public int GetCount(string tableName, params SqliteParameter[] args)
+    {
+        // conditions
+        string temp = "";
+        for (int i = 0; i < args.Length; ++i)
         {
-            m_command.Dispose();
-            m_command = null;
+            temp += args[i].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(args[i].Value.ToString()) + ((i != args.Length - 1) ? " AND " : "");
         }
-        m_dbConn.Close();
-        m_dbConn = null;
+
+        string format = (args == null || args.Length == 0) ? "SELECT COUNT(*) FROM {0}" : "SELECT COUNT(*) FROM {0} WHERE {1}";
+        var list = ExecuteReader(string.Format(format, tableName, temp));
+
+        if (list == null || list.Count == 0 || list[0].Count == 0 || (list[0][0]).ToString() == "0")
+        {
+            return 0;
+        }
+        return list.Count;
+    }
+
+    /// <summary>
+    /// 根据条件读取数据，并且返回对应条数的数据组，前面的List是数据行数，后面的List是列名对应的数据
+    /// </summary>
+    /// <param name="columnNames">需要读取的字段</param>
+    /// <param name="args">读取信息的限定条件</param>
+    public List<List<object>> ReaderInfo(string tableName, string[] columnNames, params SqliteParameter[] args)
+    {
+        if (columnNames == null || columnNames.Length == 0)
+        {
+            return null;
+        }
+
+        // columns name
+        string temp0 = "";
+        for (int i = 0; i < columnNames.Length; ++i)
+        {
+            temp0 += ", " + columnNames[i];
+        }
+        temp0 = temp0.TrimStart(',', ' ');
+
+        // conditions
+        string temp1 = "";
+        for (int i = 0; i < args.Length; ++i)
+        {
+            // name=@name
+            temp1 += args[i].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(args[i].Value.ToString()) + ((i != args.Length - 1) ? " AND " : "");
+        }
+
+        string format = (args == null || args.Length == 0) ? "SELECT {0} FROM {1}" : "SELECT {0} FROM {1} WHERE {2}";
+        return ExecuteReader(string.Format(format, temp0, tableName, temp1));
+    }
+
+    public List<List<object>> ReadAllInfo(string tableName, params SqliteParameter[] args)
+    {
+        // conditions
+        string temp = "";
+        for (int i = 0; i < args.Length; ++i)
+        {
+            temp += args[i].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(args[i].Value.ToString()) + ((i != args.Length - 1) ? " AND " : "");
+        }
+
+        string format = (args == null || args.Length == 0) ? "SELECT * FROM {0}" : "SELECT * FROM {0} WHERE {1}";
+        return ExecuteReader(string.Format(format, tableName, temp));
+    }
+
+    // 插入数据
+    void InsertInto(string tableName, params SqliteParameter[] args)
+    {
+        if (args == null || args.Length <= 0)
+        {
+            return;
+        }
+        string format = "INSERT INTO {0} ({1}) VALUES ({2})";
+        // columns name
+        string temp0 = "";
+        for (int i = 0; i < args.Length; ++i)
+        {
+            temp0 += ", " + args[i].ParameterName.TrimStart(_Identifier);
+        }
+        temp0 = temp0.TrimStart(',', ' ');
+        
+        // values
+        string temp1 = "";
+        for (int i = 0; i < args.Length; ++i)
+        {
+            temp1 += ", " + GetStringForSQL(args[i].Value.ToString());
+        }
+        temp1 = temp1.TrimStart(',', ' ');
+        ExecuteNonQuery(string.Format(format, tableName, temp0, temp1));
+    }
+    
+    public void UpdateValues(string tableName, SqliteParameter condition, params SqliteParameter[] args)
+    {
+        // 如果没有信息就插入信息
+        var count = GetCount(tableName, condition);
+        if (count == 0)
+        {
+            InsertInto(tableName, args);
+            return;
+        }
+
+        string format = "UPDATE {0} SET {1} WHERE {2}";
+
+        // set values 
+        string temp0 = "";
+        for (int i = 0; i < args.Length; ++i)
+        {
+            temp0 += args[i].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(args[i].Value.ToString()) + ((i != args.Length - 1) ? ", " : "");
+        }
+
+        // condition
+        string temp1 = condition.ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(condition.Value.ToString());
+        ExecuteNonQuery(string.Format(format, tableName, temp0, temp1));
+    }
+
+    public void DeleteValuesOR(string tableName, params SqliteParameter[] args)
+    {
+        if(args == null)
+            { 
+            return; 
+            }
+        string queryString = "DELETE FROM " + tableName + " WHERE " + args[0].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(args[0].Value.ToString());
+        for (int i = 1; i < args.Length; i++)
+        {
+            queryString += "OR " + args[i].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(args[i].Value.ToString());
+        }
+        ExecuteNonQuery(queryString);
+    }
+
+    public void DeleteValuesAND(string tableName, params SqliteParameter[] args)
+    {
+        if (args == null)
+        {
+            return;
+        }
+        string queryString = "DELETE FROM " + tableName + " WHERE " + args[0].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(args[0].Value.ToString());
+        for (int i = 1; i < args.Length; i++)
+        {
+            queryString += "AND " + args[i].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(args[i].Value.ToString());
+        }
+        ExecuteNonQuery(queryString);
+    }
+
+    /// <summary>
+    /// 创建数据表
+    /// </summary> +
+    /// <param name="tableName">数据表名</param>
+    /// <param name="colNames">字段名</param>
+    /// <param name="colTypes">字段名类型</param>
+    public void CreateTable(string tableName, string[] colNames, string[] colTypes)
+    {
+        string queryString = "CREATE TABLE IF NOT EXISTS " + tableName + "( " + colNames[0] + " " + colTypes[0];
+        for (int i = 1; i < colNames.Length; i++)
+        {
+            queryString += ", " + colNames[i] + " " + colTypes[i];
+        }
+        queryString += "  ) ";
+        ExecuteNonQuery(queryString);
+    }
+
+    public void DeleteTable(string tableName)
+    {
+        string queryString = "DROP TABLE " + tableName;
+        ExecuteNonQuery(queryString);
+    }
+
+    string GetStringForSQL(string content)
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.Append("'");
+        sb.Append(content);
+        sb.Append("'");
+        return sb.ToString();
     }
 }

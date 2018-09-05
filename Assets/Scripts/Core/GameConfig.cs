@@ -9,4 +9,8 @@ public class GameConfig : TSingleton<GameConfig>
     // Scene
     public readonly string _LauncherSceneName = "Launcher";
     public readonly string _PlaySceneName = "Play";
+
+    // sql
+    public readonly string _AccountTableName = "Account";
+    public readonly string _AccountName = "Local"; 
 }

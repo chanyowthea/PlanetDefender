@@ -4,105 +4,30 @@ using System.Text;
 
 public class Test : MonoBehaviour
 {
-    private Sqlite m_sqlite;
-    private const string TABLE_NAME = "UnityTest";
-    // Use this for initialization
-    void Start()
+    private void Awake()
     {
-        //数据库地址
-        string dbPath = Application.dataPath + "/test.db";
-        m_sqlite = new Sqlite(dbPath);
-
-        //创建新表
-        CreateTable();
-
-        //插入数据
-        TestConfig tc1 = new TestConfig
-        {
-            m_id = "001",
-            m_name = "test1",
-            m_len = 10
-        };
-        InsertTable(tc1);
-
-        //在插入一条
-        TestConfig tc2 = new TestConfig
-        {
-            m_id = "002",
-            m_name = "test2",
-            m_len = 20
-        };
-        InsertTable(tc2);
-
-        //查询数据
-        SelectTable();
-
-        //更新数据
-        tc2.m_name = "johnny";
-        tc2.m_len = 5;
-        UpdateTable(tc2);
-
-        SelectTable();
+        SingletonManager.Init();
     }
 
-    void OnDestroy()
+    private void Start()
     {
-        m_sqlite.Close();
-    }
+        SingletonManager.SqliteHelper.DeleteTable(GameConfig.instance._AccountTableName); 
+        SingletonManager.SqliteHelper.CreateTable(GameConfig.instance._AccountTableName,
+            new string[] { "ID", "Name", "CurrentLevel" }, new string[] { "INTEGER PRIMARY KEY", "TEXT UNIQUE", "INTEGER" });
+        int level = 4;
 
-    private void CreateTable()
-    {
-        StringBuilder sql = new StringBuilder();
-        sql.Append("create table ");
-        sql.Append(TABLE_NAME);
-        sql.Append("(ID VARCHAR(255) PRIMARY KEY,");
-        sql.Append("Name VARCHAR(255),");
-        sql.Append("Len INT);");
-        Excute(sql.ToString());
-    }
+        //SingletonManager.SqliteHelper.InsertValues(GameConfig.instance._AccountTableName, 
+        //    new string[] { "'2'", SingletonManager.SqliteHelper.GetStringForSQL(GameConfig.instance._AccountName + "0"), SingletonManager.SqliteHelper.GetStringForSQL(level.ToString()) });
+        //SingletonManager.SqliteHelper.InsertValues(GameConfig.instance._AccountTableName, 
+        //    new string[] { "'3'", SingletonManager.SqliteHelper.GetStringForSQL(GameConfig.instance._AccountName + "1"), SingletonManager.SqliteHelper.GetStringForSQL(level.ToString()) });
 
-    private void InsertTable(TestConfig tc)
-    {
-        StringBuilder sql = new StringBuilder();
-        sql.Append("insert into ");
-        sql.Append(TABLE_NAME);
-        sql.Append(" values ('");
-        sql.Append(tc.m_id);
-        sql.Append("','");
-        sql.Append(tc.m_name);
-        sql.Append("',");
-        sql.Append(tc.m_len);
-        sql.Append(");");
-        Excute(sql.ToString());
-    }
+        //SingletonManager.SqliteHelper.GeRecordCount(GameConfig.instance._AccountTableName, 
+        //    new string[] { "CurrentLevel" }, new string[] { "=" }, new string[] { SingletonManager.SqliteHelper.GetStringForSQL("4") }); 
+        return; 
 
-    private void SelectTable()
-    {
-        string sql = "select * from " + TABLE_NAME;
-        foreach (var tc in m_sqlite.ExcuteSelectQuery<TestConfig>(sql))
-        {
-            Debug.Log(tc);
-        }
-    }
+        //SingletonManager.SqliteHelper.InsertValues(GameConfig.instance._AccountTableName,
+        //    new string[] { "'1'", SingletonManager.SqliteHelper.GetStringForSQL(GameConfig.instance._AccountName), SingletonManager.SqliteHelper.GetStringForSQL(level.ToString()) });
 
-    private void UpdateTable(TestConfig tc)
-    {
-        StringBuilder sql = new StringBuilder();
-        sql.Append("update ");
-        sql.Append(TABLE_NAME);
-        sql.Append(" set Name = '");
-        sql.Append(tc.m_name);
-        sql.Append("', Len = ");
-        sql.Append(tc.m_len);
-        sql.Append(" where ID = '");
-        sql.Append(tc.m_id);
-        sql.Append("';");
-        Excute(sql.ToString());
-    }
-
-    private void Excute(string sql)
-    {
-        Debug.Log(sql.ToString());
-        m_sqlite.ExcuteQuery(sql);
+        //SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName, new string[] { "CurrenctLevel" }, new string[] { SingletonManager.SqliteHelper.GetStringForSQL(level.ToString()) }, "ID", "=", "'1'");
     }
 }

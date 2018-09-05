@@ -45,8 +45,15 @@ public class GameManager : MonoSingleton<GameManager>
         Time.timeScale = 0;
         ConfigDataManager.instance.LoadCSV<TurrectCSV>("Turrect");
         ConfigDataManager.instance.LoadCSV<LevelCSV>("Level");
+        var reader = SingletonManager.SqliteHelper.ReaderInfo(GameConfig.instance._AccountTableName, new string[] { "CurrentLevel"}, 
+            new Mono.Data.Sqlite.SqliteParameter("@Name", GameConfig.instance._AccountName));
         var v = UIManager.Instance.Open<HUDView>();
-        v.SetData(5 * 1 * 1); // TODO
+        int level = 0; 
+        if (reader.Count > 0 && reader[0].Count > 0)
+        {
+            level = (int)reader[0][0];
+        }
+        v.SetData(level); 
     }
 
     public void OnEnd()
