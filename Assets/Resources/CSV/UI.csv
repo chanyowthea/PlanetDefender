@@ -7,3 +7,4 @@ MessageView,MessageView
 TopResidentUI,TopResidentUI
 StartView,StartView
 TurrectSelectView,TurrectSelectView
+LoadingView,LoadingView
