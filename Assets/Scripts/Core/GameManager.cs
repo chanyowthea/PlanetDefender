@@ -51,7 +51,7 @@ public class GameManager : MonoSingleton<GameManager>
         int level = 0; 
         if (reader.Count > 0 && reader[0].Count > 0)
         {
-            level = (int)reader[0][0];
+            int.TryParse(reader[0][0].ToString(), out level);
         }
         v.SetData(level); 
     }
