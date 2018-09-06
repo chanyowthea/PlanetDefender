@@ -28,9 +28,9 @@ class StartView : BaseUI
     {
         SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName, 
             new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
-            new Mono.Data.Sqlite.SqliteParameter("CurrentLevel", level)); 
-        UIManager.Instance.Close(this); 
-        UIManager.Instance.ChangeScene(); 
-        SceneManager.LoadScene(GameConfig.instance._PlaySceneName);
+            new Mono.Data.Sqlite.SqliteParameter("CurrentLevel", level));
+        UIManager.Instance.ChangeScene();
+        var load = UIManager.Instance.Open<LoadingView>();
+        load.SetData(GameConfig.instance._PlaySceneName); 
     }
 }
