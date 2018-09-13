@@ -37,8 +37,12 @@ class TopResidentUI : BaseUI
     {
         if (UIManager.Instance.CurFullScreenUI.GetType() == typeof(HUDView))
         {
-            EventDispatcher.instance.DispatchEvent(EventID.End);
-            Facade.instance.ChangeScene(GameConfig.instance._LauncherSceneName);
+            var view = UIManager.Instance.Open<PromptView>(); 
+            view.SetData("Back to start view?", () =>
+            {
+                EventDispatcher.instance.DispatchEvent(EventID.End);
+                Facade.instance.ChangeScene(GameConfig.instance._LauncherSceneName);
+            });
             return; 
         }
         UIManager.Instance.PopupLastFullScreenUI();

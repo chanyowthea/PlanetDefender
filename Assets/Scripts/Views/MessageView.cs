@@ -19,8 +19,6 @@ class MessageView : BaseUI
     public override void Open(NavigationData data)
     {
         base.Open(data);
-        _routine = Routine(); 
-        //CoroutineUtil.instance.StartCoroutine(_routine);
         CoroutineUtil.instance.Wait(1, () => UIManager.Instance.Close(this), true);
     }
 
@@ -37,19 +35,5 @@ class MessageView : BaseUI
     public void SetData(string s)
     {
         _messageText.text = s;
-    }
-
-    IEnumerator Routine()
-    {
-        _canvasGroup.alpha = 1;
-        yield return new WaitForSecondsRealtime(1);
-        float time = 0;
-        while (time <= 1)
-        {
-            yield return null;
-            time += Time.deltaTime;
-            _canvasGroup.alpha = 1 - time / 1;
-        }
-        UIManager.Instance.Close(this);
     }
 }

@@ -1,21 +1,44 @@
-﻿//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using UIFramwork;
-//using UnityEngine.UI;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UIFramework;
+using UnityEngine.UI;
+using System;
 
-//public class PromptView : BaseView
-//{
-//    [SerializeField] Text _timeText;
-//    [SerializeField] Image _bg;
-//    public void OnClickClose()
-//    {
-//        GameManager._instance._viewManager.Close(this.GetHashCode());
-//    }
+class PromptView : BaseUI
+{
+    [SerializeField] Text _MessageText;
+    Action _OnOK;
+    Action _OnCancel;
 
-//    public void SetData(int index, float time)
-//    {
-//        _bg.transform.localPosition = new Vector3(330 * (index == 0 ? -1 : 1), _bg.transform.localPosition.y, _bg.transform.localPosition.z);
-//        _timeText.text = time.ToString();
-//    }
-//}
+    public PromptView()
+    {
+        _NaviData._Type = EUIType.Coexisting;
+        _NaviData._Layer = EUILayer.Popup;
+    }
+
+    public void OnClickCancel()
+    {
+        if (_OnCancel != null)
+        {
+            _OnCancel();
+        }
+        UIManager.Instance.Close(this);
+    }
+
+    public void OnClickOK()
+    {
+        if (_OnOK != null)
+        {
+            _OnOK();
+        }
+        UIManager.Instance.Close(this);
+    }
+
+    public void SetData(string msg, Action onOK, Action onCancel = null)
+    {
+        _MessageText.text = msg;
+        _OnOK = onOK;
+        _OnCancel = onCancel; 
+    }
+}
