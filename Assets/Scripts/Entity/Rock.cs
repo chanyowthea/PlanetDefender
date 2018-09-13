@@ -14,6 +14,7 @@ public class Rock : Entity
         {
             _hpText.text = value.ToString();
             base.HP = value;
+            //Debug.Log("Rock set hp=" + value);
             if (HP <= 0)
             {
                 EventDispatcher.instance.DispatchEvent(EventID.AddScore, MaxHP);
@@ -32,7 +33,6 @@ public class Rock : Entity
     void Awake()
     {
         transform.SetParent(GameAssets.rockParent.transform);
-        HP = MaxHP;
         gameObject.name = "" + GetHashCode();
     }
     
@@ -45,6 +45,14 @@ public class Rock : Entity
         Init(); 
     }
 
+    public override void Init()
+    {
+        base.Init();
+        MaxHP = 5;
+        HP = MaxHP; 
+        attack = 2; 
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -53,18 +61,15 @@ public class Rock : Entity
             transform.position - PlanetController.instance.transform.position);
         if (!PlanetController.instance.IsInVisualField(neearestPos))
         {
-            Debug.Log("Update=");
             Destroy(this.gameObject);
         }
     }
 
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("target collider name=" + collider.name);
         // 撞到星球就消失
         if (collider.gameObject.GetComponent<PlanetController>() != null)
         {
-            Debug.LogError("Rock OnTriggerEnter");
             EventDispatcher.instance.DispatchEvent(EventID.AddScore, MaxHP);
             Destroy(this.gameObject);
         }

@@ -131,6 +131,10 @@ namespace UIFramework
                 while (CurFullScreenUI != null && CurFullScreenUI.GetType() != typeof(T))
                 {
                     PopupLastFullScreenUI();
+                    if (_OpenedFullScreenUI.Count <= 1)
+                    {
+                        break;
+                    }
                 }
                 return null;
             }
@@ -402,7 +406,7 @@ namespace UIFramework
             for (int i = 0, length = _ResidentUI.Count; i < length; i++)
             {
                 var ui = _ResidentUI[i];
-                ui.Close(); 
+                ui.Close();
             }
             _ResidentUI.Clear();
 
@@ -412,9 +416,9 @@ namespace UIFramework
                 for (int i = 0, length = uis.Count; i < length; i++)
                 {
                     var ui = uis[i];
-                    ui.Close(); 
+                    ui.Close();
                 }
-                uis.Clear(); 
+                uis.Clear();
             }
             _CoexistingUI.Clear();
 

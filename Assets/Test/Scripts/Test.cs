@@ -11,6 +11,11 @@ public class Test : MonoBehaviour
 
     private void Start()
     {
+        Debugger.LogError("test.cs 666");
+        Debugger.Log("test.cs 666");
+        Debugger.Log("test.cs 666", LogColor.Green);
+        return;
+
         SingletonManager.SqliteHelper.DeleteTable(GameConfig.instance._AccountTableName); 
         SingletonManager.SqliteHelper.CreateTable(GameConfig.instance._AccountTableName,
             new string[] { "ID", "Name", "CurrentLevel" }, new string[] { "INTEGER PRIMARY KEY", "TEXT UNIQUE", "INTEGER" });

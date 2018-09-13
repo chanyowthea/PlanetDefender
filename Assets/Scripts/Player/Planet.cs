@@ -89,7 +89,7 @@ public class Planet : Army
             return; 
         }
         int cost = csv._Price;
-        if (GameData.instance.goldCount < cost)
+        if (ArchiveManager.instance.GetGoldCount() < cost)
         {
             var v = UIManager.Instance.Open<MessageView>();
             v.SetData("金币不足,建造失败");
@@ -229,7 +229,7 @@ public class Planet : Army
         {
             return;
         }
-
-        HP -= BattleUtil.CalcDamage(rock.attack, _Defense);
+        Debug.Log("ExecuteAttack value=" + BattleUtil.CalcDamage(rock.attack, _Defense)); 
+        EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -BattleUtil.CalcDamage(rock.attack, _Defense));
     }
 }

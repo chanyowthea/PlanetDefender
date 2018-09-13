@@ -19,7 +19,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
                     _singletonRoot = new GameObject(); 
                 }
                 _singletonRoot.name = _singletonRootName;
-                DontDestroyOnLoad(_singletonRoot); //防止被销毁  
+                //DontDestroyOnLoad(_singletonRoot); //防止被销毁  
             }
             if (_instance == null) //为空表示第一次获取当前单例类  
             {
@@ -40,7 +40,6 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     protected virtual void Awake()
     {
         _instance = this as T;
-        DontDestroyOnLoad(this); 
     }
 }
 
