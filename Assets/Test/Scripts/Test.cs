@@ -11,9 +11,6 @@ public class Test : MonoBehaviour
 
     private void Start()
     {
-        Debugger.LogError("test.cs 666");
-        Debugger.Log("test.cs 666");
-        Debugger.Log("test.cs 666", LogColor.Green);
         return;
 
         SingletonManager.SqliteHelper.DeleteTable(GameConfig.instance._AccountTableName); 
