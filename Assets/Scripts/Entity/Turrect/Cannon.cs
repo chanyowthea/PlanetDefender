@@ -56,7 +56,7 @@ public class Cannon : Turrect, IShot
         _Degree = degree; 
         Faction = faction;
 
-        var csv = ConfigDataManager.instance.GetData<TurrectCSV>(turrectId.ToString());
+        var csv = ConfigDataManager.instance.GetData<TurretCSV>(turrectId.ToString());
         if (csv == null)
         {
             Debug.LogError("CreateCannon csv is empty! ");

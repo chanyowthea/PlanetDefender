@@ -7,11 +7,17 @@ public class ArchiveManager : TSingleton<ArchiveManager>
     public override void Init()
     {
         base.Init();
+
+        // delete the table to recreate it. 
         //SingletonManager.SqliteHelper.DeleteTable(GameConfig.instance._AccountTableName);
+
+        // if the table not exist, create it. 
         SingletonManager.SqliteHelper.CreateTable(GameConfig.instance._AccountTableName, new string[] 
             { "ID", "Name", "CurrentLevel", "Golds", "HighestScores" },
             new string[] 
             { "INTEGER PRIMARY KEY AUTOINCREMENT", "TEXT UNIQUE", "INTEGER", "INTEGER", "INTEGER" });
+
+        // if the account information not exist, create it. 
         SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName,
             new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
             new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),

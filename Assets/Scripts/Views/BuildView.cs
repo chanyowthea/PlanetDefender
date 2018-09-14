@@ -102,15 +102,15 @@ class BuildView : BaseUI
             }
         }
 
-        var view = UIManager.Instance.Open<TurrectSelectView>();
+        var view = UIManager.Instance.Open<TurretSelectView>();
         view.SetData(index * 60); 
         //EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, index * 60);
         Debug.Log("OnClickBuild index=" + index);
     }
 
-    void BuildSuccess(int degree, int turrectId)
+    void BuildSuccess(int degree, int turretId)
     {
-        OnBuild(degree / 60, turrectId);
+        OnBuild(degree / 60, turretId);
     }
 
     void OnBuild(int index, int turrectId, bool isBuild = true)
@@ -120,7 +120,7 @@ class BuildView : BaseUI
         image.gameObject.SetActive(isBuild);
         if (turrectId != 0)
         {
-            var csv = ConfigDataManager.instance.GetData<TurrectCSV>(turrectId.ToString());
+            var csv = ConfigDataManager.instance.GetData<TurretCSV>(turrectId.ToString());
             if (csv == null)
             {
                 Debug.LogError("CreateCannon csv is empty! ");

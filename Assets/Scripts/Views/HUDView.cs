@@ -81,8 +81,9 @@ class HUDView : BaseUI
         UpdateView();
     }
     
-    public void OnClickBack()
+    public void OnClickOreIllustration()
     {
+        UIManager.Instance.Open<OreIllustrationUI>();
     }
 
     public void OnClickAttack()

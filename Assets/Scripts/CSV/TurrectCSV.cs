@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurrectCSV : CSVBaseData
+public class TurretCSV : CSVBaseData
 {
     public int _ID;
     public string _Name;

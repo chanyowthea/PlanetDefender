@@ -27,6 +27,11 @@ class TopResidentUI : BaseUI
         base.Close();
     }
 
+    public void UpdateView(bool isShowGold, bool isShowBackButton = true)
+    {
+        _goldText.gameObject.SetActive(isShowGold);
+    }
+
     public void UpdateGold(int value)
     {
         _goldCount = value;
