@@ -45,14 +45,8 @@ public class GameManager : MonoSingleton<GameManager>
         Time.timeScale = 0;
         ConfigDataManager.instance.LoadCSV<TurrectCSV>("Turrect");
         ConfigDataManager.instance.LoadCSV<LevelCSV>("Level");
-        var reader = SingletonManager.SqliteHelper.ReaderInfo(GameConfig.instance._AccountTableName, new string[] { "CurrentLevel"}, 
-            new Mono.Data.Sqlite.SqliteParameter("@Name", GameConfig.instance._AccountName));
+        int level = ArchiveManager.instance.GetCurrentLevel();
         var v = UIManager.Instance.Open<HUDView>();
-        int level = 0; 
-        if (reader.Count > 0 && reader[0].Count > 0)
-        {
-            int.TryParse(reader[0][0].ToString(), out level);
-        }
         v.SetData(level); 
     }
 
@@ -65,7 +59,6 @@ public class GameManager : MonoSingleton<GameManager>
         ArchiveManager.instance.DeleteAllData();
         PlanetController.instance._Reset();
         GameData.instance.Clear();
-        GameData.instance.Init();
     }
 
     public void AddHealth()

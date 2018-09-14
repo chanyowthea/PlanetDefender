@@ -80,11 +80,9 @@ class HUDView : BaseUI
         }
         UpdateView();
     }
-
+    
     public void OnClickBack()
     {
-        EventDispatcher.instance.DispatchEvent(EventID.End);
-        SceneManager.LoadScene(GameConfig.instance._LauncherSceneName); 
     }
 
     public void OnClickAttack()
@@ -128,16 +126,15 @@ class HUDView : BaseUI
         }
         if (_addHealthRoutine != null)
         {
-            StopCoroutine(_addHealthRoutine);
+            CoroutineUtil.instance.StopCoroutine(_addHealthRoutine);
             _addHealthRoutine = null;
         }
         _addHealthRoutine = AddHealthCountDown();
-        StartCoroutine(_addHealthRoutine);
+        CoroutineUtil.instance.StartCoroutine(_addHealthRoutine);
 
-        // TODO 这个方式很烂，有没有好的方式？
         if (PlanetController.instance.IsHpLessThanMax())
         {
-            if (GameData.instance.goldCount >= 1)
+            if (ArchiveManager.instance.GetGoldCount() >= 1)
             {
                 EventDispatcher.instance.DispatchEvent(EventID.AddHealth, 1);
                 EventDispatcher.instance.DispatchEvent(EventID.AddGold, -1);

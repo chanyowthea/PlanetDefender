@@ -8,3 +8,4 @@ TopResidentUI,TopResidentUI
 StartView,StartView
 TurrectSelectView,TurrectSelectView
 LoadingView,LoadingView
+PromptView,PromptView

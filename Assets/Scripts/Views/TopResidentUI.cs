@@ -18,7 +18,7 @@ class TopResidentUI : BaseUI
     {
         base.Open(data);
         EventDispatcher.instance.RegisterEvent(EventID.UpdateGold, this, "UpdateGold");
-        UpdateGold(GameData.instance.goldCount);
+        UpdateGold(ArchiveManager.instance.GetGoldCount());
     }
 
     internal override void Close()
@@ -35,6 +35,16 @@ class TopResidentUI : BaseUI
 
     public void OnClickBack()
     {
-        UIManager.Instance.PopupLastFullScreenUI(); 
+        if (UIManager.Instance.CurFullScreenUI.GetType() == typeof(HUDView))
+        {
+            var view = UIManager.Instance.Open<PromptView>(); 
+            view.SetData("Back to start view?", () =>
+            {
+                EventDispatcher.instance.DispatchEvent(EventID.End);
+                Facade.instance.ChangeScene(GameConfig.instance._LauncherSceneName);
+            });
+            return; 
+        }
+        UIManager.Instance.PopupLastFullScreenUI();
     }
 }

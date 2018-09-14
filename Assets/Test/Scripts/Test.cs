@@ -11,6 +11,8 @@ public class Test : MonoBehaviour
 
     private void Start()
     {
+        return;
+
         SingletonManager.SqliteHelper.DeleteTable(GameConfig.instance._AccountTableName); 
         SingletonManager.SqliteHelper.CreateTable(GameConfig.instance._AccountTableName,
             new string[] { "ID", "Name", "CurrentLevel" }, new string[] { "INTEGER PRIMARY KEY", "TEXT UNIQUE", "INTEGER" });

@@ -23,7 +23,7 @@ class EndView : BaseUI
 
     public void OnClickEnd()
     {
-        UIManager.Instance.Open<StartView>(null, true);
+        Facade.instance.ChangeScene(GameConfig.instance._LauncherSceneName); 
     }
 
     public void SetData(string result)

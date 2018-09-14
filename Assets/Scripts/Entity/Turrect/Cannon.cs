@@ -67,6 +67,8 @@ public class Cannon : Turrect, IShot
         {
             _hpSprite.sprite = GameObject.Instantiate(sprite);
         }
+        _Attack = csv._Attack; 
+        _Defense = csv._Defense; 
         TurrectID = turrectId; 
     }
 

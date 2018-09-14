@@ -12,6 +12,8 @@ namespace Scene
 
         private void Update()
         {
+            return; 
+
             if (Time.time - _lastRandomTime < _randomInterval * Time.timeScale)
             {
                 return;
