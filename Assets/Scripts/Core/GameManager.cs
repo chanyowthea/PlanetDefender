@@ -43,8 +43,9 @@ public class GameManager : MonoSingleton<GameManager>
         EventDispatcher.instance.RegisterEvent(EventID.End, this, "OnEnd");
         GameData.instance.Init();
         Time.timeScale = 0;
-        ConfigDataManager.instance.LoadCSV<TurrectCSV>("Turrect");
+        ConfigDataManager.instance.LoadCSV<TurretCSV>("Turret");
         ConfigDataManager.instance.LoadCSV<LevelCSV>("Level");
+        ConfigDataManager.instance.LoadCSV<OreCSV>("Ore");
         int level = ArchiveManager.instance.GetCurrentLevel();
         var v = UIManager.Instance.Open<HUDView>();
         v.SetData(level); 

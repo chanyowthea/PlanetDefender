@@ -82,7 +82,7 @@ public class Planet : Army
     public void CreateCannon(int degree, int turrectId)
     {
         // 金币不足,建造失败
-        var csv = ConfigDataManager.instance.GetData<TurrectCSV>(turrectId.ToString());
+        var csv = ConfigDataManager.instance.GetData<TurretCSV>(turrectId.ToString());
         if (csv == null)
         {
             Debug.LogError("CreateCannon csv is empty! ");

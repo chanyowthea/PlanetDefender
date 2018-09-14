@@ -4,7 +4,7 @@ using UIFramework;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TurrectSelectItem : MonoBehaviour
+public class TurretSelectItem : MonoBehaviour
 {
     [SerializeField] Image _Picture;
     [SerializeField] Text _NameText;
@@ -17,7 +17,7 @@ public class TurrectSelectItem : MonoBehaviour
         {
             return;
         }
-        var csv = ConfigDataManager.instance.GetData<TurrectCSV>(id);
+        var csv = ConfigDataManager.instance.GetData<TurretCSV>(id);
         if (csv == null)
         {
             return;
@@ -38,7 +38,10 @@ public class TurrectSelectItem : MonoBehaviour
 
     public void OnClickItem()
     {
-        EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, _Degree, _TurrectId);
-        UIManager.Instance.Close<TurrectSelectView>(); 
+        var ui = UIManager.Instance.Open<TurretDetailUI>();
+        ui.SetData(_TurrectId, () =>
+        {
+            EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, _Degree, _TurrectId);
+        }); 
     }
 }

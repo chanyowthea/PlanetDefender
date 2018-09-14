@@ -6,6 +6,8 @@ EndView,EndView
 MessageView,MessageView
 TopResidentUI,TopResidentUI
 StartView,StartView
-TurrectSelectView,TurrectSelectView
+TurretSelectView,TurretSelectView
 LoadingView,LoadingView
 PromptView,PromptView
+TurretDetailUI,TurretDetailUI
+OreIllustrationUI,OreIllustrationUI

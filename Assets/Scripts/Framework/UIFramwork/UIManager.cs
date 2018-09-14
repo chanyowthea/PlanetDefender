@@ -161,6 +161,12 @@ namespace UIFramework
         public void Close<T>(T ui)
             where T : BaseUI
         {
+            // confirm the external close function of a full screen ui execute the popup logic. 
+            if (ui != null && ui._NaviData._Type == EUIType.FullScreen)
+            {
+                UIManager.Instance.PopupLastFullScreenUI();
+                return;
+            }
             CloseInternal(ui);
         }
 
@@ -173,7 +179,13 @@ namespace UIFramework
             BaseUI ui = FindLastUI<T>(temp._NaviData._Type);
             if (ui == null)
             {
-                //Debug.LogErrorFormat("do not contains ui with type of {0}", t);
+                return;
+            }
+
+            // confirm the external close function of a full screen ui execute the popup logic. 
+            if (ui._NaviData._Type == EUIType.FullScreen)
+            {
+                UIManager.Instance.PopupLastFullScreenUI();
                 return;
             }
             CloseInternal(ui as T);
@@ -263,8 +275,6 @@ namespace UIFramework
                 }
             }
         }
-
-
 
         void RemoveTargetUI<T>(T ui)
             where T : BaseUI
@@ -435,6 +445,24 @@ namespace UIFramework
                 ui.Close();
             }
             _IndependentUI.Clear();
+        }
+
+        public T GetCurrentResidentUI<T>()
+            where T : BaseUI
+        {
+            if (_ResidentUI.Count == 0)
+            {
+                return null;
+            }
+            for (int i = _ResidentUI.Count - 1; i >= 0; --i)
+            {
+                var ui = _ResidentUI[i];
+                if (ui.GetType() == typeof(T))
+                {
+                    return ui as T;
+                }
+            }
+            return null; 
         }
     }
 }
