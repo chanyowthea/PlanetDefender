@@ -114,7 +114,7 @@ namespace UIFramework
         void Push<T>(T ui)
             where T : BaseUI
         {
-            var t = typeof(T);
+            var t = ui.GetType();
             Debug.Log("Push t=" + t);
             if (!_UIPool.ContainsKey(t))
             {
@@ -413,36 +413,39 @@ namespace UIFramework
 
         public void ChangeScene()
         {
-            for (int i = 0, length = _ResidentUI.Count; i < length; i++)
+            for (int i = _ResidentUI.Count - 1; i >= 0; --i)
             {
                 var ui = _ResidentUI[i];
-                ui.Close();
+                CloseInternal(ui); 
             }
             _ResidentUI.Clear();
 
             foreach (var item in _CoexistingUI)
             {
                 var uis = item.Value;
-                for (int i = 0, length = uis.Count; i < length; i++)
+                for (int i = uis.Count - 1; i >= 0; --i)
                 {
                     var ui = uis[i];
-                    ui.Close();
+                    CloseInternal(ui);
                 }
                 uis.Clear();
             }
             _CoexistingUI.Clear();
 
-            for (int i = 0, length = _OpenedFullScreenUI.Count; i < length; i++)
+            for (int i = _OpenedFullScreenUI.Count - 1; i >= 0; --i)
             {
                 var ui = _OpenedFullScreenUI[i];
-                ui.Close();
+                DebugFramework.Debugger.Log("_OpenedFullScreenUI type=" + ui.GetType());
+                DebugFramework.Debugger.Log("_OpenedFullScreenUI count=" + _UIPool.Count);
+                CloseInternal(ui);
+                DebugFramework.Debugger.Log("_OpenedFullScreenUI count=" + _UIPool.Count);
             }
             _OpenedFullScreenUI.Clear();
 
-            for (int i = 0, length = _IndependentUI.Count; i < length; i++)
+            for (int i = _IndependentUI.Count - 1; i >= 0; --i)
             {
                 var ui = _IndependentUI[i];
-                ui.Close();
+                CloseInternal(ui);
             }
             _IndependentUI.Clear();
         }

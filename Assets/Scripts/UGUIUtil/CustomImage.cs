@@ -9,6 +9,12 @@ public class CustomImage : MonoBehaviour
     [SerializeField] Image _Image;
     [SerializeField] EScaleType _ScaleType;
 
+    public Sprite sprite
+    {
+        get { return _Image.sprite; }
+        set{ _Image.sprite = value; }
+    }
+
     public enum EScaleType
     {
         Shrink,
@@ -17,8 +23,14 @@ public class CustomImage : MonoBehaviour
 
     public void SetData(Sprite s)
     {
+        if (s == null)
+        {
+            return;
+        }
+        // for the layout component affects the rect transform value. 
+        Canvas.ForceUpdateCanvases(); 
         var spriteRect = _Mask.rectTransform.rect.size;
-        float maskRatio = _Mask.rectTransform.rect.width / _Mask.rectTransform.rect.height;
+        float maskRatio = _Mask.rectTransform.rect.width / _Mask.rectTransform.rect.height; ;
 
         // the ratio of sprite
         float ratio = s.rect.width / s.rect.height;

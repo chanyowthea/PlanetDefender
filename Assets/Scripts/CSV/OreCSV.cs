@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class OreCSV : CSVBaseData
 {
-    public string _ID;
+    public int _ID;
     public string _Name;
     public string _Picture; 
-    public string _Price;
-    public string _TechLevel;
-    public string _PlanetRarity;
-    public string _AetherRarity;
+    public int _Price;
+    public int _TechLevel;
+    public bool _InMall;
 
     public override string GetPrimaryKey()
     {
@@ -19,12 +18,11 @@ public class OreCSV : CSVBaseData
 
     public override void ParseData(long index, int fieldCount, string[] headers, string[] values)
     {
-        _ID = ReadString("ID", headers, values);
+        _ID = ReadInt("ID", headers, values);
         _Name = ReadString("Name", headers, values);
         _Picture = ReadString("Picture", headers, values);
-        _Price = ReadString("Price", headers, values);
-        _TechLevel = ReadString("TechLevel", headers, values);
-        _PlanetRarity = ReadString("PlanetRarity", headers, values);
-        _AetherRarity = ReadString("AetherRarity", headers, values);
+        _Price = ReadInt("Price", headers, values);
+        _TechLevel = ReadInt("TechLevel", headers, values);
+        _InMall = ReadInt("InMall", headers, values) == 0;
     }
 }

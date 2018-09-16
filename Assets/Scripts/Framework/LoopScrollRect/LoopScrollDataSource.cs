@@ -6,6 +6,7 @@ namespace UnityEngine.UI
     public abstract class LoopScrollDataSource
     {
         public abstract void ProvideData(Transform transform, int idx);
+        public abstract void ClearData(Transform transform);
     }
 
     public class LoopScrollSendIndexSource : LoopScrollDataSource
@@ -17,6 +18,11 @@ namespace UnityEngine.UI
         public override void ProvideData(Transform transform, int idx)
         {
             transform.SendMessage("ScrollCellIndex", idx);
+        }
+
+        public override void ClearData(Transform transform)
+        {
+
         }
     }
 
@@ -41,6 +47,16 @@ namespace UnityEngine.UI
             {
                 DebugFramework.Debugger.Log("i=" + i);
                 i.SetData(objectsToFill[idx]);
+            }
+        }
+
+        public override void ClearData(Transform transform)
+        {
+            var i = transform.GetComponent<ILoopScrollRectItem<T>>();
+            if (i != null)
+            {
+                DebugFramework.Debugger.Log("ClearData i=" + i);
+                i.ClearData();
             }
         }
     }

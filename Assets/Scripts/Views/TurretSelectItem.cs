@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class TurretSelectItem : MonoBehaviour
 {
-    [SerializeField] Image _Picture;
+    [SerializeField] CustomImage _Picture;
     [SerializeField] Text _NameText;
     int _Degree; 
     int _TurrectId; 
@@ -24,15 +24,15 @@ public class TurretSelectItem : MonoBehaviour
         }
         _TurrectId = int.Parse(id); 
         _NameText.text = csv._Name;
-        _Picture.sprite = ResourcesManager.instance.GetSprite(csv._Picture); 
+        _Picture.SetData(ResourcesManager.instance.GetSprite(csv._Picture)); 
         _Degree = degree; 
     }
 
     public void ClearData()
     {
-        _NameText.text = null;
         ResourcesManager.instance.UnloadAsset(_Picture.sprite);
         _Picture.sprite = null;
+        _NameText.text = null;
         _Degree = 0; 
     }
 

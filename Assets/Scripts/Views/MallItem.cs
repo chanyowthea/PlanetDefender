@@ -4,17 +4,17 @@ using UIFramework;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OreIllustrationItem : MonoBehaviour, ILoopScrollRectItem<int>
+public class MallItem : MonoBehaviour, ILoopScrollRectItem<int>
 {
     [SerializeField] Text _NameText;
     [SerializeField] CustomImage _CustomImage;
-    int _OreId;
+    int _ID;
     
-    public void SetData(int oreId)
+    public void SetData(int id)
     {
-        _OreId = oreId;
-        var csv = ConfigDataManager.instance.GetData<OreCSV>(_OreId.ToString());
-        if (csv == null)
+        _ID = id;
+        var csv = ConfigDataManager.instance.GetData<OreCSV>(_ID.ToString());
+        if (csv == null || !csv._InMall)
         {
             return;
         }
@@ -31,6 +31,6 @@ public class OreIllustrationItem : MonoBehaviour, ILoopScrollRectItem<int>
 
     public void OnClickItem()
     {
-        DebugFramework.Debugger.Log("OnClickItem id=" + _OreId); 
+        DebugFramework.Debugger.Log("OnClickItem id=" + _ID); 
     }
 }

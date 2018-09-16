@@ -4,10 +4,8 @@ using System.Text;
 using UnityEngine.UI;
 public class Test : MonoBehaviour
 {
-    [SerializeField] CustomImage _Image;
+    [SerializeField] SpriteRenderer _SpriteRenderer;
     private void Start()
     {
-        var s = ResourcesManager.instance.GetSprite("Cannon"); 
-        _Image.SetData(s); 
     }
 }

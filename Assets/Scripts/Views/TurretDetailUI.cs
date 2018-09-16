@@ -12,7 +12,7 @@ class TurretDetailUI : BaseUI
     [SerializeField] Text _AttackText;
     [SerializeField] Text _DefenseText;
     [SerializeField] Text _PriceText;
-    [SerializeField] Image _Picture; 
+    [SerializeField] CustomImage _Picture; 
     Action _OnPurchase;
     int _TurretId; 
 
@@ -30,6 +30,8 @@ class TurretDetailUI : BaseUI
 
     internal override void Close()
     {
+        ResourcesManager.instance.UnloadAsset(_Picture.sprite);
+        _Picture.sprite = null;
         EventDispatcher.instance.RegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
         base.Close();
     }
@@ -65,7 +67,7 @@ class TurretDetailUI : BaseUI
         _AttackText.text = csv._Attack.ToString();
         _DefenseText.text = csv._Defense.ToString(); 
         _PriceText.text = csv._Price.ToString(); 
-        _Picture.sprite = ResourcesManager.instance.GetSprite(csv._Picture);
+        _Picture.SetData(ResourcesManager.instance.GetSprite(csv._Picture));
         _OnPurchase = onPurchase;
     }
 }

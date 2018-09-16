@@ -5,4 +5,5 @@ using UnityEngine;
 public interface ILoopScrollRectItem<T>
 {
     void SetData(T data);
+    void ClearData(); 
 }

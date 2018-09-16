@@ -17,6 +17,7 @@ public class GameData : TSingleton<GameData>
 
     public override void Clear()
     {
+        scoreCount = 0; 
         EventDispatcher.instance.UnRegisterEvent(EventID.AddScore, this, "AddScore");
         base.Clear();
     }
@@ -29,6 +30,7 @@ public class GameData : TSingleton<GameData>
     void AddScore(int value)
     {
         scoreCount += value;
+        DebugFramework.Debugger.Log("AddScore scoreCount=" + scoreCount); 
         EventDispatcher.instance.DispatchEvent(EventID.UpdateScore, scoreCount);
     }
 }

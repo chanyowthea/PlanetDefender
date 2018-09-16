@@ -46,6 +46,7 @@ public class GameManager : MonoSingleton<GameManager>
         ConfigDataManager.instance.LoadCSV<TurretCSV>("Turret");
         ConfigDataManager.instance.LoadCSV<LevelCSV>("Level");
         ConfigDataManager.instance.LoadCSV<OreCSV>("Ore");
+        ArchiveManager.instance.OnEnterPlay(); 
         int level = ArchiveManager.instance.GetCurrentLevel();
         var v = UIManager.Instance.Open<HUDView>();
         v.SetData(level); 
@@ -54,17 +55,12 @@ public class GameManager : MonoSingleton<GameManager>
     public void OnEnd()
     {
         Time.timeScale = 0;
-        GameObject.Destroy(GameAssets.bulletParent);
-        GameObject.Destroy(GameAssets.goldParent);
-        GameObject.Destroy(GameAssets.rockParent);
-        ArchiveManager.instance.DeleteAllData();
-        PlanetController.instance._Reset();
+        ArchiveManager.instance.OnQuitPlay();
         GameData.instance.Clear();
     }
 
     public void AddHealth()
     {
-
     }
 
     private void OnDestroy()
@@ -74,15 +70,10 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void OnApplicationQuit()
     {
-        ArchiveManager.instance.SaveAllData();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            ArchiveManager.instance.DeleteAllData();
-        }
         if (Input.GetKeyDown(KeyCode.C))
         {
             EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, 0, 1);

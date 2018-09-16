@@ -70,8 +70,7 @@ public class Rock : Entity
         // 撞到星球就消失
         if (collider.gameObject.GetComponent<PlanetController>() != null)
         {
-            EventDispatcher.instance.DispatchEvent(EventID.AddScore, MaxHP);
-            Destroy(this.gameObject);
+            HP = 0; 
         }
         // 撞到子弹会扣血
         else

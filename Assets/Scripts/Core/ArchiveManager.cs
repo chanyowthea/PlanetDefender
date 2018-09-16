@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Mono.Data.Sqlite;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,18 +13,22 @@ public class ArchiveManager : TSingleton<ArchiveManager>
         //SingletonManager.SqliteHelper.DeleteTable(GameConfig.instance._AccountTableName);
 
         // if the table not exist, create it. 
-        SingletonManager.SqliteHelper.CreateTable(GameConfig.instance._AccountTableName, new string[] 
+        SingletonManager.SqliteHelper.CreateTable(GameConfig.instance._AccountTableName, new string[]
             { "ID", "Name", "CurrentLevel", "Golds", "HighestScores" },
-            new string[] 
+            new string[]
             { "INTEGER PRIMARY KEY AUTOINCREMENT", "TEXT UNIQUE", "INTEGER", "INTEGER", "INTEGER" });
 
         // if the account information not exist, create it. 
-        SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName,
-            new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
-            new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
-            new Mono.Data.Sqlite.SqliteParameter("CurrentLevel", "0"),
-            new Mono.Data.Sqlite.SqliteParameter("Golds", "10000"),
-            new Mono.Data.Sqlite.SqliteParameter("HighestScores", "0"));
+        if (SingletonManager.SqliteHelper.GetCount(GameConfig.instance._AccountTableName,
+            new SqliteParameter("Name", GameConfig.instance._AccountName)) == 0)
+        {
+            SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName,
+                new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
+                new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
+                new Mono.Data.Sqlite.SqliteParameter("CurrentLevel", "0"),
+                new Mono.Data.Sqlite.SqliteParameter("Golds", "10000"),
+                new Mono.Data.Sqlite.SqliteParameter("HighestScores", "0"));
+        }
     }
 
     public void OnEnterPlay()
@@ -38,9 +43,9 @@ public class ArchiveManager : TSingleton<ArchiveManager>
 
     void AddGold(int value)
     {
-        int golds = GetGoldCount(); 
+        int golds = GetGoldCount();
         golds += value;
-        SetGoldCount(golds); 
+        SetGoldCount(golds);
         EventDispatcher.instance.DispatchEvent(EventID.UpdateGold, GetGoldCount());
     }
 
@@ -67,17 +72,6 @@ public class ArchiveManager : TSingleton<ArchiveManager>
             new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
             new Mono.Data.Sqlite.SqliteParameter("Golds", value));
     }
-
-    public void DeleteAllData()
-    {
-
-    }
-
-    public void SaveAllData()
-    {
-
-    }
-
 
     public int GetCurrentLevel()
     {

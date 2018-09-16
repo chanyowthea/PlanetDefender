@@ -65,7 +65,9 @@ public class Cannon : Turrect, IShot
         var sprite = ResourcesManager.instance.GetSprite(csv._Picture);
         if (sprite != null)
         {
+            var lastSize = _hpSprite.size;
             _hpSprite.sprite = GameObject.Instantiate(sprite);
+            _hpSprite.size = lastSize; 
         }
         _Attack = csv._Attack; 
         _Defense = csv._Defense; 

@@ -55,11 +55,6 @@ public class PlanetController : MonoSingleton<PlanetController>
         {
             return;
         }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            _planet.CreatCannonQuick();
-        }
         if (CrossPlatformInputManager.GetButtonDown("Rotate"))
         {
             Rotate(true);

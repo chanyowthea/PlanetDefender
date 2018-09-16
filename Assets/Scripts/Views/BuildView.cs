@@ -77,6 +77,12 @@ class BuildView : BaseUI
 
     internal override void Close()
     {
+        for (int i = 0, length = _btns.Length; i < length; i++)
+        {
+            var img = _imgs[i];
+            ResourcesManager.instance.UnloadAsset(img.sprite);
+            img.sprite = null;
+        }
         EventDispatcher.instance.UnRegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
         Time.timeScale = _lastTimeScale;
         for (int i = 0, length = _btns.Length; i < length; i++)

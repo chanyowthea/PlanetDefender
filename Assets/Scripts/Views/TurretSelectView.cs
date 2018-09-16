@@ -54,7 +54,6 @@ class TurretSelectView : BaseUI
     public void SetData(int degree)
     {
         _Degree = degree;
-
         _ItemPrefab.gameObject.SetActive(false);
         var list = ConfigDataManager.instance.GetDataList<TurretCSV>();
         for (int i = 0, length = list.Count; i < length; i++)

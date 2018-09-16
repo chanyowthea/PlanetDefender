@@ -291,6 +291,13 @@ namespace UnityEngine.UI
 
         public void ClearData()
         {
+            if (Application.isPlaying && this.isActiveAndEnabled)
+            {
+                for (int i = 0; i < content.childCount; i++)
+                {
+                    dataSource.ClearData(content.GetChild(i));
+                }
+            }
             totalCount = 0; 
             dataSource = null; 
         }

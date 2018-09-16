@@ -51,6 +51,13 @@ class HUDView : BaseUI
         UpdateView();
     }
 
+    internal override void ClearData()
+    {
+        _scoreCount = 0; 
+        _CurLevel = 0; 
+        base.ClearData();
+    }
+
     void UpdateView()
     {
         _scoreText.text = _scoreCount.ToString();
@@ -84,6 +91,21 @@ class HUDView : BaseUI
     public void OnClickOreIllustration()
     {
         UIManager.Instance.Open<OreIllustrationUI>();
+    }
+
+    public void OnClickTurretIllustration()
+    {
+        UIManager.Instance.Open<TurretIllustrationUI>();
+    }
+
+    public void OnClickMall()
+    {
+        UIManager.Instance.Open<MallUI>();
+    }
+
+    public void OnClickMore()
+    {
+
     }
 
     public void OnClickAttack()
