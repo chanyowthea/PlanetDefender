@@ -18,8 +18,8 @@ public class SQLiteHelper
         dir = Application.dataPath + "/DataBase/";
         connectionString = "data source=" + dir + string.Format("{0}.db", database);
 #elif UNITY_ANDROID
-        path = Application.persistentDataPath + "/DataBase/"; 
-        connectionString = "URI=file:" + path + string.Format("{0}.db", database);
+        dir = Application.persistentDataPath + "/DataBase/"; 
+        connectionString = "URI=file:" + dir + string.Format("{0}.db", database);
 #endif
         if (!Directory.Exists(dir))
         {

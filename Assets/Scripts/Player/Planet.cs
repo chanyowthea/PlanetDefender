@@ -220,16 +220,16 @@ public class Planet : Army
 
     void OnTriggerEnter(Collider collider)
     {
-        ExecuteAttack(collider.gameObject.GetComponent<Rock>());
+        ExecuteAttack(collider.gameObject.GetComponent<Enemy>());
     }
 
-    void ExecuteAttack(Rock rock)
+    void ExecuteAttack(Enemy rock)
     {
         if (rock == null)
         {
             return;
         }
-        Debug.Log("ExecuteAttack value=" + BattleUtil.CalcDamage(rock.attack, _Defense)); 
-        EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -BattleUtil.CalcDamage(rock.attack, _Defense));
+        Debug.Log("ExecuteAttack value=" + BattleUtil.CalcDamage(rock.Attack, _Defense)); 
+        EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -BattleUtil.CalcDamage(rock.Attack, _Defense));
     }
 }

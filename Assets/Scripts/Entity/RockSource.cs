@@ -24,6 +24,6 @@ public class RockSource : MonoBehaviour
         r.transform.position = this.transform.position;
         var dir = Vector3.Normalize(PlanetController.instance.transform.position -
             new Vector3(1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 0));
-        r.SetData(transform.position, 0.02f, dir, EFaction.Enemy);
+        r.SetData(transform.position, 0.02f, dir, EFaction.Enemy, new System.Random().Next(1, 23));
     }
 }

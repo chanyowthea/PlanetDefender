@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Rock : Entity
+public class Enemy : Entity
 {
     public float _radius = 1.41f / 2;
 
@@ -27,30 +27,43 @@ public class Rock : Entity
         }
     }
 
-    [SerializeField] SpriteRenderer _sprite;
-    public int attack { private set; get;}
+    [SerializeField] SpriteRenderer _Sprite;
+    public int Attack { private set; get;}
 
     void Awake()
     {
         transform.SetParent(GameAssets.rockParent.transform);
-        gameObject.name = "" + GetHashCode();
+        gameObject.name = GetType() + "_" + GetHashCode();
     }
     
-    public void SetData(Vector3 pos, float moveSpeed, Vector3 moveDir, EFaction faction)
+    public void SetData(Vector3 pos, float moveSpeed, Vector3 moveDir, EFaction faction, int enemyId)
     {
+        _Sprite.sprite = null; 
         transform.position = pos;
         _MoveSpeed = moveSpeed;
         _MoveDir = moveDir;
         Faction = faction;
+        var csv = ConfigDataManager.instance.GetData<EnemyCSV>(enemyId.ToString());
+        if (csv != null)
+        {
+            MaxHP = csv._MaxHP;
+            Attack = csv._Attack;
+            _Defense = csv._Defense;
+            var sprite = ResourcesManager.instance.GetSprite(csv._Picture); 
+            if (sprite != null)
+            {
+                var lastSize = _Sprite.size;
+                _Sprite.sprite = GameObject.Instantiate(sprite);
+                _Sprite.size = lastSize;
+            }
+        }
+        HP = MaxHP;
         Init(); 
     }
 
     public override void Init()
     {
         base.Init();
-        MaxHP = 5;
-        HP = MaxHP; 
-        attack = 2; 
     }
 
     protected override void Update()
@@ -91,6 +104,9 @@ public class Rock : Entity
 
     private void OnDestroy()
     {
-        //Debug.LogError("Rock OnDestroy");
+        if (_Sprite.sprite != null)
+        {
+            GameObject.Destroy(_Sprite.sprite);
+        }
     }
 }

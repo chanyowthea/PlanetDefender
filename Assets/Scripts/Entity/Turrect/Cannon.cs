@@ -7,9 +7,7 @@ using UnityEngine.UI;
 public class Cannon : Turrect, IShot
 {
     [SerializeField] SpriteRenderer _hpSprite;
-    List<Rock> _rocksInFireRangle = new List<Rock>();
     public Action<int> _onDie;
-    Dictionary<Rock, Vector3> _rocksInMonitoring = new Dictionary<Rock, Vector3>();
 
     public override int HP
     {
@@ -93,10 +91,10 @@ public class Cannon : Turrect, IShot
     // attack by other 
     void OnTriggerEnter(Collider collider)
     {
-        var c = collider.gameObject.GetComponent<Rock>();
+        var c = collider.gameObject.GetComponent<Enemy>();
         if (c != null)
         {
-            HP -= BattleUtil.CalcDamage(c.attack, _Defense);
+            HP -= BattleUtil.CalcDamage(c.Attack, _Defense);
         }
     }
 }

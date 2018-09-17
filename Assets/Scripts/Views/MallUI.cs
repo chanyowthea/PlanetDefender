@@ -25,7 +25,8 @@ class MallUI : BaseUI
         int id = 0;
         for (int i = 0, length = list.Count; i < length; i++)
         {
-            if (int.TryParse(list[i].GetPrimaryKey(), out id))
+            var csv = list[i] as OreCSV;
+            if (int.TryParse(csv.GetPrimaryKey(), out id) && csv._InMall)
             {
                 ids.Add(id);
             }

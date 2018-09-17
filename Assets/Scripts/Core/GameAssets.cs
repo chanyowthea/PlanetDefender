@@ -4,18 +4,11 @@ using UnityEngine;
 
 public class GameAssets : MonoSingleton<GameAssets>
 {
-    [Header("ItemPrefabs")]
+    [Header("Prefabs")]
     public GameObject _cannonPrefab;
     public Bullet _bulletPrefab;
-    public Rock _rockPrefab;
+    public Enemy _rockPrefab;
     public Gold _goldPrefab;
-
-    [Header("Materials")]
-    public Material _rockMat;
-    public Material _rockMat_Default;
-
-    [Header("Configs")]
-
 
     static GameObject _bulletParent;
     public static GameObject bulletParent

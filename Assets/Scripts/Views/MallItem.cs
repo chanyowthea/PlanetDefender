@@ -14,7 +14,7 @@ public class MallItem : MonoBehaviour, ILoopScrollRectItem<int>
     {
         _ID = id;
         var csv = ConfigDataManager.instance.GetData<OreCSV>(_ID.ToString());
-        if (csv == null || !csv._InMall)
+        if (csv == null)
         {
             return;
         }
