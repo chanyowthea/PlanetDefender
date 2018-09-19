@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ArchiveManager : TSingleton<ArchiveManager>
 {
+    public AccountData AccountInfo { private set; get; }
     public override void Init()
     {
         base.Init();
@@ -12,23 +13,32 @@ public class ArchiveManager : TSingleton<ArchiveManager>
         // delete the table to recreate it. 
         //SingletonManager.SqliteHelper.DeleteTable(GameConfig.instance._AccountTableName);
 
-        // if the table not exist, create it. 
-        SingletonManager.SqliteHelper.CreateTable(GameConfig.instance._AccountTableName, new string[]
-            { "ID", "Name", "CurrentLevel", "Golds", "HighestScores" },
-            new string[]
-            { "INTEGER PRIMARY KEY AUTOINCREMENT", "TEXT UNIQUE", "INTEGER", "INTEGER", "INTEGER" });
+        // if the table do not exist, create it. 
+        AccountInfo = new AccountData();
+        Dictionary<string, ESQLiteAttributeType> dict = new Dictionary<string, ESQLiteAttributeType>();
+        dict.Add(LogUtil.GetVarName(rt => AccountInfo._AccountID), ESQLiteAttributeType.PrimaryKeyAutoIncrement);
+        dict.Add(LogUtil.GetVarName(rt => AccountInfo._AccountName), ESQLiteAttributeType.Unique);
+        SingletonManager.SqliteHelper.CreateTable(GameConfig.instance._AccountTableName, AccountInfo.ToFieldNames(), AccountInfo.ToSqliteTypes(dict));
 
-        // if the account information not exist, create it. 
+        // if the account information do not exist, create it. 
         if (SingletonManager.SqliteHelper.GetCount(GameConfig.instance._AccountTableName,
-            new SqliteParameter("Name", GameConfig.instance._AccountName)) == 0)
+            new SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName)) == 0)
         {
+            AccountInfo._AccountName = GameConfig.instance._AccountName;
+            AccountInfo._CurrentLevel = 0;
+            AccountInfo._Golds = 10000;
+            AccountInfo._HighestScores = 0;
+            Dictionary<int, int> ms = new Dictionary<int, int>();
+            ms.Add(1, 10);
+            ms.Add(2, 10);
+            ms.Add(3, 10);
+            AccountInfo._Materials = ms.GetLogString();
+
             SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName,
-                new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
-                new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
-                new Mono.Data.Sqlite.SqliteParameter("CurrentLevel", "0"),
-                new Mono.Data.Sqlite.SqliteParameter("Golds", "10000"),
-                new Mono.Data.Sqlite.SqliteParameter("HighestScores", "0"));
+                new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName), 
+                AccountInfo.ToSqliteParams());
         }
+        UpdateAccountInfo();
     }
 
     public void OnEnterPlay()
@@ -56,39 +66,38 @@ public class ArchiveManager : TSingleton<ArchiveManager>
 
     public int GetGoldCount()
     {
-        int value = 0;
-        var reader = SingletonManager.SqliteHelper.ReaderInfo(GameConfig.instance._AccountTableName, new string[] { "Golds" },
-            new Mono.Data.Sqlite.SqliteParameter("@Name", GameConfig.instance._AccountName));
-        if (reader.Count > 0 && reader[0].Count > 0)
-        {
-            int.TryParse(reader[0][0].ToString(), out value);
-        }
-        return value;
+        return AccountInfo._Golds;
     }
 
     public void SetGoldCount(int value)
     {
         SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName,
-            new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
-            new Mono.Data.Sqlite.SqliteParameter("Golds", value));
+            new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName),
+            new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._Golds), value));
+        AccountInfo._Golds = value;
     }
 
     public int GetCurrentLevel()
     {
-        int level = 0;
-        var reader = SingletonManager.SqliteHelper.ReaderInfo(GameConfig.instance._AccountTableName, new string[] { "CurrentLevel" },
-            new Mono.Data.Sqlite.SqliteParameter("@Name", GameConfig.instance._AccountName));
-        if (reader.Count > 0 && reader[0].Count > 0)
-        {
-            int.TryParse(reader[0][0].ToString(), out level);
-        }
-        return level;
+        return AccountInfo._CurrentLevel;
     }
 
     public void SetCurrentLevel(int level)
     {
         SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName,
-            new Mono.Data.Sqlite.SqliteParameter("Name", GameConfig.instance._AccountName),
-            new Mono.Data.Sqlite.SqliteParameter("CurrentLevel", level));
+            new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName),
+            new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._CurrentLevel), level));
+        AccountInfo._CurrentLevel = level;
+    }
+
+    public void UpdateAccountInfo()
+    {
+        var reader = SingletonManager.SqliteHelper.ReaderInfo(GameConfig.instance._AccountTableName,
+            AccountInfo.ToFieldNames(),
+            new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName));
+        if (reader.Count > 0 && reader[0].Count > 0)
+        {
+            AccountInfo.SetAllValues(reader[0]);
+        }
     }
 }

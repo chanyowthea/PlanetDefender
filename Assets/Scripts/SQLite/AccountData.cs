@@ -7,8 +7,9 @@ using System.Reflection;
 public class AccountData : SQLiteData
 {
     public int _AccountID;
+    public int _CurrentLevel; 
     public string _AccountName;
-    public string _Golds;
-    public string _HighestScores; 
+    public int _Golds;
+    public int _HighestScores; 
     public string _Materials; 
 }

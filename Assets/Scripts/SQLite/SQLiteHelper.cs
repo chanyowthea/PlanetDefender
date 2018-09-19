@@ -121,8 +121,8 @@ public class SQLiteHelper
     /// 根据条件读取数据，并且返回对应条数的数据组，前面的List是数据行数，后面的List是列名对应的数据
     /// </summary>
     /// <param name="columnNames">需要读取的字段</param>
-    /// <param name="args">读取信息的限定条件</param>
-    public List<List<object>> ReaderInfo(string tableName, string[] columnNames, params SqliteParameter[] args)
+    /// <param name="conditions">读取信息的限定条件</param>
+    public List<List<object>> ReaderInfo(string tableName, string[] columnNames, params SqliteParameter[] conditions)
     {
         if (columnNames == null || columnNames.Length == 0)
         {
@@ -139,13 +139,14 @@ public class SQLiteHelper
 
         // conditions
         string temp1 = "";
-        for (int i = 0; i < args.Length; ++i)
+        for (int i = 0; i < conditions.Length; ++i)
         {
             // name=@name
-            temp1 += args[i].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(args[i].Value.ToString()) + ((i != args.Length - 1) ? " AND " : "");
+            temp1 += conditions[i].ParameterName.TrimStart(_Identifier) + "=" + GetStringForSQL(conditions[i].Value.ToString()) 
+                + ((i != conditions.Length - 1) ? " AND " : "");
         }
 
-        string format = (args == null || args.Length == 0) ? "SELECT {0} FROM {1}" : "SELECT {0} FROM {1} WHERE {2}";
+        string format = (conditions == null || conditions.Length == 0) ? "SELECT {0} FROM {1}" : "SELECT {0} FROM {1} WHERE {2}";
         return ExecuteReader(string.Format(format, temp0, tableName, temp1));
     }
 
