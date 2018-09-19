@@ -43,15 +43,15 @@ class BuildView : BaseUI
             OnBuild(i, 0, false);
         }
 
-        var cannons = PlanetController.instance.GetAllCannons();
-        for (int i = 0, length = cannons.Length; i < length; i++)
+        var cannons = TurretManager.instance.GetAllTurrets();
+        for (int i = 0, length = cannons.Count; i < length; i++)
         {
             var c = cannons[i];
             if (c == null)
             {
                 continue;
             }
-            var cannon = c.GetComponentInChildren<Cannon>();
+            var cannon = c.GetComponentInChildren<Turret>();
             if (cannon == null)
             {
                 continue;
@@ -94,10 +94,10 @@ class BuildView : BaseUI
 
     void OnClickBuild(int index)
     {
-        var cs = PlanetController.instance.GetAllCannons();
+        var cs = TurretManager.instance.GetAllTurrets();
         if (cs != null)
         {
-            for (int i = 0, length = cs.Length; i < length; i++)
+            for (int i = 0, length = cs.Count; i < length; i++)
             {
                 var c = cs[i];
                 // 已经建造了不可再建造
@@ -110,13 +110,14 @@ class BuildView : BaseUI
 
         var view = UIManager.Instance.Open<TurretSelectView>();
         view.SetData(index * 60); 
-        //EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, index * 60);
         Debug.Log("OnClickBuild index=" + index);
     }
 
     void BuildSuccess(int degree, int turretId)
     {
         OnBuild(degree / 60, turretId);
+        UIManager.Instance.PopupBackTo<HUDView>();
+        UIManager.Instance.Open<BuildView>();
     }
 
     void OnBuild(int index, int turrectId, bool isBuild = true)

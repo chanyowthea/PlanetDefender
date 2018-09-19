@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Cannon : Turrect, IShot
+public class Turret : Army, IShot
 {
-    [SerializeField] SpriteRenderer _hpSprite;
+    public int _Degree { get; protected set; }
     public Action<int> _onDie;
+    [SerializeField] SpriteRenderer _hpSprite;
 
     public override int HP
     {

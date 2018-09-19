@@ -7,13 +7,11 @@ public class Launcher : MonoBehaviour
 {
     void Start()
     {
-        Screen.autorotateToLandscapeLeft = true;
-        Screen.autorotateToLandscapeRight = true;
-        Screen.autorotateToPortrait = false;
-        Screen.autorotateToPortraitUpsideDown = false;
-        SingletonManager.Init();
-        ArchiveManager.instance.Init(); 
-        ConfigDataManager.instance.LoadCSV<UICSV>("UI");
+        var data = new AccountData();
+        var ts = data.ToSqliteTypes(); 
+        DebugFramework.Debugger.Log(ts.GetLogString()); 
+
+        Facade.instance.Init(); 
         UIManager.Instance.Open<StartView>();
     }
 }

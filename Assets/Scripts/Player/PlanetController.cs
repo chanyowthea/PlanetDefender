@@ -37,6 +37,11 @@ public class PlanetController : MonoSingleton<PlanetController>
         _planet.CreateCannon(degree, turrectId);
     }
 
+    public GameObject GetTurretPivot()
+        { 
+        return _planet.GetTurretPivot(); 
+        }
+
     void AddHealth(int value)
     {
         if (_planet.HP + value < _planet.MaxHP)
@@ -83,39 +88,39 @@ public class PlanetController : MonoSingleton<PlanetController>
         }
     }
 
-    public Cannon GetCannonByDegree(int degree)
-    {
-        if (_planet.cannonPivotDict.ContainsKey(degree))
-        {
-            var c = _planet.cannonPivotDict[degree];
-            if (c == null)
-            {
-                return null;
-            }
-            var comp = c.GetComponentInChildren<Cannon>();
-            return comp;
-        }
-        return null;
-    }
+    //public Turret GetCannonByDegree(int degree)
+    //{
+    //    if (_planet.cannonPivotDict.ContainsKey(degree))
+    //    {
+    //        var c = _planet.cannonPivotDict[degree];
+    //        if (c == null)
+    //        {
+    //            return null;
+    //        }
+    //        var comp = c.GetComponentInChildren<Turret>();
+    //        return comp;
+    //    }
+    //    return null;
+    //}
 
-    public Cannon[] GetAllCannons()
-    {
-        List<Cannon> cs = new List<Cannon>();
-        foreach (var item in _planet.cannonPivotDict)
-        {
-            if (item.Value == null)
-            {
-                continue;
-            }
-            var comp = item.Value.GetComponentInChildren<Cannon>();
-            if (comp == null)
-            {
-                continue;
-            }
-            cs.Add(comp);
-        }
-        return cs.ToArray();
-    }
+    //public Turret[] GetAllCannons()
+    //{
+    //    List<Turret> cs = new List<Turret>();
+    //    foreach (var item in _planet.cannonPivotDict)
+    //    {
+    //        if (item.Value == null)
+    //        {
+    //            continue;
+    //        }
+    //        var comp = item.Value.GetComponentInChildren<Turret>();
+    //        if (comp == null)
+    //        {
+    //            continue;
+    //        }
+    //        cs.Add(comp);
+    //    }
+    //    return cs.ToArray();
+    //}
 
     public int GetHP()
     {

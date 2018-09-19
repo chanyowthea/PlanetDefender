@@ -110,7 +110,7 @@ class HUDView : BaseUI
 
     public void OnClickAttack()
     {
-        if (PlanetController.instance.GetAllCannons().Length == 0)
+        if (TurretManager.instance.GetAllTurrets().Count == 0)
         {
             var tips = UIManager.Instance.Open<MessageView>();
             tips.SetData("请建造炮塔后再进行攻击");

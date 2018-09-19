@@ -21,6 +21,8 @@ public class SQLiteHelper
         dir = Application.persistentDataPath + "/DataBase/"; 
         connectionString = "URI=file:" + dir + string.Format("{0}.db", database);
 #endif
+        DebugFramework.Debugger.Log("dir=" + dir);
+        DebugFramework.Debugger.Log("connectionString=" + connectionString);
         if (!Directory.Exists(dir))
         {
             Directory.CreateDirectory(dir);

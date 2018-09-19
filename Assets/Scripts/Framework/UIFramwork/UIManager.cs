@@ -128,15 +128,7 @@ namespace UIFramework
         {
             if (isJumpBack)
             {
-                while (CurFullScreenUI != null && CurFullScreenUI.GetType() != typeof(T))
-                {
-                    PopupLastFullScreenUI();
-                    if (_OpenedFullScreenUI.Count <= 1)
-                    {
-                        break;
-                    }
-                }
-                return null;
+                return PopupBackTo<T>(); 
             }
 
             Debug.Log("Open t=" + typeof(T));
@@ -168,6 +160,43 @@ namespace UIFramework
                 return;
             }
             CloseInternal(ui);
+        }
+
+        public T PopupBackTo<T>()
+            where T : BaseUI
+        {
+            bool has = _OpenedFullScreenUI.FindIndex((BaseUI ui) => ui.GetType() == typeof(T)) >= 0; 
+            if (!has)
+            {
+                return null;
+            }
+            while (CurFullScreenUI != null && CurFullScreenUI.GetType() != typeof(T))
+            {
+                PopupLastFullScreenUI();
+                if (_OpenedFullScreenUI.Count <= 1)
+                {
+                    break;
+                }
+            }
+            return CurFullScreenUI as T;
+        }
+
+        public T PopupBackTo<T>(T ui)
+            where T : BaseUI
+        {
+            if (!_OpenedFullScreenUI.Contains(ui))
+            {
+                return null;
+            }
+            while (CurFullScreenUI != null && CurFullScreenUI == ui)
+            {
+                PopupLastFullScreenUI();
+                if (_OpenedFullScreenUI.Count <= 1)
+                {
+                    break;
+                }
+            }
+            return CurFullScreenUI as T;
         }
 
         // 关闭最后一个该类型的UI
@@ -212,6 +241,29 @@ namespace UIFramework
             {
                 ShowFullScreenUI(CurFullScreenUI);
             }
+
+            // 推入对象池
+            // 这里看看有什么优化方案，目前是Push和ui.CloseInternal分别判断了一次_CloseByDestroy
+            if (!ui._NaviData._CloseByDestroy)
+            {
+                Push(ui);
+            }
+
+            ui.Close();
+        }
+
+        public void RemoveFromNavigation<T>(T ui)
+            where T : BaseUI
+        {
+            if (ui == null)
+            {
+                Debug.LogError("argument is invalid! ui is empty! ");
+                return;
+            }
+            Debug.Log("PopupFromNavigation t=" + ui.GetType());
+
+            // 移除栈中各UI
+            RemoveTargetUI(ui);
 
             // 推入对象池
             // 这里看看有什么优化方案，目前是Push和ui.CloseInternal分别判断了一次_CloseByDestroy
