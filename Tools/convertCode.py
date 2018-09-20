@@ -34,7 +34,7 @@ def converCode(path):
     #print(file_con)
     if result['encoding'] == 'GB2312':
         #os.remove(path)
-        srccode = file_con.decode('gb2312')
+        srccode = file_con.decode('gbk')
         destcode = srccode.encode('utf-8')    
         WriteFile(destcode, path)
 

@@ -28,7 +28,9 @@ public class Facade : MonoSingleton<Facade>
         Screen.autorotateToPortraitUpsideDown = false;
         SingletonManager.Init();
         ArchiveManager.instance.Init();
+        ConfigDataManager.instance.LoadCSV<LocCSV>("Loc");
         ConfigDataManager.instance.LoadCSV<UICSV>("UI");
+        LocManager.instance.Init(LocLang.None);
     }
 
     public void ChangeScene(string sceneName)
