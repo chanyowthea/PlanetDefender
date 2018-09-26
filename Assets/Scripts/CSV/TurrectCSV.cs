@@ -8,10 +8,11 @@ public class TurretCSV : CSVBaseData
     public string _Name;
     public int _Attack;
     public int _Defense;
-    public string _Picture;
+    public string _Path;
     public int _Price;
     public Dictionary<int,int> _Materials = new Dictionary<int, int>();
     public int _TechLevel;
+    public string _Picture; 
 
     public override string GetPrimaryKey()
     {
@@ -24,6 +25,7 @@ public class TurretCSV : CSVBaseData
         _Name = ReadString("Name", headers, values);
         _Attack = ReadInt("Attack", headers, values); 
         _Defense = ReadInt("Defense", headers, values);
+        _Path = ReadString("Path", headers, values);
         _Picture = ReadString("Picture", headers, values);
         _Price = ReadInt("Price", headers, values);
         var ms = ReadString("Materials", headers, values);

@@ -7,6 +7,7 @@ public class ResourcesManager : TSingleton<ResourcesManager>
     public Dictionary<string, UnityEngine.Object> _LoadedAssetDict = new Dictionary<string, Object>();
     public const string _PicturePrefix = "Textures/";
     public const string _UIPrefix = "UI/";
+    public const string _TurretPrefix = "Prefabs/Turret/";
 
     UnityEngine.Object Load(string path)
     {
@@ -45,9 +46,20 @@ public class ResourcesManager : TSingleton<ResourcesManager>
         if (csv != null)
         {
             var obj = Load(_UIPrefix.Append(csv._Path));
-            var go = GameObject.Instantiate(obj); 
+            var go = GameObject.Instantiate(obj);
             return ((GameObject)go).GetComponent<T>();
         }
         return null;
+    }
+
+    public Turret GetTurret(string path)
+    {
+        var obj = Load(_TurretPrefix.Append(path));
+        if (obj == null)
+        {
+            return null;
+        }
+        var go = GameObject.Instantiate(obj);
+        return ((GameObject)go).GetComponent<Turret>();
     }
 }
