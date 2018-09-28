@@ -6,6 +6,7 @@ using UnityEngine;
 public class TurretManager : TSingleton<TurretManager>
 {
     private Dictionary<int, Turret> _OccupiedDegrees = new Dictionary<int, Turret>();
+    //private Dictionary<int, Turret> _OccupiedDegrees = new Dictionary<int, TurretCSV>();
 
     public List<Turret> GetAllTurrets()
     {
@@ -56,20 +57,17 @@ public class TurretManager : TSingleton<TurretManager>
         c.transform.SetParent(PlanetController.instance.transform);
         c.SetActive(true);
         c.transform.localScale = Vector3.one;
-        var a = GameObject.Instantiate(GameAssets.instance._cannonPrefab);
-        a.transform.SetParent(c.transform);
-        a.SetActive(true);
-        a.transform.localScale = Vector3.one;
-        a.transform.localPosition = new Vector3(0, radius + GameConfig.instance._cannonHalfHeight_Common, 0);
-        a.transform.localRotation = Quaternion.identity;
-        
-        Turret turret = a.GetComponent<Turret>();
+        Turret turret = ResourcesManager.instance.GetTurret(csv._Path);
         if (turret == null)
         {
             DebugFramework.Debugger.Log(string.Format("turret is empty!"));
             return;
         }
-
+        turret.transform.SetParent(c.transform);
+        turret.gameObject.SetActive(true);
+        turret.transform.localScale = Vector3.one;
+        turret.transform.localPosition = new Vector3(0, radius + GameConfig.instance._cannonHalfHeight_Common, 0);
+        turret.transform.localRotation = Quaternion.identity;
         turret.SetData(degree, EFaction.Ours, turretId);
         c.transform.localEulerAngles = new Vector3(0, 0, degree);
         DebugFramework.Debugger.Log("degree=" + degree);

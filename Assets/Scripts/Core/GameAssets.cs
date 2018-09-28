@@ -5,7 +5,6 @@ using UnityEngine;
 public class GameAssets : MonoSingleton<GameAssets>
 {
     [Header("Prefabs")]
-    public GameObject _cannonPrefab;
     public Bullet _bulletPrefab;
     public Enemy _rockPrefab;
     public Gold _goldPrefab;
