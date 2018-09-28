@@ -21,8 +21,8 @@ class SettingsUI : BaseUI
         _DropDown.ClearOptions();
         _DropDown.AddOptions(LocManager.instance.GetSupportLanguagesLoc());
         _DropDown.onValueChanged.AddListener(OnValueChanged);
-        // TODO
-        CoroutineUtil.instance.Wait(Time.deltaTime * 2, () => ResetDropDownLanguage());
+        // TODO 
+        //CoroutineUtil.instance.Wait(Time.deltaTime * 2, () => ResetDropDownLanguage());
     }
 
     internal override void Close()
@@ -33,19 +33,20 @@ class SettingsUI : BaseUI
 
     void ResetDropDownLanguage()
     {
-        var children = _DropDown.transform.GetComponentsInChildren<LocComponent>();
-        var lans = LocManager.instance.GetSupportLanguagesID();
-        for (int i = 0, length = children.Length; i < length; i++)
-        {
-            children[i].StringID = lans[i];
-        }
+        //var children = _DropDown.transform.GetComponentsInChildren<LocComponent>();
+        //var lans = LocManager.instance.GetSupportLanguagesID();
+        //for (int i = 0, length = children.Length; i < length; i++)
+        //{
+        //    children[i].StringID = lans[i];
+        //}
     }
 
     void OnValueChanged(int index)
     {
         LocLang lang = (LocLang)index;
         LocManager.instance.CurrentLanguage = lang;
-        ResetDropDownLanguage();
+        _DropDown.ClearOptions();
+        _DropDown.AddOptions(LocManager.instance.GetSupportLanguagesLoc());
     }
 
     public void OnClickExit()
