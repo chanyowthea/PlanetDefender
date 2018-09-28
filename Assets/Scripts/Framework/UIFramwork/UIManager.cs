@@ -402,6 +402,31 @@ namespace UIFramework
             return ui;
         }
 
+        BaseUI FindLastIdenticalLayerUI(EUIType type, EUILayer layer)
+        {
+            BaseUI ui = null;
+            if (type == EUIType.FullScreen)
+            {
+                ui = _OpenedFullScreenUI.FindLast((BaseUI tempUI) => tempUI._NaviData._Layer == layer);
+            }
+            else if (type == EUIType.Coexisting)
+            {
+                if (CurFullScreenUI != null && _CoexistingUI.ContainsKey(CurFullScreenUI))
+                {
+                    ui = _CoexistingUI[CurFullScreenUI].FindLast((BaseUI tempUI) => tempUI._NaviData._Layer == layer);
+                }
+            }
+            else if (type == EUIType.Independent)
+            {
+                ui = _IndependentUI.FindLast((BaseUI tempUI) => tempUI._NaviData._Layer == layer);
+            }
+            else if (type == EUIType.Resident)
+            {
+                ui = _ResidentUI.FindLast((BaseUI tempUI) => tempUI._NaviData._Layer == layer);
+            }
+            return ui;
+        }
+
         void AddTargetUI<T>(T ui)
             where T : BaseUI
         {
@@ -410,7 +435,7 @@ namespace UIFramework
                 return;
             }
             // 设置层级
-            var last = FindLastUI<T>(ui._NaviData._Type);
+            var last = FindLastIdenticalLayerUI(ui._NaviData._Type, ui._NaviData._Layer);
             if (last != null)
             {
                 ui.CanvasComp.sortingOrder = last.CanvasComp.sortingOrder + 1;

@@ -30,7 +30,7 @@ public class Facade : MonoSingleton<Facade>
         ArchiveManager.instance.Init();
         ConfigDataManager.instance.LoadCSV<LocCSV>("Loc");
         ConfigDataManager.instance.LoadCSV<UICSV>("UI");
-        LocManager.instance.Init(LocLang.None);
+        LocManager.instance.Init(LocLang.English);
     }
 
     public void ChangeScene(string sceneName)

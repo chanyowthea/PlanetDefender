@@ -18,11 +18,6 @@ class BuildView : BaseUI
         _NaviData._IsCloseCoexistingUI = true;
     }
 
-    void UpdateView()
-    {
-
-    }
-
     public override void Open(NavigationData data)
     {
         base.Open(data);
@@ -72,6 +67,11 @@ class BuildView : BaseUI
         {
             int index = i;
             _btns[i].onClick.AddListener(() => OnClickBuild(index));
+        }
+        
+        var ui = UIManager.Instance.GetCurrentResidentUI<TopResidentUI>(); if (ui != null)
+        {
+            ui.UpdateView(true);
         }
     }
 
