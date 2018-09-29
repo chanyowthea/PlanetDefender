@@ -6,8 +6,8 @@ ROTATE,Rotate,旋转,旋轉,回転する
 BUILD,Build,建造,建造,建造する
 QUIT_GAME,Quit Game,退出游戏,退出遊戲,
 LANGUAGE,Language,语言,,
-SCORES,Scores,分数,,
-GOLDS,Golds,金币：,,
+SCORES,Scores: ,分数：,,
+GOLDS,Golds: ,金币：,,
 TARGET_SCORES,Target Scores: ,目标分数：,,
 SETTINGS,Settings,设置,,
 HEAL,Heal,回血,,

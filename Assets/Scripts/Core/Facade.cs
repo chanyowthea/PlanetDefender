@@ -1,5 +1,4 @@
-﻿using DebugFramework;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UIFramework;
 using UnityEngine;
@@ -42,7 +41,7 @@ public class Facade : MonoSingleton<Facade>
 
     void OnApplicationQuit()
     {
-        DebugFramework.Debugger.OnApplicationQuit();
+        Debugger.OnApplicationQuit();
     }
 
     void OnApplicationPause(bool paused)

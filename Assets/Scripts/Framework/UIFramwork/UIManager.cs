@@ -512,10 +512,10 @@ namespace UIFramework
             for (int i = _OpenedFullScreenUI.Count - 1; i >= 0; --i)
             {
                 var ui = _OpenedFullScreenUI[i];
-                DebugFramework.Debugger.Log("_OpenedFullScreenUI type=" + ui.GetType());
-                DebugFramework.Debugger.Log("_OpenedFullScreenUI count=" + _UIPool.Count);
+                Debugger.Log("_OpenedFullScreenUI type=" + ui.GetType());
+                Debugger.Log("_OpenedFullScreenUI count=" + _UIPool.Count);
                 CloseInternal(ui);
-                DebugFramework.Debugger.Log("_OpenedFullScreenUI count=" + _UIPool.Count);
+                Debugger.Log("_OpenedFullScreenUI count=" + _UIPool.Count);
             }
             _OpenedFullScreenUI.Clear();
 

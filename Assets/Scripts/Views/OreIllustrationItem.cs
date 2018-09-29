@@ -31,6 +31,6 @@ public class OreIllustrationItem : MonoBehaviour, ILoopScrollRectItem<int>
 
     public void OnClickItem()
     {
-        DebugFramework.Debugger.Log("OnClickItem id=" + _OreId); 
+        Debugger.Log("OnClickItem id=" + _OreId); 
     }
 }

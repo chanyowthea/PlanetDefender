@@ -30,7 +30,7 @@ public class GameData : TSingleton<GameData>
     void AddScore(int value)
     {
         scoreCount += value;
-        DebugFramework.Debugger.Log("AddScore scoreCount=" + scoreCount); 
+        Debugger.Log("AddScore scoreCount=" + scoreCount); 
         EventDispatcher.instance.DispatchEvent(EventID.UpdateScore, scoreCount);
     }
 }

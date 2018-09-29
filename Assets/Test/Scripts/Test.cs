@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Text;
 using UnityEngine.UI;
-public class Test : MonoBehaviour
+public class Test : Turret
 {
-    [SerializeField] SpriteRenderer _SpriteRenderer;
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+        Debugger.Log("6666");
     }
 }

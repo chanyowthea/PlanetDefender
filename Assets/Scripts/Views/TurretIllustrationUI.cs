@@ -4,7 +4,6 @@ using UnityEngine;
 using UIFramework;
 using UnityEngine.UI;
 using System;
-using DebugFramework;
 
 class TurretIllustrationUI : BaseUI
 {

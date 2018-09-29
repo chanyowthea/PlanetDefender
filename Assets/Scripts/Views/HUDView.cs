@@ -12,7 +12,6 @@ class HUDView : BaseUI
     [SerializeField] Text _scoreText;
     int _scoreCount; 
     int _CurLevel; 
-    const string _scoreFormat = "Target Scores: {0}";
 
     public HUDView()
     {
@@ -72,7 +71,7 @@ class HUDView : BaseUI
         LevelCSV csv = ConfigDataManager.instance.GetData<LevelCSV>(_CurLevel.ToString());
         if (csv != null)
         {
-            _targetScoreText.text = string.Format(_scoreFormat, csv._TargetScore);
+            _targetScoreText.text = csv._TargetScore.ToString();
         }
     }
 
