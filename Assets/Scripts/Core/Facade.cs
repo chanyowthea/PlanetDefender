@@ -1,5 +1,4 @@
-﻿using DebugFramework;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UIFramework;
 using UnityEngine;
@@ -30,7 +29,7 @@ public class Facade : MonoSingleton<Facade>
         ArchiveManager.instance.Init();
         ConfigDataManager.instance.LoadCSV<LocCSV>("Loc");
         ConfigDataManager.instance.LoadCSV<UICSV>("UI");
-        LocManager.instance.Init(LocLang.None);
+        LocManager.instance.Init(LocLang.English);
     }
 
     public void ChangeScene(string sceneName)
@@ -42,7 +41,7 @@ public class Facade : MonoSingleton<Facade>
 
     void OnApplicationQuit()
     {
-        DebugFramework.Debugger.OnApplicationQuit();
+        Debugger.OnApplicationQuit();
     }
 
     void OnApplicationPause(bool paused)

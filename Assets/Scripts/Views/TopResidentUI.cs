@@ -7,6 +7,7 @@ using UnityEngine.UI;
 class TopResidentUI : BaseUI
 {
     [SerializeField] Text _goldText;
+    [SerializeField] Button _BackBtn;
     int _goldCount;
     public TopResidentUI()
     {
@@ -30,6 +31,7 @@ class TopResidentUI : BaseUI
     public void UpdateView(bool isShowGold, bool isShowBackButton = true)
     {
         _goldText.gameObject.SetActive(isShowGold);
+        _BackBtn.gameObject.SetActive(isShowBackButton); 
     }
 
     public void UpdateGold(int value)
@@ -40,16 +42,6 @@ class TopResidentUI : BaseUI
 
     public void OnClickBack()
     {
-        if (UIManager.Instance.CurFullScreenUI.GetType() == typeof(HUDView))
-        {
-            var view = UIManager.Instance.Open<PromptView>(); 
-            view.SetData("Back to start view?", () =>
-            {
-                EventDispatcher.instance.DispatchEvent(EventID.End);
-                Facade.instance.ChangeScene(GameConfig.instance._LauncherSceneName);
-            });
-            return; 
-        }
         UIManager.Instance.PopupLastFullScreenUI();
     }
 }

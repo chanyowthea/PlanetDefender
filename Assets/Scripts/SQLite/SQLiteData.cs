@@ -70,7 +70,7 @@ public abstract class SQLiteData
         var fs = _FieldInfos;
         if (fs.Length != objs.Count)
         {
-            DebugFramework.Debugger.LogError(string.Format("the length of data is inconsistent with the number of variables！variables count：{0}, data count：{1}", 
+            Debugger.LogError(string.Format("the length of data is inconsistent with the number of variables！variables count：{0}, data count：{1}", 
                 fs.Length, objs.Count));
             return;
         }

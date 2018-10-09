@@ -49,7 +49,7 @@ public class TurretManager : TSingleton<TurretManager>
             var v = UIManager.Instance.Open<MessageView>();
             v.SetData("位置已被占用,建造失败");
             Debug.LogFormat("degree {0} has been occupied! ", degree);
-            DebugFramework.Debugger.Log(string.Format("degree {0} has been occupied! ", degree));
+            Debugger.Log(string.Format("degree {0} has been occupied! ", degree));
             return;
         }
         var c = GameObject.Instantiate(pivot);
@@ -60,7 +60,7 @@ public class TurretManager : TSingleton<TurretManager>
         Turret turret = ResourcesManager.instance.GetTurret(csv._Path);
         if (turret == null)
         {
-            DebugFramework.Debugger.Log(string.Format("turret is empty!"));
+            Debugger.Log(string.Format("turret is empty!"));
             return;
         }
         turret.transform.SetParent(c.transform);
@@ -70,13 +70,13 @@ public class TurretManager : TSingleton<TurretManager>
         turret.transform.localRotation = Quaternion.identity;
         turret.SetData(degree, EFaction.Ours, turretId);
         c.transform.localEulerAngles = new Vector3(0, 0, degree);
-        DebugFramework.Debugger.Log("degree=" + degree);
+        Debugger.Log("degree=" + degree);
 
         // 添加指定位置炮塔
         turret._onDie = RemoveTurret;
         if (_OccupiedDegrees.ContainsValue(turret))
         {
-            DebugFramework.Debugger.Log(string.Format("turret {0} has been add twice! ", turret.name));
+            Debugger.Log(string.Format("turret {0} has been add twice! ", turret.name));
             return;
         }
         _OccupiedDegrees.Add(degree, turret);
@@ -92,7 +92,7 @@ public class TurretManager : TSingleton<TurretManager>
         int degree = -1;
         if (turret == null)
         {
-            DebugFramework.Debugger.Log(string.Format("turret is empty!"));
+            Debugger.Log(string.Format("turret is empty!"));
             return degree;
         }
 

@@ -11,7 +11,7 @@ public class LocManager : TSingleton<LocManager>
     private Dictionary<LocLang, Dictionary<string, string>> _LocText = new Dictionary<LocLang, Dictionary<string, string>>();
     List<LocLang> _SupportedLanguages = new List<LocLang> { LocLang.English, LocLang.SimplifiedChinese, LocLang.TraditionalChinese, LocLang.Japanese };
 
-    private LocLang _CurrentLang = LocLang.None;
+    private LocLang _CurrentLang = LocLang.English;
     public LocLang CurrentLanguage
     {
         get
@@ -32,27 +32,52 @@ public class LocManager : TSingleton<LocManager>
     public void Init(LocLang currentLang)
     {
         _CurrentLang = currentLang;
-        if (_CurrentLang == LocLang.None && _SupportedLanguages.Count > 0)
-        {
-            _CurrentLang = _SupportedLanguages[0];
-        }
         _LocText = new Dictionary<LocLang, Dictionary<string, string>>();
         ParseTranslation();
     }
 
-    public List<string> GetSupportLanguages()
+    public List<string> GetSupportLanguagesLoc()
     {
-        //string[] ss = new string[_SupportedLanguages.Count];
-        //for (int i = 0, length = _SupportedLanguages.Count; i < length; i++)
-        //{
-        //    ss[i] = LocLangConvert.GetCSVColumnName(_SupportedLanguages[i]);
-        //}
-        //return ss;
-
         List<string> ss = new List<string>();
         for (int i = 0, length = _SupportedLanguages.Count; i < length; i++)
         {
-            ss.Add(_SupportedLanguages[i].ToString());  
+            string lan = "";
+            switch(_SupportedLanguages[i])
+                { 
+                case LocLang.English:
+                    lan = LocManager.instance.DoLoc("ENGLISH"); 
+                    break;
+                case LocLang.SimplifiedChinese:
+                    lan = LocManager.instance.DoLoc("CHINESE");
+                    break;
+                default:
+                    lan = LocManager.instance.DoLoc("ENGLISH");
+                    break;
+            }
+            ss.Add(lan);  
+        }
+        return ss;
+    }
+
+    public List<string> GetSupportLanguagesID()
+    {
+        List<string> ss = new List<string>();
+        for (int i = 0, length = _SupportedLanguages.Count; i < length; i++)
+        {
+            string lan = "";
+            switch (_SupportedLanguages[i])
+            {
+                case LocLang.English:
+                    lan = "ENGLISH";
+                    break;
+                case LocLang.SimplifiedChinese:
+                    lan = "CHINESE";
+                    break;
+                default:
+                    lan = "ENGLISH";
+                    break;
+            }
+            ss.Add(lan);
         }
         return ss;
     }

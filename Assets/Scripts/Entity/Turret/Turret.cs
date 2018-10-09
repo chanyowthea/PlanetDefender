@@ -35,12 +35,12 @@ public class Turret : Army, IShot
 
     public int TurrectID{ private set; get; }
 
-    void Start()
+    protected virtual void Start()
     {
         EventDispatcher.instance.RegisterEvent(EventID.AttackFromPlanet, this, "Attack");
     }
 
-    void OnDestroy()
+    protected virtual void OnDestroy()
     {
         if (_hpSprite.sprite != null)
         {
@@ -49,7 +49,7 @@ public class Turret : Army, IShot
         EventDispatcher.instance.UnRegisterEvent(EventID.AttackFromPlanet, this, "Attack");
     }
 
-    public void SetData(int degree, EFaction faction, int turrectId)
+    public virtual void SetData(int degree, EFaction faction, int turrectId)
     {
         _hpSprite.sprite = null; 
         _Degree = degree; 
@@ -73,12 +73,12 @@ public class Turret : Army, IShot
         TurrectID = turrectId; 
     }
 
-    void Attack()
+    protected void Attack()
     {
         Fire();
     }
 
-    public void Fire()
+    public virtual void Fire()
     {
         if (Time.time - _LastFireTime <= _FireCoolDownTime)
         {
@@ -90,7 +90,7 @@ public class Turret : Army, IShot
     }
 
     // attack by other 
-    void OnTriggerEnter(Collider collider)
+    protected virtual void OnTriggerEnter(Collider collider)
     {
         var c = collider.gameObject.GetComponent<Enemy>();
         if (c != null)

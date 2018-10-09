@@ -31,6 +31,6 @@ public class MallItem : MonoBehaviour, ILoopScrollRectItem<int>
 
     public void OnClickItem()
     {
-        DebugFramework.Debugger.Log("OnClickItem id=" + _ID); 
+        Debugger.Log("OnClickItem id=" + _ID); 
     }
 }

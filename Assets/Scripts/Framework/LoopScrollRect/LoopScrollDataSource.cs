@@ -45,7 +45,7 @@ namespace UnityEngine.UI
             var i = transform.GetComponent<ILoopScrollRectItem<T>>();
             if (i != null)
             {
-                DebugFramework.Debugger.Log("i=" + i);
+                Debugger.Log("i=" + i);
                 i.SetData(objectsToFill[idx]);
             }
         }
@@ -55,7 +55,7 @@ namespace UnityEngine.UI
             var i = transform.GetComponent<ILoopScrollRectItem<T>>();
             if (i != null)
             {
-                DebugFramework.Debugger.Log("ClearData i=" + i);
+                Debugger.Log("ClearData i=" + i);
                 i.ClearData();
             }
         }

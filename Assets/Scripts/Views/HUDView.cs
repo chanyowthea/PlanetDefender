@@ -10,10 +10,8 @@ class HUDView : BaseUI
 {
     [SerializeField] Text _targetScoreText;
     [SerializeField] Text _scoreText;
-    [SerializeField] Dropdown _DropDown;
     int _scoreCount; 
     int _CurLevel; 
-    const string _scoreFormat = "Target Scores: {0}";
 
     public HUDView()
     {
@@ -26,22 +24,25 @@ class HUDView : BaseUI
     {
         base.Open(data);
         UIManager.Instance.Open<TopResidentUI>();
+        var ui = UIManager.Instance.GetCurrentResidentUI<TopResidentUI>(); if (ui != null)
+        {
+            ui.UpdateView(true, false);
+        }
         EventDispatcher.instance.RegisterEvent(EventID.UpdateScore, this, "UpdateScore");
-
-        _DropDown.ClearOptions();
-        _DropDown.AddOptions(LocManager.instance.GetSupportLanguages());
-        _DropDown.onValueChanged.AddListener(OnValueChanged);
     }
 
     internal override void Show()
     {
         base.Show();
-        Time.timeScale = 1; 
+        Time.timeScale = 1;
+        var ui = UIManager.Instance.GetCurrentResidentUI<TopResidentUI>(); if (ui != null)
+        {
+            ui.UpdateView(true, false);
+        }
     }
 
     internal override void Close()
     {
-        _DropDown.onValueChanged.RemoveListener(OnValueChanged);
         EventDispatcher.instance.UnRegisterEvent(EventID.UpdateScore, this, "UpdateScore");
         if (_addHealthRoutine != null)
         {
@@ -70,7 +71,7 @@ class HUDView : BaseUI
         LevelCSV csv = ConfigDataManager.instance.GetData<LevelCSV>(_CurLevel.ToString());
         if (csv != null)
         {
-            _targetScoreText.text = string.Format(_scoreFormat, csv._TargetScore);
+            _targetScoreText.text = csv._TargetScore.ToString();
         }
     }
 
@@ -109,9 +110,9 @@ class HUDView : BaseUI
         UIManager.Instance.Open<MallUI>();
     }
 
-    public void OnClickMore()
+    public void OnClickSettings()
     {
-
+        UIManager.Instance.Open<SettingsUI>();
     }
 
     public void OnClickAttack()
@@ -181,12 +182,5 @@ class HUDView : BaseUI
         _addHealthBtn.enabled = false;
         yield return new WaitForSeconds(1);
         _addHealthBtn.enabled = true;
-    }
-
-    void OnValueChanged(int index)
-    {
-        string s = _DropDown.options[index].text;
-        LocLang lang = (LocLang)System.Enum.Parse(typeof(LocLang), s);
-        LocManager.instance.CurrentLanguage = lang;
     }
 }

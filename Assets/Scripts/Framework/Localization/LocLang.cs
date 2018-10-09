@@ -2,7 +2,6 @@
 
 public enum LocLang
 {
-    None,
     English,
     SimplifiedChinese,
     TraditionalChinese,
@@ -91,7 +90,7 @@ public static class LocLangConvert
             case "ja": return LocLang.Japanese;
             case "rou": return LocLang.Romanian;
         }
-        return LocLang.None;
+        return LocLang.English;
     }
 
     public static LocLang GetLocLang(SystemLanguage systemLan)
