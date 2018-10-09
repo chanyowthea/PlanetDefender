@@ -3,7 +3,7 @@
 1,箭塔,2,1,ArcherTower,4,1-2,1,ArcherTower
 2,火炮,4,1,Cannon,6,1-1;2-1,1,Cannon
 3,雷电枪,6,2,LightningGun,8,2-1;3-1,1,LightningGun
-4,电热炮,10,2,ElectroHeatCannon,10,3-2;4-1,2,ElectroHeatCannon
-5,电磁炮,15,2,ElectroMagneticCannon,14,1-3;2-2;4-1,2,ElectroMagneticCannon
-6,微波导弹,50,1,MicrowaveMissile,18,4-2;5-2;11-1,3,MicrowaveMissile
-7,粒子束枪,20,1,ParticleBeamGun,22,9-2;12-1,3,ParticleBeamGun
+4,电热炮,10,2,ElectroHeatCannon,10,3-2;4-1,2,LightningGun
+5,电磁炮,15,2,ElectroMagneticCannon,14,1-3;2-2;4-1,2,LightningGun
+6,微波导弹,50,1,MicrowaveMissile,18,4-2;5-2;11-1,3,LightningGun
+7,粒子束枪,20,1,ParticleBeamGun,22,9-2;12-1,3,LightningGun

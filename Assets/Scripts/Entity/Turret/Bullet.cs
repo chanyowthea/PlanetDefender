@@ -68,8 +68,4 @@ public class Bullet : Entity
             GameObject.Destroy(this.gameObject);
         }
     }
-
-    private void OnDestroy()
-    {
-    }
 }

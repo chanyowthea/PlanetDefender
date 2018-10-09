@@ -21,24 +21,12 @@ class SettingsUI : BaseUI
         _DropDown.ClearOptions();
         _DropDown.AddOptions(LocManager.instance.GetSupportLanguagesLoc());
         _DropDown.onValueChanged.AddListener(OnValueChanged);
-        // TODO 
-        //CoroutineUtil.instance.Wait(Time.deltaTime * 2, () => ResetDropDownLanguage());
     }
 
     internal override void Close()
     {
         _DropDown.onValueChanged.RemoveListener(OnValueChanged);
         base.Close();
-    }
-
-    void ResetDropDownLanguage()
-    {
-        //var children = _DropDown.transform.GetComponentsInChildren<LocComponent>();
-        //var lans = LocManager.instance.GetSupportLanguagesID();
-        //for (int i = 0, length = children.Length; i < length; i++)
-        //{
-        //    children[i].StringID = lans[i];
-        //}
     }
 
     void OnValueChanged(int index)

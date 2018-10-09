@@ -8,6 +8,6 @@ public class BaseRotate : MonoBehaviour
 
     private void Update()
     {
-        transform.localEulerAngles += new Vector3(0, 0, _rotateSpeedDegreePerFrame * Time.timeScale);
+        transform.localEulerAngles += new Vector3(0, 0, _rotateSpeedDegreePerFrame * GameManager.instance._Timer._TimeScale);
     }
 }

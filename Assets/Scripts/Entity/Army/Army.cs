@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// common movable unit
 public class Army : Entity
 {
     protected int _Attack = 1;

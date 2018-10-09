@@ -4,12 +4,15 @@ using UnityEngine;
 using UIFramework;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 class LoadingView : BaseUI
 {
     private AsyncOperation _Operation;
+    Action<string> _OnSceneLoaded;
     public Slider _Slider;
     public Text _Label;
+    string _SceneName;
 
     public LoadingView()
     {
@@ -18,13 +21,24 @@ class LoadingView : BaseUI
         _NaviData._IsCloseCoexistingUI = true;
     }
 
-    public void SetData(string sceneName)
+    public void SetData(string sceneName, Action<string> onSceneLoaded = null)
     {
         if (string.IsNullOrEmpty(sceneName))
         {
             return;
         }
+        if (onSceneLoaded != null)
+        {
+            _OnSceneLoaded += onSceneLoaded;
+        }
+        _SceneName = sceneName;
         StartCoroutine(StartLoadScene(sceneName));
+    }
+
+    internal override void ClearData()
+    {
+        _OnSceneLoaded = null;
+        base.ClearData();
     }
 
     IEnumerator StartLoadScene(string sceneName)
@@ -55,6 +69,10 @@ class LoadingView : BaseUI
 
             if (mCurProcess == 1)
             {
+                if (_OnSceneLoaded != null)
+                {
+                    _OnSceneLoaded(_SceneName);
+                }
                 _Operation.allowSceneActivation = true;
             }
         }

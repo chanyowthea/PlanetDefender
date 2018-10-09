@@ -5,6 +5,16 @@ using UnityEngine;
 
 public class Facade : MonoSingleton<Facade>
 {
+    public readonly TimeService _UITimer = new TimeService();
+    public TimeService CurTimer
+    {
+        get
+        {
+            return CurRoutinePlace == ERoutinePlace.InGame ? GameManager.instance._Timer : _UITimer;
+        }
+    }
+    public ERoutinePlace CurRoutinePlace { private set; get; }
+
     bool _HasInitialized;
     public void Init()
     {
@@ -36,7 +46,22 @@ public class Facade : MonoSingleton<Facade>
     {
         UIManager.Instance.ChangeScene();
         var load = UIManager.Instance.Open<LoadingView>();
-        load.SetData(sceneName);
+        load.SetData(sceneName, (sName) =>
+        {
+            //if (sName == GameConfig.instance._PlaySceneName)
+            //{
+            //    CurRoutinePlace = ERoutinePlace.InGame;
+            //}
+            //else
+            //{
+            //    CurRoutinePlace = ERoutinePlace.UI;
+            //}
+        });
+    }
+
+    private void Update()
+    {
+        _UITimer.UpdateTime(); 
     }
 
     void OnApplicationQuit()

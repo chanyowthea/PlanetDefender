@@ -114,4 +114,10 @@ public class TurretManager : TSingleton<TurretManager>
             _OccupiedDegrees.Remove(degree);
         }
     }
+
+    public override void Clear()
+    {
+        _OccupiedDegrees.Clear();
+        base.Clear();
+    }
 }

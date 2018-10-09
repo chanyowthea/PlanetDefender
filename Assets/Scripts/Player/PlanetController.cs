@@ -7,6 +7,20 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlanetController : MonoSingleton<PlanetController>
 {
+    IEnumerator _LapseRoutine;
+    float _HealthLapseSpeed = 5;
+    public float HealthLapseSpeed
+    {
+        set
+        {
+            _HealthLapseSpeed = value;
+        }
+        get
+        {
+            return _HealthLapseSpeed;
+        }
+    }
+
     [SerializeField] Planet _planet;
     bool _isRotate;
 
@@ -14,10 +28,17 @@ public class PlanetController : MonoSingleton<PlanetController>
     {
         EventDispatcher.instance.RegisterEvent(EventID.CreateTurret, this, "CreateTurret");
         EventDispatcher.instance.RegisterEvent(EventID.AddHealth, this, "AddHealth");
+        _LapseRoutine = LapseRoutine(); 
+        CoroutineUtil.instance.StartCoroutine(_LapseRoutine);
     }
 
     private void OnDestroy()
     {
+        if (_LapseRoutine != null)
+        {
+            CoroutineUtil.instance.StopCoroutine(_LapseRoutine);
+            _LapseRoutine = null;
+        }
         EventDispatcher.instance.UnRegisterEvent(EventID.AddHealth, this, "AddHealth");
         EventDispatcher.instance.UnRegisterEvent(EventID.CreateTurret, this, "CreateTurret");
     }
@@ -25,6 +46,21 @@ public class PlanetController : MonoSingleton<PlanetController>
     public void _Reset()
     {
         _planet.Init();
+    }
+
+    IEnumerator LapseRoutine()
+    {
+        float time = 0;
+        while (true)
+        {
+            if (time >= HealthLapseSpeed)
+            {
+                time = 0; 
+                EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -1);
+            }
+            yield return null;
+            time += GameManager.instance._Timer.DeltaTime;
+        }
     }
 
     void Rotate(bool value)
@@ -38,9 +74,9 @@ public class PlanetController : MonoSingleton<PlanetController>
     }
 
     public GameObject GetTurretPivot()
-        { 
-        return _planet.GetTurretPivot(); 
-        }
+    {
+        return _planet.GetTurretPivot();
+    }
 
     void AddHealth(int value)
     {

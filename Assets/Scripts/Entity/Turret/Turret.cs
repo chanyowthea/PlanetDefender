@@ -80,11 +80,11 @@ public class Turret : Army, IShot
 
     public virtual void Fire()
     {
-        if (Time.time - _LastFireTime <= _FireCoolDownTime)
+        if (GameManager.instance._Timer.GameTime - _LastFireTime <= _FireCoolDownTime)
         {
             return;
         }
-        _LastFireTime = Time.time;
+        _LastFireTime = GameManager.instance._Timer.GameTime;
         var bullet = GameObject.Instantiate(GameAssets.instance._bulletPrefab);
         bullet.SetData(FirePos, transform.up, _BulletMoveSpeed, _Attack, EFaction.Ours);
     }

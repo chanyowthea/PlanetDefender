@@ -9,11 +9,11 @@ public class GoldSource : MonoBehaviour
 
     void Update()
     {
-        if (Time.time - _lastTime < _generateInterval)
+        if (GameManager.instance._Timer.GameTime - _lastTime < _generateInterval)
         {
             return;
         }
-        _lastTime = Time.time;
+        _lastTime = GameManager.instance._Timer.GameTime;
         var r = GameObject.Instantiate(GameAssets.instance._goldPrefab);
         var moveDir = Vector3.Normalize(PlanetController.instance.transform.position -
             new Vector3(1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 0));

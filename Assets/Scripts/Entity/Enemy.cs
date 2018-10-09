@@ -13,13 +13,23 @@ public class Enemy : Entity
         set
         {
             _hpText.text = value.ToString();
-            base.HP = value;
             //Debug.Log("Rock set hp=" + value);
-            if (HP <= 0)
+            if (base.HP > 0 && value <= 0)
             {
                 EventDispatcher.instance.DispatchEvent(EventID.AddScore, MaxHP);
+                if (_EnemyType == EEnemyType.Bomb)
+                {
+                    Debugger.Log("play bomb effect! ", LogColor.Red);
+                    var go = Instantiate(GameAssets.instance._ExplosionEffect);
+                    go.transform.position = this.transform.position;
+                    CoroutineUtil.instance.Wait(1, () =>
+                    {
+                        GameObject.Destroy(go);
+                    });
+                }
                 Destroy(this.gameObject);
             }
+            base.HP = value;
         }
         get
         {
@@ -28,17 +38,18 @@ public class Enemy : Entity
     }
 
     [SerializeField] SpriteRenderer _Sprite;
-    public int Attack { private set; get;}
+    public int Attack { private set; get; }
+    EEnemyType _EnemyType;
 
     void Awake()
     {
         transform.SetParent(GameAssets.rockParent.transform);
         gameObject.name = GetType() + "_" + GetHashCode();
     }
-    
+
     public void SetData(Vector3 pos, float moveSpeed, Vector3 moveDir, EFaction faction, int enemyId)
     {
-        _Sprite.sprite = null; 
+        _Sprite.sprite = null;
         transform.position = pos;
         _MoveSpeed = moveSpeed;
         _MoveDir = moveDir;
@@ -49,16 +60,17 @@ public class Enemy : Entity
             MaxHP = csv._MaxHP;
             Attack = csv._Attack;
             _Defense = csv._Defense;
-            var sprite = ResourcesManager.instance.GetSprite(csv._Picture); 
+            var sprite = ResourcesManager.instance.GetSprite(csv._Picture);
             if (sprite != null)
             {
                 var lastSize = _Sprite.size;
                 _Sprite.sprite = GameObject.Instantiate(sprite);
                 _Sprite.size = lastSize;
             }
+            _EnemyType = csv._Type;
         }
         HP = MaxHP;
-        Init(); 
+        Init();
     }
 
     public override void Init()
@@ -83,7 +95,7 @@ public class Enemy : Entity
         // 撞到星球就消失
         if (collider.gameObject.GetComponent<PlanetController>() != null)
         {
-            HP = 0; 
+            HP = 0;
         }
         // 撞到子弹会扣血
         else

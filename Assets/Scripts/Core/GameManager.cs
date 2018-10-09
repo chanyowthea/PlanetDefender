@@ -7,11 +7,13 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    public readonly TimeService _Timer = new TimeService(); 
+    
     private void Start()
     {
         EventDispatcher.instance.RegisterEvent(EventID.End, this, "OnEnd");
         GameData.instance.Init();
-        Time.timeScale = 0;
+        _Timer._TimeScale = 0;
         ConfigDataManager.instance.LoadCSV<TurretCSV>("Turret");
         ConfigDataManager.instance.LoadCSV<LevelCSV>("Level");
         ConfigDataManager.instance.LoadCSV<OreCSV>("Ore");
@@ -24,9 +26,11 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void OnEnd()
     {
-        Time.timeScale = 0;
+        _Timer._TimeScale = 0;
         ArchiveManager.instance.OnQuitPlay();
         GameData.instance.Clear();
+        TurretManager.instance.Clear();
+        CoroutineUtil.instance.ClearRoutines(ERoutinePlace.InGame); 
     }
 
     public void AddHealth()
@@ -48,5 +52,6 @@ public class GameManager : MonoSingleton<GameManager>
         {
             EventDispatcher.instance.DispatchEvent(EventID.CreateTurret, 0, 1);
         }
+        _Timer.UpdateTime(); 
     }
 }

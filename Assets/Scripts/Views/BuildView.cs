@@ -24,8 +24,8 @@ class BuildView : BaseUI
         EventDispatcher.instance.RegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
 
         _planetRtf.localEulerAngles = PlanetController.instance.transform.localEulerAngles;
-        _lastTimeScale = Time.timeScale;
-        Time.timeScale = 0;
+        _lastTimeScale = GameManager.instance._Timer._TimeScale;
+        GameManager.instance._Timer._TimeScale = 0;
 
         if (_btns.Length != _imgs.Length)
         {
@@ -84,7 +84,7 @@ class BuildView : BaseUI
             img.sprite = null;
         }
         EventDispatcher.instance.UnRegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
-        Time.timeScale = _lastTimeScale;
+        GameManager.instance._Timer._TimeScale = _lastTimeScale;
         for (int i = 0, length = _btns.Length; i < length; i++)
         {
             _btns[i].onClick.RemoveAllListeners();

@@ -19,7 +19,7 @@ class MessageView : BaseUI
     public override void Open(NavigationData data)
     {
         base.Open(data);
-        CoroutineUtil.instance.Wait(1, () => UIManager.Instance.Close(this), true);
+        CoroutineUtil.instance.Wait(1, () => UIManager.Instance.Close(this), ERoutinePlace.UI);
     }
 
     internal override void Close()

@@ -34,7 +34,7 @@ class HUDView : BaseUI
     internal override void Show()
     {
         base.Show();
-        Time.timeScale = 1;
+        GameManager.instance._Timer._TimeScale = 1;
         var ui = UIManager.Instance.GetCurrentResidentUI<TopResidentUI>(); if (ui != null)
         {
             ui.UpdateView(true, false);
@@ -133,17 +133,17 @@ class HUDView : BaseUI
 
     public void OnClickPause()
     {
-        Time.timeScale = 0;
+        GameManager.instance._Timer._TimeScale = 0;
     }
 
     public void OnClickNormal()
     {
-        Time.timeScale = 1;
+        GameManager.instance._Timer._TimeScale = 1;
     }
 
     public void OnClickAccelerate()
     {
-        Time.timeScale = 2;
+        GameManager.instance._Timer._TimeScale = 2;
     }
 
     [SerializeField] Button _addHealthBtn;

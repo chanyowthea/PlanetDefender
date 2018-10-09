@@ -2,27 +2,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.Assertions.Comparers;
+
+public enum ERoutinePlace
+{
+    UI,
+    InGame,
+}
 
 public class CoroutineUtil : MonoSingleton<CoroutineUtil>
 {
-    public IEnumerator Wait(float time, Action onFinish, bool isRealTime = false)
+    Dictionary<ERoutinePlace, List<IEnumerator>> _WaitRoutines = new Dictionary<ERoutinePlace, List<IEnumerator>>()
     {
-        var r = WaitRoutine(time, onFinish, isRealTime);
+        { ERoutinePlace.UI, new List<IEnumerator>()},
+        { ERoutinePlace.InGame, new List<IEnumerator>()}
+    };
+    public IEnumerator Wait(float time, Action onFinish, ERoutinePlace eRoutinePlace = ERoutinePlace.InGame)
+    {
+        var r = WaitRoutine(time, onFinish);
+        if (_WaitRoutines.ContainsKey(eRoutinePlace))
+        {
+            var list = _WaitRoutines[eRoutinePlace];
+            list.Add(r);
+        }
         StartCoroutine(r);
         return r;
     }
 
-    IEnumerator WaitRoutine(float waitTime, Action action, bool isRealTime = false)
+    public void ClearRoutines(ERoutinePlace eRoutinePlace = ERoutinePlace.InGame)
     {
-        if (isRealTime)
+        if (!_WaitRoutines.ContainsKey(eRoutinePlace))
         {
-            yield return new WaitForSecondsRealtime(waitTime);
+            return;
         }
-        else
+
+        var list = _WaitRoutines[eRoutinePlace];
+        for (int i = 0, length = list.Count; i < length; i++)
         {
-            yield return new WaitForSeconds(waitTime);
+            var r = list[i];
+            if (r != null)
+            {
+                StopCoroutine(r);
+            }
         }
+        list.Clear();
+    }
+
+    IEnumerator WaitRoutine(float waitTime, Action action, ERoutinePlace eRoutinePlace = ERoutinePlace.InGame)
+    {
+        float time = 0;
+        while (time < waitTime)
+        {
+            yield return null;
+            time += eRoutinePlace != ERoutinePlace.InGame ? 
+                Facade.instance._UITimer.DeltaTime : GameManager.instance._Timer.DeltaTime;
+        }
+
         if (action != null)
         {
             action();

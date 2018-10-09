@@ -14,16 +14,16 @@ namespace Scene
         {
             return; 
 
-            if (Time.time - _lastRandomTime < _randomInterval * Time.timeScale)
-            {
-                return;
-            }
-            _lastRandomTime = Time.time;
+            //if (Time.time - _lastRandomTime < _randomInterval * Time.timeScale)
+            //{
+            //    return;
+            //}
+            //_lastRandomTime = Time.time;
 
-            if (RandomUtil.instance.random.Next(0, 100) == 0)
-            {
-                CreateRock(_rockSrcs[0].transform.position);
-            }
+            //if (RandomUtil.instance.random.Next(0, 100) == 0)
+            //{
+            //    CreateRock(_rockSrcs[0].transform.position);
+            //}
         }
 
         void CreateRock(Vector3 pos)

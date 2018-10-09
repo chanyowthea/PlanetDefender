@@ -15,15 +15,16 @@ public class RockSource : MonoBehaviour
 
     void Update()
     {
-        if (Time.time - _lastTime < _generateInterval)
+        if (GameManager.instance._Timer.GameTime - _lastTime < _generateInterval)
         {
             return;
         }
-        _lastTime = Time.time;
+        _lastTime = GameManager.instance._Timer.GameTime;
         var r = GameObject.Instantiate(GameAssets.instance._rockPrefab);
         r.transform.position = this.transform.position;
         var dir = Vector3.Normalize(PlanetController.instance.transform.position -
             new Vector3(1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 0));
-        r.SetData(transform.position, 0.02f, dir, EFaction.Enemy, new System.Random().Next(1, 23));
+        //r.SetData(transform.position, 0.02f, dir, EFaction.Enemy, new System.Random().Next(1, 23));
+        r.SetData(transform.position, 0.02f, dir, EFaction.Enemy, 2);
     }
 }
