@@ -28,8 +28,10 @@ public class PlanetController : MonoSingleton<PlanetController>
     {
         EventDispatcher.instance.RegisterEvent(EventID.CreateTurret, this, "CreateTurret");
         EventDispatcher.instance.RegisterEvent(EventID.AddHealth, this, "AddHealth");
-        _LapseRoutine = LapseRoutine(); 
-        CoroutineUtil.instance.StartCoroutine(_LapseRoutine);
+        CoroutineUtil.instance.Wait(HealthLapseSpeed, () =>
+        {
+            EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -1);
+        }, ERoutinePlace.InGame, true);
     }
 
     private void OnDestroy()
@@ -46,21 +48,6 @@ public class PlanetController : MonoSingleton<PlanetController>
     public void _Reset()
     {
         _planet.Init();
-    }
-
-    IEnumerator LapseRoutine()
-    {
-        float time = 0;
-        while (true)
-        {
-            if (time >= HealthLapseSpeed)
-            {
-                time = 0; 
-                EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -1);
-            }
-            yield return null;
-            time += GameManager.instance._Timer.DeltaTime;
-        }
     }
 
     void Rotate(bool value)

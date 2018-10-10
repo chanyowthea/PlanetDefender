@@ -16,9 +16,17 @@ public class CoroutineUtil : MonoSingleton<CoroutineUtil>
         { ERoutinePlace.UI, new List<IEnumerator>()},
         { ERoutinePlace.InGame, new List<IEnumerator>()}
     };
-    public IEnumerator Wait(float time, Action onFinish, ERoutinePlace eRoutinePlace = ERoutinePlace.InGame)
+    public IEnumerator Wait(float time, Action onFinish, ERoutinePlace eRoutinePlace = ERoutinePlace.InGame, bool isRepeat = false)
     {
-        var r = WaitRoutine(time, onFinish);
+        IEnumerator r = null;
+        if (!isRepeat)
+        {
+            r = WaitRoutine(time, onFinish, eRoutinePlace);
+        }
+        else
+        {
+            r = WaitRoutineRepeat(time, onFinish, eRoutinePlace);
+        }
         if (_WaitRoutines.ContainsKey(eRoutinePlace))
         {
             var list = _WaitRoutines[eRoutinePlace];
@@ -47,19 +55,38 @@ public class CoroutineUtil : MonoSingleton<CoroutineUtil>
         list.Clear();
     }
 
-    IEnumerator WaitRoutine(float waitTime, Action action, ERoutinePlace eRoutinePlace = ERoutinePlace.InGame)
+    IEnumerator WaitRoutine(float waitTime, Action action, ERoutinePlace eRoutinePlace)
     {
         float time = 0;
         while (time < waitTime)
         {
             yield return null;
-            time += eRoutinePlace != ERoutinePlace.InGame ? 
+            time += eRoutinePlace != ERoutinePlace.InGame ?
                 Facade.instance._UITimer.DeltaTime : GameManager.instance._Timer.DeltaTime;
         }
 
         if (action != null)
         {
             action();
+        }
+    }
+
+    IEnumerator WaitRoutineRepeat(float waitTime, Action action, ERoutinePlace eRoutinePlace)
+    {
+        float time = 0;
+        while (true)
+        {
+            if (time >= waitTime)
+            {
+                time = 0;
+                if (action != null)
+                {
+                    action();
+                }
+            }
+            yield return null;
+            time += eRoutinePlace != ERoutinePlace.InGame ?
+                Facade.instance._UITimer.DeltaTime : GameManager.instance._Timer.DeltaTime;
         }
     }
 }

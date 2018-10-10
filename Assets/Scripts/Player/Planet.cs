@@ -29,6 +29,7 @@ public class Planet : Army
     //public Dictionary<int, GameObject> cannonPivotDict { get; private set; }
     protected List<int> _allDegrees = new List<int>();
     [SerializeField] Text _hpText;
+    [SerializeField] GameObject _PoisionPivot;
 
     public override int HP
     {
@@ -48,6 +49,8 @@ public class Planet : Army
             return base.HP;
         }
     }
+    bool _IsInPoisionState;
+
     public void Awake()
     {
         //cannonPivotDict = new Dictionary<int, GameObject>();
@@ -77,6 +80,39 @@ public class Planet : Army
         //    GameObject.Destroy(item.Value.gameObject);
         //}
         //cannonPivotDict.Clear();
+        _PoisionPivot.SetActive(_IsInPoisionState); 
+    }
+
+    public void DoHurt(int enemyId)
+    {
+        var csv = ConfigDataManager.instance.GetData<EnemyCSV>(enemyId.ToString());
+        if (csv == null)
+        {
+            Debugger.LogError("csv is empty! ");
+            return;
+        }
+
+        int hurt = BattleUtil.CalcDamage(csv._Attack, _Defense);
+        DoHurtValue(hurt);
+        if (hurt > 0)
+        {
+            if (csv._Type == EEnemyType.Poision && !_IsInPoisionState)
+            {
+                _IsInPoisionState = true;
+                _PoisionPivot.SetActive(true);
+                CoroutineUtil.instance.Wait(3, () => DoHurtValue(hurt), ERoutinePlace.InGame, true); 
+            }
+        }
+    }
+
+    public void DoHurtValue(int value)
+    {
+        if (value < 0)
+        {
+            return;
+        }
+
+        HP -= value;
     }
 
     public void CreateCannon(int degree, int turrectId)
@@ -178,7 +214,8 @@ public class Planet : Army
         {
             return;
         }
-        Debug.Log("ExecuteAttack value=" + BattleUtil.CalcDamage(rock.Attack, _Defense)); 
-        EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -BattleUtil.CalcDamage(rock.Attack, _Defense));
+        Debug.Log("ExecuteAttack value=" + BattleUtil.CalcDamage(rock.Attack, _Defense));
+        //EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -BattleUtil.CalcDamage(rock.Attack, _Defense));
+        DoHurt(rock.EnemyID); 
     }
 }

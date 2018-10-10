@@ -39,7 +39,8 @@ public class Enemy : Entity
 
     [SerializeField] SpriteRenderer _Sprite;
     public int Attack { private set; get; }
-    EEnemyType _EnemyType;
+    public EEnemyType _EnemyType { private set; get; }
+    public int EnemyID {private set; get; } 
 
     void Awake()
     {
@@ -49,6 +50,7 @@ public class Enemy : Entity
 
     public void SetData(Vector3 pos, float moveSpeed, Vector3 moveDir, EFaction faction, int enemyId)
     {
+        EnemyID = enemyId; 
         _Sprite.sprite = null;
         transform.position = pos;
         _MoveSpeed = moveSpeed;
