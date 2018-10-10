@@ -30,7 +30,7 @@ public class PlanetController : MonoSingleton<PlanetController>
         EventDispatcher.instance.RegisterEvent(EventID.AddHealth, this, "AddHealth");
         CoroutineUtil.instance.Wait(HealthLapseSpeed, () =>
         {
-            EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -1);
+            //EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -1);
         }, ERoutinePlace.InGame, true);
     }
 

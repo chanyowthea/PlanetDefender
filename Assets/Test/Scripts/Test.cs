@@ -2,11 +2,16 @@
 using System.Collections;
 using System.Text;
 using UnityEngine.UI;
-public class Test : Turret
+using System;
+
+public class Test : MonoBehaviour
 {
-    protected override void Start()
+    void Start()
     {
-        base.Start();
-        Debugger.Log("6666");
+        Debugger.LogGreen("666");
+        Debugger.LogFormat("666", 1);
+        Debugger.LogFormat("666 {0}", 1);
+        Debugger.LogErrorFormat("666", 1);
+        Debugger.LogErrorFormat("666 {0}", 1);
     }
 }
