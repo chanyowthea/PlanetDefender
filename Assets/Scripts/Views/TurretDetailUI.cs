@@ -4,6 +4,7 @@ using UnityEngine;
 using UIFramework;
 using UnityEngine.UI;
 using System;
+using System.Text;
 
 class TurretDetailUI : BaseUI
 {
@@ -11,9 +12,10 @@ class TurretDetailUI : BaseUI
     [SerializeField] Text _AttackText;
     [SerializeField] Text _DefenseText;
     [SerializeField] Text _PriceText;
-    [SerializeField] CustomImage _Picture; 
+    [SerializeField] Text _MaterialText;
+    [SerializeField] CustomImage _Picture;
     Action _OnPurchase;
-    int _TurretId; 
+    int _TurretId;
 
     public TurretDetailUI()
     {
@@ -59,13 +61,31 @@ class TurretDetailUI : BaseUI
         var csv = ConfigDataManager.instance.GetData<TurretCSV>(turretId.ToString());
         if (csv == null)
         {
-            Debugger.Log("cannot find csv data with id " + turretId); 
+            Debugger.Log("cannot find csv data with id " + turretId);
             return;
         }
         _NameText.text = csv._Name;
         _AttackText.text = csv._Attack.ToString();
-        _DefenseText.text = csv._Defense.ToString(); 
-        _PriceText.text = csv._Price.ToString(); 
+        _DefenseText.text = csv._Defense.ToString();
+        _PriceText.text = csv._Price.ToString();
+
+        StringBuilder ms = new StringBuilder();
+        foreach (var item in csv._Materials)
+        {
+            var ore = ConfigDataManager.instance.GetData<OreCSV>(item.Key.ToString());
+            if (ore == null)
+            {
+                continue;
+            }
+            if (ms.Length != 0)
+            {
+                ms.Append(", ");
+            }
+            ms.Append(ore._Name);
+            ms.Append("x");
+            ms.Append(item.Value);
+        }
+        _MaterialText.text = ms.ToString();
         _Picture.SetData(ResourcesManager.instance.GetSprite(csv._Picture));
         _OnPurchase = onPurchase;
     }

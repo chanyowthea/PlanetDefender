@@ -30,7 +30,7 @@ public class GameManager : MonoSingleton<GameManager>
         ArchiveManager.instance.OnQuitPlay();
         GameData.instance.Clear();
         TurretManager.instance.Clear();
-        CoroutineUtil.instance.ClearRoutines(ERoutinePlace.InGame); 
+        //CoroutineUtil.instance.ClearRoutines(ERoutinePlace.InGame);
     }
 
     public void AddHealth()

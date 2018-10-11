@@ -44,7 +44,7 @@ public class Enemy : Entity
 
     void Awake()
     {
-        transform.SetParent(GameAssets.rockParent.transform);
+        transform.SetParent(GameAssets.rockParent.transform); 
         gameObject.name = GetType() + "_" + GetHashCode();
     }
 
