@@ -32,11 +32,10 @@ public class MallItem : MonoBehaviour, ILoopScrollRectItem<int>
     public void OnClickItem()
     {
         Debugger.Log("OnClickItem id=" + _ID);
-        var ui = UIManager.Instance.Open<PromptView>();
+        var ui = UIManager.Instance.Open<MallPurchaseUI>();
         ui.SetData("Confirm to buy this one? ", () =>
         {
-            ArchiveManager.instance.ChangeMaterialsCount(_ID, 1);
             Debugger.Log("buy item with id " + _ID + " successful! "); 
-        });
+        }, _ID, PurchaseManager.instance.GetStockCount(_ID));
     }
 }

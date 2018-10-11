@@ -19,6 +19,7 @@ public class GameManager : MonoSingleton<GameManager>
         ConfigDataManager.instance.LoadCSV<OreCSV>("Ore");
         ConfigDataManager.instance.LoadCSV<EnemyCSV>("Enemy");
         ArchiveManager.instance.OnEnterPlay(); 
+        PurchaseManager.instance.Init(); 
         int level = ArchiveManager.instance.GetCurrentLevel();
         var v = UIManager.Instance.Open<HUDView>();
         v.SetData(level); 

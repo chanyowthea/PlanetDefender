@@ -31,16 +31,17 @@ class MallUI : BaseUI
             }
         }
         _Rect.SetData(ids.ToArray()); 
-        _Rect.RefillCells(); 
-    }
+        _Rect.RefillCells();
 
-    internal override void Close()
-    {
         var ui = UIManager.Instance.GetCurrentResidentUI<TopResidentUI>();
         if (ui != null)
         {
             ui.UpdateView(true);
         }
+    }
+
+    internal override void Close()
+    {
         _Rect.ClearCells(); 
         base.Close();
     }

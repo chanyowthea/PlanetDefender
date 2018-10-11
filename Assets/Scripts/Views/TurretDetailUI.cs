@@ -16,6 +16,7 @@ class TurretDetailUI : BaseUI
     [SerializeField] CustomImage _Picture;
     Action _OnPurchase;
     int _TurretId;
+    string _MaterialFormat = "需要材料：{0}"; 
 
     public TurretDetailUI()
     {
@@ -85,7 +86,7 @@ class TurretDetailUI : BaseUI
             ms.Append("x");
             ms.Append(item.Value);
         }
-        _MaterialText.text = ms.ToString();
+        _MaterialText.text = string.Format(_MaterialFormat, ms.ToString());
         _Picture.SetData(ResourcesManager.instance.GetSprite(csv._Picture));
         _OnPurchase = onPurchase;
     }

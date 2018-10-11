@@ -92,34 +92,50 @@ public class ArchiveManager : TSingleton<ArchiveManager>
 
     public void ChangeMaterialsCount(int id, int deltaCount)
     {
-        var csv = ConfigDataManager.instance.GetData<OreCSV>(id.ToString());
-        if (csv == null)
+        ChangeMaterialsCount(new ItemPair(id, deltaCount)); 
+    }
+
+    public void ChangeMaterialsCount(params ItemPair[] items)
+    {
+        if (items == null || items.Length == 0)
         {
             return;
         }
 
         var ms = AccountInfo._Materials.GetDictionary();
-        if (ms.ContainsKey(id))
+        for (int i = 0, length = items.Length; i < length; i++)
         {
-            var value = ms[id];
-            value += deltaCount;
-            if (value <= 0)
+            var item = items[i];
+            var id = item._ID;
+            var deltaCount = item._Number; 
+            var csv = ConfigDataManager.instance.GetData<OreCSV>(id.ToString());
+            if (csv == null)
             {
-                ms.Remove(id);
+                return;
+            }
+
+            if (ms.ContainsKey(id))
+            {
+                var value = ms[id];
+                value += deltaCount;
+                if (value <= 0)
+                {
+                    ms.Remove(id);
+                }
+                else
+                {
+                    ms[id] = value;
+                }
             }
             else
             {
-                ms[id] = value;
+                if (deltaCount > 0)
+                {
+                    ms[id] = deltaCount;
+                }
             }
         }
-        else
-        {
-            if (deltaCount > 0)
-            {
-                ms[id] = deltaCount;
-            }
-        }
-        AccountInfo._Materials = ms.GetLogString(); 
+        AccountInfo._Materials = ms.GetLogString();
 
         SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName,
             new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName),

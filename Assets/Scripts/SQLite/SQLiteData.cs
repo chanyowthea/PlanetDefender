@@ -5,12 +5,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-public class KeyPair<T1, T2>
-{
-    public T1 _Key;
-    public T2 _Value;
-}
-
 // support int, string, float, byte[] only. 
 public abstract class SQLiteData
 {
