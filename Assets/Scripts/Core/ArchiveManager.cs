@@ -35,7 +35,7 @@ public class ArchiveManager : TSingleton<ArchiveManager>
             AccountInfo._Materials = ms.GetLogString();
 
             SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName,
-                new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName), 
+                new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName),
                 AccountInfo.ToSqliteParams());
         }
         UpdateAccountInfo();
@@ -88,6 +88,42 @@ public class ArchiveManager : TSingleton<ArchiveManager>
             new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName),
             new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._CurrentLevel), level));
         AccountInfo._CurrentLevel = level;
+    }
+
+    public void ChangeMaterialsCount(int id, int deltaCount)
+    {
+        var csv = ConfigDataManager.instance.GetData<OreCSV>(id.ToString());
+        if (csv == null)
+        {
+            return;
+        }
+
+        var ms = AccountInfo._Materials.GetDictionary();
+        if (ms.ContainsKey(id))
+        {
+            var value = ms[id];
+            value += deltaCount;
+            if (value <= 0)
+            {
+                ms.Remove(id);
+            }
+            else
+            {
+                ms[id] = value;
+            }
+        }
+        else
+        {
+            if (deltaCount > 0)
+            {
+                ms[id] = deltaCount;
+            }
+        }
+        AccountInfo._Materials = ms.GetLogString(); 
+
+        SingletonManager.SqliteHelper.UpdateValues(GameConfig.instance._AccountTableName,
+            new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName),
+            new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._Materials), AccountInfo._Materials));
     }
 
     public void UpdateAccountInfo()

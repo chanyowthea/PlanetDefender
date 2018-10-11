@@ -9,7 +9,7 @@ public class MallItem : MonoBehaviour, ILoopScrollRectItem<int>
     [SerializeField] Text _NameText;
     [SerializeField] CustomImage _CustomImage;
     int _ID;
-    
+
     public void SetData(int id)
     {
         _ID = id;
@@ -18,9 +18,9 @@ public class MallItem : MonoBehaviour, ILoopScrollRectItem<int>
         {
             return;
         }
-        _NameText.text = csv._Name; 
+        _NameText.text = csv._Name;
         var s = ResourcesManager.instance.GetSprite(csv._Picture);
-        _CustomImage.SetData(s); 
+        _CustomImage.SetData(s);
     }
 
     public void ClearData()
@@ -31,6 +31,12 @@ public class MallItem : MonoBehaviour, ILoopScrollRectItem<int>
 
     public void OnClickItem()
     {
-        Debugger.Log("OnClickItem id=" + _ID); 
+        Debugger.Log("OnClickItem id=" + _ID);
+        var ui = UIManager.Instance.Open<PromptView>();
+        ui.SetData("Confirm to buy this one? ", () =>
+        {
+            ArchiveManager.instance.ChangeMaterialsCount(_ID, 1);
+            Debugger.Log("buy item with id " + _ID + " successful! "); 
+        });
     }
 }
