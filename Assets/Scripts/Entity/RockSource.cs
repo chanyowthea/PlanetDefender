@@ -15,11 +15,11 @@ public class RockSource : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.instance._Timer.GameTime - _lastTime < _generateInterval)
+        if (GameManager.instance._DelayCallUtil.GameTime - _lastTime < _generateInterval)
         {
             return;
         }
-        _lastTime = GameManager.instance._Timer.GameTime;
+        _lastTime = GameManager.instance._DelayCallUtil.GameTime;
         var r = GameObject.Instantiate(GameAssets.instance._rockPrefab);
         r.transform.position = this.transform.position;
         var dir = Vector3.Normalize(PlanetController.instance.transform.position -

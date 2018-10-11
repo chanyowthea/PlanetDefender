@@ -100,7 +100,7 @@ public class Planet : Army
             {
                 _IsInPoisionState = true;
                 _PoisionPivot.SetActive(true);
-                CoroutineUtil.instance.Wait(3, () => DoHurtValue(hurt), ERoutinePlace.InGame, true); 
+                GameManager.instance.DelayCall(3, () => DoHurtValue(hurt), true); 
             }
         }
     }

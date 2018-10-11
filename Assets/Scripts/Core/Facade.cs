@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using UIFramework;
 using UnityEngine;
+using System; 
 
 public class Facade : MonoSingleton<Facade>
 {
-    public readonly TimeService _UITimer = new TimeService();
-    public TimeService CurTimer
+    DelayCallUtil _DelayCallUtil;
+    bool _HasInitialized;
+    public float TimeScale
     {
         get
         {
-            return CurRoutinePlace == ERoutinePlace.InGame ? GameManager.instance._Timer : _UITimer;
+            return _DelayCallUtil.Timer._TimeScale;
+        }
+        set
+        {
+            _DelayCallUtil.Timer._TimeScale = value;
         }
     }
-    public ERoutinePlace CurRoutinePlace { private set; get; }
 
-    bool _HasInitialized;
     public void Init()
     {
         if (_HasInitialized)
@@ -40,28 +44,34 @@ public class Facade : MonoSingleton<Facade>
         ConfigDataManager.instance.LoadCSV<LocCSV>("Loc");
         ConfigDataManager.instance.LoadCSV<UICSV>("UI");
         LocManager.instance.Init(LocLang.English);
+        _DelayCallUtil = gameObject.AddComponent<DelayCallUtil>(); 
     }
 
     public void ChangeScene(string sceneName)
     {
         UIManager.Instance.ChangeScene();
         var load = UIManager.Instance.Open<LoadingView>();
-        load.SetData(sceneName, (sName) =>
-        {
-            //if (sName == GameConfig.instance._PlaySceneName)
-            //{
-            //    CurRoutinePlace = ERoutinePlace.InGame;
-            //}
-            //else
-            //{
-            //    CurRoutinePlace = ERoutinePlace.UI;
-            //}
-        });
+        load.SetData(sceneName);
+    }
+
+    public uint DelayCall(float delayTime, Action action, bool isRepeated = false)
+    {
+        return _DelayCallUtil.DelayCall(delayTime, action, isRepeated); 
+    }
+
+    public void CancelDelayCall(uint id)
+    {
+        _DelayCallUtil.CancelDelayCall(id); 
     }
 
     private void Update()
     {
-        _UITimer.UpdateTime(); 
+        _DelayCallUtil.RunOneFrame();
+    }
+
+    void FixedUpdate()
+    {
+        _DelayCallUtil.FixedRunOneFrame();
     }
 
     void OnApplicationQuit()

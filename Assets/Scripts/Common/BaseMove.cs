@@ -9,6 +9,6 @@ public class BaseMove : MonoBehaviour
 
     protected virtual void Update()
     {
-        transform.position += _MoveDir * _MoveSpeed * GameManager.instance._Timer._TimeScale;
+        transform.position += _MoveDir * _MoveSpeed * GameManager.instance.TimeScale;
     }
 }

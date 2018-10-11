@@ -10,10 +10,10 @@ public class TurretManager : TSingleton<TurretManager>
 
     public List<Turret> GetAllTurrets()
     {
-        List<Turret> list = new List<Turret>(); 
+        List<Turret> list = new List<Turret>();
         foreach (var item in _OccupiedDegrees)
         {
-            list.Add(item.Value); 
+            list.Add(item.Value);
         }
         return list;
     }
@@ -35,13 +35,11 @@ public class TurretManager : TSingleton<TurretManager>
             return;
         }
 
-        //int cost = csv._Materials;
-        //if (ArchiveManager.instance.GetGoldCount() < cost)
-        //{
-        //    var v = UIManager.Instance.Open<MessageView>();
-        //    v.SetData("金币不足,建造失败");
-        //    return;
-        //}
+        bool isStockSufficient = CheckMaterials(csv._Materials);
+        if (!isStockSufficient)
+        {
+            return;
+        }
 
         degree %= 360;
         if (_OccupiedDegrees.ContainsKey(degree))
@@ -84,7 +82,26 @@ public class TurretManager : TSingleton<TurretManager>
         // 建造成功扣除金币
         EventDispatcher.instance.DispatchEvent(EventID.AddGold, -cost);
         EventDispatcher.instance.DispatchEvent(EventID.CreateTurretSuccess, degree, turretId);
+    }
 
+    bool CheckMaterials(Dictionary<int, int> materials)
+    {
+        foreach (var item in materials)
+        {
+            if (ArchiveManager.instance.GetMaterialCount(item.Key) < item.Value)
+            {
+                var v = UIManager.Instance.Open<MessageView>();
+                v.SetData("材料不足,建造失败");
+                return false;
+            }
+        }
+        List<ItemPair> items = new List<ItemPair>();
+        foreach (var item in materials)
+        {
+            items.Add(new ItemPair(item.Key, item.Value));
+        }
+        ArchiveManager.instance.ChangeMaterialsCount(items.ToArray());
+        return true;
     }
 
     public int GetTurretDegree(Turret turret)
@@ -104,7 +121,7 @@ public class TurretManager : TSingleton<TurretManager>
                 break;
             }
         }
-        return degree; 
+        return degree;
     }
 
     public void RemoveTurret(int degree)

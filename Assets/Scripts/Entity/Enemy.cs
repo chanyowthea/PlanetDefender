@@ -22,7 +22,7 @@ public class Enemy : Entity
                     Debugger.Log("play bomb effect! ", LogColor.Red);
                     var go = Instantiate(GameAssets.instance._ExplosionEffect);
                     go.transform.position = this.transform.position;
-                    CoroutineUtil.instance.Wait(1, () =>
+                    GameManager.instance.DelayCall(1, () =>
                     {
                         GameObject.Destroy(go);
                     });

@@ -38,6 +38,7 @@ public class ArchiveManager : TSingleton<ArchiveManager>
                 new Mono.Data.Sqlite.SqliteParameter(LogUtil.GetVarName(rt => AccountInfo._AccountName), GameConfig.instance._AccountName),
                 AccountInfo.ToSqliteParams());
         }
+        //SetGoldCount(10000); 
         UpdateAccountInfo();
     }
 
@@ -62,6 +63,16 @@ public class ArchiveManager : TSingleton<ArchiveManager>
     public override void Clear()
     {
         base.Clear();
+    }
+
+    public int GetMaterialCount(int id)
+    {
+        var dict = AccountInfo._Materials.GetDictionary();
+        if (!dict.ContainsKey(id))
+        {
+            return 0;
+        }
+        return dict[id];
     }
 
     public int GetGoldCount()
@@ -92,7 +103,7 @@ public class ArchiveManager : TSingleton<ArchiveManager>
 
     public void ChangeMaterialsCount(int id, int deltaCount)
     {
-        ChangeMaterialsCount(new ItemPair(id, deltaCount)); 
+        ChangeMaterialsCount(new ItemPair(id, deltaCount));
     }
 
     public void ChangeMaterialsCount(params ItemPair[] items)
@@ -107,7 +118,7 @@ public class ArchiveManager : TSingleton<ArchiveManager>
         {
             var item = items[i];
             var id = item._ID;
-            var deltaCount = item._Number; 
+            var deltaCount = item._Number;
             var csv = ConfigDataManager.instance.GetData<OreCSV>(id.ToString());
             if (csv == null)
             {
@@ -151,5 +162,6 @@ public class ArchiveManager : TSingleton<ArchiveManager>
         {
             AccountInfo.SetAllValues(reader[0]);
         }
+        //AccountInfo._Golds = 0; 
     }
 }

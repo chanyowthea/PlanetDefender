@@ -47,6 +47,11 @@ class SettingsUI : BaseUI
         });
     }
 
+    public void OnClickInventory()
+    {
+        var view = UIManager.Instance.Open<InventoryUI>();
+    }
+
     public void OnClickClose()
     {
         UIManager.Instance.Close(this);

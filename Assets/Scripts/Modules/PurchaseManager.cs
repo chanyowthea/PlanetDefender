@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UIFramework;
 using UnityEngine;
 
 public class PurchaseManager : TSingleton<PurchaseManager>
@@ -23,6 +24,12 @@ public class PurchaseManager : TSingleton<PurchaseManager>
         }
     }
 
+    public override void Clear()
+    {
+        _MallStock.Clear(); 
+        base.Clear();
+    }
+
     public int GetStockCount(int id)
     {
         if (!_MallStock.ContainsKey(id))
@@ -38,11 +45,15 @@ public class PurchaseManager : TSingleton<PurchaseManager>
         var csv = ConfigDataManager.instance.GetData<OreCSV>(id.ToString());
         if (csv == null)
         {
+            var v = UIManager.Instance.Open<MessageView>();
+            v.SetData("Unknow error! ");
             Debugger.LogError("csv is empty! ");
             return 1;
         }
         if (ArchiveManager.instance.GetGoldCount() < csv._Price)
         {
+            var v = UIManager.Instance.Open<MessageView>();
+            v.SetData("gold is not enough! ");
             Debugger.LogError("gold is not enough! ");
             return 2;
         }

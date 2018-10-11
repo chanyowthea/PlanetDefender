@@ -12,7 +12,7 @@ class StartView : BaseUI
         _NaviData._Layer = EUILayer.FullScreen;
         _NaviData._IsCloseCoexistingUI = true;
     }
-    
+
     public override void Open(NavigationData data = null)
     {
         base.Open(data);
@@ -21,12 +21,13 @@ class StartView : BaseUI
     internal override void Show()
     {
         base.Show();
-        UIManager.Instance.Close<TopResidentUI>(); 
+        UIManager.Instance.Close<TopResidentUI>();
     }
 
+    uint delayCallID = 0;
     public void OnClickStart(int level)
     {
-        ArchiveManager.instance.SetCurrentLevel(level); 
-        Facade.instance.ChangeScene(GameConfig.instance._PlaySceneName); 
+        ArchiveManager.instance.SetCurrentLevel(level);
+        Facade.instance.ChangeScene(GameConfig.instance._PlaySceneName);
     }
 }

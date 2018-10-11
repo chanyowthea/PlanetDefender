@@ -10,8 +10,8 @@ class HUDView : BaseUI
 {
     [SerializeField] Text _targetScoreText;
     [SerializeField] Text _scoreText;
-    int _scoreCount; 
-    int _CurLevel; 
+    int _scoreCount;
+    int _CurLevel;
 
     public HUDView()
     {
@@ -34,7 +34,7 @@ class HUDView : BaseUI
     internal override void Show()
     {
         base.Show();
-        GameManager.instance._Timer._TimeScale = 1;
+        GameManager.instance.TimeScale = 1;
         var ui = UIManager.Instance.GetCurrentResidentUI<TopResidentUI>(); if (ui != null)
         {
             ui.UpdateView(true, false);
@@ -44,10 +44,11 @@ class HUDView : BaseUI
     internal override void Close()
     {
         EventDispatcher.instance.UnRegisterEvent(EventID.UpdateScore, this, "UpdateScore");
-        if (_addHealthRoutine != null)
+
+        if (_DelayCallID != 0)
         {
-            StopCoroutine(_addHealthRoutine);
-            _addHealthRoutine = null;
+            Facade.instance.CancelDelayCall(_DelayCallID);
+            _DelayCallID = 0;
         }
         base.Close();
     }
@@ -60,8 +61,8 @@ class HUDView : BaseUI
 
     internal override void ClearData()
     {
-        _scoreCount = 0; 
-        _CurLevel = 0; 
+        _scoreCount = 0;
+        _CurLevel = 0;
         base.ClearData();
     }
 
@@ -81,7 +82,7 @@ class HUDView : BaseUI
         LevelCSV csv = ConfigDataManager.instance.GetData<LevelCSV>(_CurLevel.ToString());
         if (csv == null)
         {
-            Debug.LogError(string.Format("cannot find csv data with id {0}. ", _CurLevel)); 
+            Debug.LogError(string.Format("cannot find csv data with id {0}. ", _CurLevel));
             return;
         }
 
@@ -94,7 +95,7 @@ class HUDView : BaseUI
         }
         UpdateView();
     }
-    
+
     public void OnClickOreIllustration()
     {
         UIManager.Instance.Open<OreIllustrationUI>();
@@ -133,34 +134,38 @@ class HUDView : BaseUI
 
     public void OnClickPause()
     {
-        GameManager.instance._Timer._TimeScale = 0;
+        GameManager.instance.TimeScale = 0;
     }
 
     public void OnClickNormal()
     {
-        GameManager.instance._Timer._TimeScale = 1;
+        GameManager.instance.TimeScale = 1;
     }
 
     public void OnClickAccelerate()
     {
-        GameManager.instance._Timer._TimeScale = 2;
+        GameManager.instance.TimeScale = 2;
     }
 
     [SerializeField] Button _addHealthBtn;
-    IEnumerator _addHealthRoutine;
+    uint _DelayCallID;
     public void OnClickAddHealth()
     {
         if (!_addHealthBtn.enabled)
         {
             return;
         }
-        if (_addHealthRoutine != null)
+        if (_DelayCallID != 0)
         {
-            CoroutineUtil.instance.StopCoroutine(_addHealthRoutine);
-            _addHealthRoutine = null;
+            Facade.instance.CancelDelayCall(_DelayCallID);
+            _DelayCallID = 0;
         }
-        _addHealthRoutine = AddHealthCountDown();
-        CoroutineUtil.instance.StartCoroutine(_addHealthRoutine);
+        _addHealthBtn.enabled = false;
+        Facade.instance.DelayCall(1, () =>
+        {
+            _addHealthBtn.enabled = true;
+            _DelayCallID = 0;
+        });
 
         if (PlanetController.instance.IsHpLessThanMax())
         {
@@ -171,16 +176,9 @@ class HUDView : BaseUI
             }
             else
             {
-                var v=  UIManager.Instance.Open<MessageView>(); 
-                v.SetData("金币不足！"); 
+                var v = UIManager.Instance.Open<MessageView>();
+                v.SetData("金币不足！");
             }
         }
-    }
-
-    IEnumerator AddHealthCountDown()
-    {
-        _addHealthBtn.enabled = false;
-        yield return new WaitForSeconds(1);
-        _addHealthBtn.enabled = true;
     }
 }
