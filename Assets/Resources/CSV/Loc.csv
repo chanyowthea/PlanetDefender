@@ -29,4 +29,6 @@ PURCHASE,Purchase,购买,,
 INVENTORY,Inventory,持有物品,,
 STOCK,Stock: ,库存：,,
 TOTAL_COST,Total Cost: ,总价：,,
+PRICE,Price: ,售价：,,
+OWNED,Owned: ,持有：,,
 

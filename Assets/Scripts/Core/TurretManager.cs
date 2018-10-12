@@ -27,20 +27,7 @@ public class TurretManager : TSingleton<TurretManager>
             return;
         }
 
-        int cost = csv._Price;
-        if (ArchiveManager.instance.GetGoldCount() < cost)
-        {
-            var v = UIManager.Instance.Open<MessageView>();
-            v.SetData("金币不足,建造失败");
-            return;
-        }
-
-        bool isStockSufficient = CheckMaterials(csv._Materials);
-        if (!isStockSufficient)
-        {
-            return;
-        }
-
+        // check position
         degree %= 360;
         if (_OccupiedDegrees.ContainsKey(degree))
         {
@@ -50,6 +37,24 @@ public class TurretManager : TSingleton<TurretManager>
             Debugger.Log(string.Format("degree {0} has been occupied! ", degree));
             return;
         }
+
+        // check golds
+        int cost = csv._Price;
+        if (ArchiveManager.instance.GetGoldCount() < cost)
+        {
+            var v = UIManager.Instance.Open<MessageView>();
+            v.SetData("金币不足,建造失败");
+            return;
+        }
+
+        // check materials
+        bool isStockSufficient = CheckMaterials(csv._Materials);
+        if (!isStockSufficient)
+        {
+            return;
+        }
+
+        // create game object
         var c = GameObject.Instantiate(pivot);
         c.name = "Pivot_" + degree;
         c.transform.SetParent(PlanetController.instance.transform);
@@ -95,12 +100,7 @@ public class TurretManager : TSingleton<TurretManager>
                 return false;
             }
         }
-        List<ItemPair> items = new List<ItemPair>();
-        foreach (var item in materials)
-        {
-            items.Add(new ItemPair(item.Key, item.Value));
-        }
-        ArchiveManager.instance.ChangeMaterialsCount(items.ToArray());
+        ArchiveManager.instance.ConsumeMaterials(materials);
         return true;
     }
 

@@ -39,6 +39,7 @@ class MallPurchaseUI : BaseUI
     [SerializeField] InputField _NumberInput;
     [SerializeField] Text _StockText;
     [SerializeField] Text _TotalCostText;
+    [SerializeField] Text _OwnText;
     Action _OnOK;
     int _ID;
     int _MaxNumber = 1;
@@ -79,6 +80,7 @@ class MallPurchaseUI : BaseUI
         _CSVData = ConfigDataManager.instance.GetData<OreCSV>(_ID.ToString());
         _NumberInput.onEndEdit.AddListener(OnEndEdit);
         Number = 1;
+        _OwnText.text = ArchiveManager.instance.GetMaterialCount(_ID).ToString(); 
     }
 
     void OnEndEdit(string s)

@@ -88,6 +88,11 @@ public class ArchiveManager : TSingleton<ArchiveManager>
         AccountInfo._Golds = value;
     }
 
+    public void ChangeGoldCount(int delta)
+    {
+        SetGoldCount(AccountInfo._Golds + delta);
+    }
+
     public int GetCurrentLevel()
     {
         return AccountInfo._CurrentLevel;
@@ -104,6 +109,26 @@ public class ArchiveManager : TSingleton<ArchiveManager>
     public void ChangeMaterialsCount(int id, int deltaCount)
     {
         ChangeMaterialsCount(new ItemPair(id, deltaCount));
+    }
+
+    public void ChangeMaterialsCount(Dictionary<int, int> dict)
+    {
+        List<ItemPair> items = new List<ItemPair>();
+        foreach (var item in dict)
+        {
+            items.Add(new ItemPair(item.Key, item.Value));
+        }
+        ChangeMaterialsCount(items.ToArray());
+    }
+
+    public void ConsumeMaterials(Dictionary<int, int> dict)
+    {
+        List<ItemPair> items = new List<ItemPair>();
+        foreach (var item in dict)
+        {
+            items.Add(new ItemPair(item.Key, -item.Value));
+        }
+        ChangeMaterialsCount(items.ToArray());
     }
 
     public void ChangeMaterialsCount(params ItemPair[] items)

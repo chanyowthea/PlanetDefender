@@ -8,6 +8,8 @@ public class MallItem : MonoBehaviour, ILoopScrollRectItem<int>
 {
     [SerializeField] Text _NameText;
     [SerializeField] CustomImage _CustomImage;
+    [SerializeField] Text _StockText;
+    [SerializeField] Text _PriceText;
     int _ID;
 
     public void SetData(int id)
@@ -19,6 +21,8 @@ public class MallItem : MonoBehaviour, ILoopScrollRectItem<int>
             return;
         }
         _NameText.text = csv._Name;
+        _PriceText.text = csv._Price.ToString();
+        _StockText.text = PurchaseManager.instance.GetStockCount(id).ToString(); 
         var s = ResourcesManager.instance.GetSprite(csv._Picture);
         _CustomImage.SetData(s);
     }

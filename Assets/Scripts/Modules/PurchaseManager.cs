@@ -57,7 +57,7 @@ public class PurchaseManager : TSingleton<PurchaseManager>
             Debugger.LogError("gold is not enough! ");
             return 2;
         }
-
+        EventDispatcher.instance.DispatchEvent(EventID.AddGold, -csv._Price);
         ArchiveManager.instance.ChangeMaterialsCount(id, num);
         return 0;
     }
