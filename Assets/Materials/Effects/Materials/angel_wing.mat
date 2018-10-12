@@ -1,0 +1,237 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: angel_wing
+  m_Shader: {fileID: 4800000, guid: 2e008eb159d66674f85ebd705b79f3af, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cube:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DisEffectTex01:
+        m_Texture: {fileID: 2800000, guid: c8ae30c669846ed46abd5c4879020af0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DisTex01:
+        m_Texture: {fileID: 2800000, guid: f21e3a88298aa1e4ebe6a694a7f216e6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DisTex02:
+        m_Texture: {fileID: 2800000, guid: 163fd661d8744c047bb883fd99da76fc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Dis_Emission_Tex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EffectTex:
+        m_Texture: {fileID: 2800000, guid: 3031f32c09c4b0d439bc30e03770e72e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EffectTexMask:
+        m_Texture: {fileID: 2800000, guid: 640b9bcbff878ea418f25e132adf13b1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emission_Tex:
+        m_Texture: {fileID: 2800000, guid: 906b45a650c02834b9f1ce825fd9ad81, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FadeTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlossTex:
+        m_Texture: {fileID: 2800000, guid: b122f6f40050baa4790bf96b9e8d84aa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LMTex:
+        m_Texture: {fileID: 2800000, guid: 616573c052029e041a0b2e7fab351d89, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: cad58b3ad0a5c5d46b2bc694ade1dd69, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex1:
+        m_Texture: {fileID: 2800000, guid: cad58b3ad0a5c5d46b2bc694ade1dd69, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex2:
+        m_Texture: {fileID: 2800000, guid: 616573c052029e041a0b2e7fab351d89, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTexture:
+        m_Texture: {fileID: 2800000, guid: c8ae30c669846ed46abd5c4879020af0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 1, y: 1}
+    - _Mask_Tex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normalmap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowBlob:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecularMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecularTex:
+        m_Texture: {fileID: 2800000, guid: c8ae30c669846ed46abd5c4879020af0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SpecularmapGlossA:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat1Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat2Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat3Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Splat4Map:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SplatLightMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tex01:
+        m_Texture: {fileID: 2800000, guid: bfda5275c2743bd4786bd217f5cd5340, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tex02:
+        m_Texture: {fileID: 2800000, guid: 163fd661d8744c047bb883fd99da76fc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _dissolveRamp:
+        m_Texture: {fileID: 2800000, guid: c8ae30c669846ed46abd5c4879020af0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 1, y: 1}
+    m_Floats:
+    - _AlphaInstensityA: 1
+    - _AlphaMask: 0
+    - _Ambientlight: 0
+    - _Brightness: 1
+    - _BrightnessLow: 1
+    - _ColorScale: 1
+    - _CutOff: 0.5
+    - _Cutoff: 1
+    - _DestBlend: 10
+    - _DiffuseBright: 1
+    - _DiffuseIntensity: 1
+    - _DisEffectTex01_PanV: 1
+    - _DisEffectTex01_Power: 0.5
+    - _DisTex01_PanV: 1
+    - _DisTex01_Power: 1
+    - _DisTex02_PanV: 1
+    - _DisTex02_Power: 1
+    - _Dis_Emission_Tex_PanV: 0.3
+    - _Dis_Emission_Tex_Power: 0.1
+    - _EffectTex_Instensity: 1
+    - _EffectTex_PanV: 1
+    - _EffectTex_UVAngle: 1
+    - _EffectTex_UVpan: 0
+    - _Emission_Tex_Instensity: 0.5
+    - _Emission_Tex_PanV: -0.1
+    - _Emission_Tex_UVAngle: 1
+    - _FadeFactor: 1
+    - _Far: 100
+    - _FarScale: 10
+    - _Gloss: 1
+    - _InstensityA: 1
+    - _InvFade: 1
+    - _MMultiplier: 2
+    - _Near: 2.5
+    - _NearScale: 3
+    - _NormalIntensity: 0.79
+    - _Scroll2X: 1
+    - _Scroll2Y: 0
+    - _ScrollX: 1
+    - _ScrollY: 0
+    - _SecondUV: 0
+    - _ShadowBrightness: 1
+    - _ShadowIntensityLow: 1
+    - _Shininess: 1
+    - _SpecularIntensity: 1
+    - _SplatLightMap_uvScale: 1
+    - _SrcBlend: 5
+    - _Tex01_Instensity: 1
+    - _Tex01_PanV: 1
+    - _Tex01_RGBAlpha: 1
+    - _Tex01_UVAngle: 1
+    - _Tex01_UVpan: 1
+    - _Tex02_Instensity: 1
+    - _Tex02_PanV: 1
+    - _Tex02_RGBAlpha: 1
+    - _Tex02_UVAngle: 1
+    - _Tex02_UVpan: 1
+    - _VignettePower: 5.5
+    - _ZTestMode: 4
+    - _dissolveamount: 0
+    m_Colors:
+    - _CharaSpectatorColor: {r: 0, g: 0, b: 0, a: 0}
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _ColorLow: {r: 1, g: 1, b: 1, a: 1}
+    - _Color_Tex01: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _Color_Tex02: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _CustomAmbient: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _DiffuseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _EffectTex_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _Emission: {r: 0, g: 0, b: 0, a: 0}
+    - _Emission_Tex_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Position: {r: 470, g: 110, b: 0.0005263, a: 1}
+    - _ReflectColor: {r: 1, g: 1, b: 1, a: 0.5}
+    - _ShadowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecColor: {r: 0.2794118, g: 0.2794118, b: 0.2794118, a: 1}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SplatMap_uvScale: {r: 2, g: 3, b: 4, a: 3}
+    - _TintColor: {r: 0.2205882, g: 0.2205882, b: 0.2205882, a: 1}
+    - _UVXX: {r: 0.3, g: 1, b: 1, a: 1}
+    - _WorldPos: {r: 0, g: 0, b: 0, a: 1}

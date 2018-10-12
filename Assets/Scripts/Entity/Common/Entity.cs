@@ -13,7 +13,7 @@ public class Entity : MonoBehaviour
 
     protected virtual void Update()
     {
-        transform.position += _MoveDir * _MoveSpeed * GameManager.instance._Timer._TimeScale;
+        transform.position += _MoveDir * _MoveSpeed * GameManager.instance.TimeScale;
     }
 
     public virtual void Init()

@@ -16,6 +16,7 @@ class TurretDetailUI : BaseUI
     [SerializeField] CustomImage _Picture;
     Action _OnPurchase;
     int _TurretId;
+    string _MaterialFormat = "需要材料：{0}";
 
     public TurretDetailUI()
     {
@@ -67,7 +68,19 @@ class TurretDetailUI : BaseUI
         _NameText.text = csv._Name;
         _AttackText.text = csv._Attack.ToString();
         _DefenseText.text = csv._Defense.ToString();
-        _PriceText.text = csv._Price.ToString();
+
+        StringBuilder goldSB = new StringBuilder();
+        bool isGoldInsufficient = ArchiveManager.instance.GetGoldCount() < csv._Price;
+        if (isGoldInsufficient)
+        {
+            goldSB.Append("<color=red>");
+        }
+        goldSB.Append(csv._Price); 
+        if (isGoldInsufficient)
+        {
+            goldSB.Append("</color>");
+        }
+        _PriceText.text = goldSB.ToString();
 
         StringBuilder ms = new StringBuilder();
         foreach (var item in csv._Materials)
@@ -81,11 +94,21 @@ class TurretDetailUI : BaseUI
             {
                 ms.Append(", ");
             }
+
+            bool isInsufficient = ArchiveManager.instance.GetMaterialCount(item.Key) < item.Value;
+            if (isInsufficient)
+            {
+                ms.Append("<color=red>");
+            }
             ms.Append(ore._Name);
             ms.Append("x");
             ms.Append(item.Value);
+            if (isInsufficient)
+            {
+                ms.Append("</color>");
+            }
         }
-        _MaterialText.text = ms.ToString();
+        _MaterialText.text = string.Format(_MaterialFormat, ms.ToString());
         _Picture.SetData(ResourcesManager.instance.GetSprite(csv._Picture));
         _OnPurchase = onPurchase;
     }

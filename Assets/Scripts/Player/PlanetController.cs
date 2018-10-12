@@ -7,7 +7,6 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlanetController : MonoSingleton<PlanetController>
 {
-    IEnumerator _LapseRoutine;
     float _HealthLapseSpeed = 5;
     public float HealthLapseSpeed
     {
@@ -22,22 +21,26 @@ public class PlanetController : MonoSingleton<PlanetController>
     }
 
     [SerializeField] Planet _planet;
+    uint _DelayCallID;
     bool _isRotate;
 
     private void Start()
     {
         EventDispatcher.instance.RegisterEvent(EventID.CreateTurret, this, "CreateTurret");
         EventDispatcher.instance.RegisterEvent(EventID.AddHealth, this, "AddHealth");
-        _LapseRoutine = LapseRoutine(); 
-        CoroutineUtil.instance.StartCoroutine(_LapseRoutine);
+        _DelayCallID = GameManager.instance.DelayCall(HealthLapseSpeed, () =>
+        {
+            EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -1);
+            _DelayCallID = 0;
+        }, true);
     }
 
     private void OnDestroy()
     {
-        if (_LapseRoutine != null)
+        if (_DelayCallID != 0)
         {
-            CoroutineUtil.instance.StopCoroutine(_LapseRoutine);
-            _LapseRoutine = null;
+            GameManager.instance.CancelDelayCall(_DelayCallID);
+            _DelayCallID = 0;
         }
         EventDispatcher.instance.UnRegisterEvent(EventID.AddHealth, this, "AddHealth");
         EventDispatcher.instance.UnRegisterEvent(EventID.CreateTurret, this, "CreateTurret");
@@ -46,21 +49,6 @@ public class PlanetController : MonoSingleton<PlanetController>
     public void _Reset()
     {
         _planet.Init();
-    }
-
-    IEnumerator LapseRoutine()
-    {
-        float time = 0;
-        while (true)
-        {
-            if (time >= HealthLapseSpeed)
-            {
-                time = 0; 
-                EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -1);
-            }
-            yield return null;
-            time += GameManager.instance._Timer.DeltaTime;
-        }
     }
 
     void Rotate(bool value)

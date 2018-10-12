@@ -8,7 +8,7 @@ class MessageView : BaseUI
 {
     [SerializeField] CanvasGroup _canvasGroup;
     [SerializeField] Text _messageText;
-    IEnumerator _routine;
+    uint _DelayCallID;
 
     public MessageView()
     {
@@ -19,15 +19,19 @@ class MessageView : BaseUI
     public override void Open(NavigationData data)
     {
         base.Open(data);
-        CoroutineUtil.instance.Wait(1, () => UIManager.Instance.Close(this), ERoutinePlace.UI);
+        Facade.instance.DelayCall(1, () =>
+        {
+            UIManager.Instance.Close(this);
+            _DelayCallID = 0;
+        });
     }
 
     internal override void Close()
     {
-        if (_routine != null)
+        if (_DelayCallID != 0)
         {
-            CoroutineUtil.instance.StopCoroutine(_routine);
-            _routine = null;
+            Facade.instance.CancelDelayCall(_DelayCallID);
+            _DelayCallID = 0;
         }
         base.Close();
     }

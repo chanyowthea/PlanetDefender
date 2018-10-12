@@ -10,8 +10,8 @@ class HUDView : BaseUI
 {
     [SerializeField] Text _targetScoreText;
     [SerializeField] Text _scoreText;
-    int _scoreCount; 
-    int _CurLevel; 
+    int _scoreCount;
+    int _CurLevel;
 
     public HUDView()
     {
@@ -29,25 +29,39 @@ class HUDView : BaseUI
             ui.UpdateView(true, false);
         }
         EventDispatcher.instance.RegisterEvent(EventID.UpdateScore, this, "UpdateScore");
+        _HealImage.material.SetFloat("_Ratio", 0);
     }
 
     internal override void Show()
     {
         base.Show();
-        GameManager.instance._Timer._TimeScale = 1;
+        GameManager.instance.TimeScale = 1;
         var ui = UIManager.Instance.GetCurrentResidentUI<TopResidentUI>(); if (ui != null)
         {
             ui.UpdateView(true, false);
         }
     }
 
+    internal override void Hide()
+    {
+        GameManager.instance.TimeScale = 0; 
+        base.Hide();
+    }
+
     internal override void Close()
     {
-        EventDispatcher.instance.UnRegisterEvent(EventID.UpdateScore, this, "UpdateScore");
-        if (_addHealthRoutine != null)
+        if (_DelayCallID != 0)
         {
-            StopCoroutine(_addHealthRoutine);
-            _addHealthRoutine = null;
+            Facade.instance.CancelCallEveryFrameInAPeriod(_DelayCallID);
+            _DelayCallID = 0;
+        }
+
+        EventDispatcher.instance.UnRegisterEvent(EventID.UpdateScore, this, "UpdateScore");
+
+        if (_DelayCallID != 0)
+        {
+            Facade.instance.CancelDelayCall(_DelayCallID);
+            _DelayCallID = 0;
         }
         base.Close();
     }
@@ -60,8 +74,8 @@ class HUDView : BaseUI
 
     internal override void ClearData()
     {
-        _scoreCount = 0; 
-        _CurLevel = 0; 
+        _scoreCount = 0;
+        _CurLevel = 0;
         base.ClearData();
     }
 
@@ -81,7 +95,7 @@ class HUDView : BaseUI
         LevelCSV csv = ConfigDataManager.instance.GetData<LevelCSV>(_CurLevel.ToString());
         if (csv == null)
         {
-            Debug.LogError(string.Format("cannot find csv data with id {0}. ", _CurLevel)); 
+            Debug.LogError(string.Format("cannot find csv data with id {0}. ", _CurLevel));
             return;
         }
 
@@ -94,7 +108,7 @@ class HUDView : BaseUI
         }
         UpdateView();
     }
-    
+
     public void OnClickOreIllustration()
     {
         UIManager.Instance.Open<OreIllustrationUI>();
@@ -133,54 +147,46 @@ class HUDView : BaseUI
 
     public void OnClickPause()
     {
-        GameManager.instance._Timer._TimeScale = 0;
+        GameManager.instance.TimeScale = 0;
     }
 
     public void OnClickNormal()
     {
-        GameManager.instance._Timer._TimeScale = 1;
+        GameManager.instance.TimeScale = 1;
     }
 
     public void OnClickAccelerate()
     {
-        GameManager.instance._Timer._TimeScale = 2;
+        GameManager.instance.TimeScale = 2;
     }
 
-    [SerializeField] Button _addHealthBtn;
-    IEnumerator _addHealthRoutine;
+    [SerializeField] Image _HealImage;
+    uint _DelayCallID;
     public void OnClickAddHealth()
     {
-        if (!_addHealthBtn.enabled)
+        if (_DelayCallID != 0)
         {
             return;
         }
-        if (_addHealthRoutine != null)
-        {
-            CoroutineUtil.instance.StopCoroutine(_addHealthRoutine);
-            _addHealthRoutine = null;
-        }
-        _addHealthRoutine = AddHealthCountDown();
-        CoroutineUtil.instance.StartCoroutine(_addHealthRoutine);
-
         if (PlanetController.instance.IsHpLessThanMax())
         {
             if (ArchiveManager.instance.GetGoldCount() >= 1)
             {
                 EventDispatcher.instance.DispatchEvent(EventID.AddHealth, 1);
                 EventDispatcher.instance.DispatchEvent(EventID.AddGold, -1);
+
+                float maxTime = 1; 
+                _DelayCallID = Facade.instance.CallEveryFrameInAPeriod(maxTime, (time) =>
+                {
+                    _HealImage.material.SetFloat("_Ratio", (maxTime - time) / maxTime);
+                }, () => _DelayCallID = 0);
+
             }
             else
             {
-                var v=  UIManager.Instance.Open<MessageView>(); 
-                v.SetData("金币不足！"); 
+                var v = UIManager.Instance.Open<MessageView>();
+                v.SetData("金币不足！");
             }
         }
-    }
-
-    IEnumerator AddHealthCountDown()
-    {
-        _addHealthBtn.enabled = false;
-        yield return new WaitForSeconds(1);
-        _addHealthBtn.enabled = true;
     }
 }
