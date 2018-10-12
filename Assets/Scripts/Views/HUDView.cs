@@ -29,6 +29,7 @@ class HUDView : BaseUI
             ui.UpdateView(true, false);
         }
         EventDispatcher.instance.RegisterEvent(EventID.UpdateScore, this, "UpdateScore");
+        _HealImage.material.SetFloat("_Ratio", 0);
     }
 
     internal override void Show()
@@ -41,8 +42,20 @@ class HUDView : BaseUI
         }
     }
 
+    internal override void Hide()
+    {
+        GameManager.instance.TimeScale = 0; 
+        base.Hide();
+    }
+
     internal override void Close()
     {
+        if (_DelayCallID != 0)
+        {
+            Facade.instance.CancelCallEveryFrameInAPeriod(_DelayCallID);
+            _DelayCallID = 0;
+        }
+
         EventDispatcher.instance.UnRegisterEvent(EventID.UpdateScore, this, "UpdateScore");
 
         if (_DelayCallID != 0)
@@ -147,32 +160,27 @@ class HUDView : BaseUI
         GameManager.instance.TimeScale = 2;
     }
 
-    [SerializeField] Button _addHealthBtn;
+    [SerializeField] Image _HealImage;
     uint _DelayCallID;
     public void OnClickAddHealth()
     {
-        if (!_addHealthBtn.enabled)
+        if (_DelayCallID != 0)
         {
             return;
         }
-        if (_DelayCallID != 0)
-        {
-            Facade.instance.CancelDelayCall(_DelayCallID);
-            _DelayCallID = 0;
-        }
-        _addHealthBtn.enabled = false;
-        Facade.instance.DelayCall(1, () =>
-        {
-            _addHealthBtn.enabled = true;
-            _DelayCallID = 0;
-        });
-
         if (PlanetController.instance.IsHpLessThanMax())
         {
             if (ArchiveManager.instance.GetGoldCount() >= 1)
             {
                 EventDispatcher.instance.DispatchEvent(EventID.AddHealth, 1);
                 EventDispatcher.instance.DispatchEvent(EventID.AddGold, -1);
+
+                float maxTime = 1; 
+                _DelayCallID = Facade.instance.CallEveryFrameInAPeriod(maxTime, (time) =>
+                {
+                    _HealImage.material.SetFloat("_Ratio", (maxTime - time) / maxTime);
+                }, () => _DelayCallID = 0);
+
             }
             else
             {

@@ -35,6 +35,10 @@ public class GameManager : MonoSingleton<GameManager>
         int level = ArchiveManager.instance.GetCurrentLevel();
         var v = UIManager.Instance.Open<HUDView>();
         v.SetData(level);
+        //for (int i = 1; i < 17; i++)
+        //{
+        //    ArchiveManager.instance.ChangeMaterialsCount(i, 100);
+        //}
     }
 
     public void OnEnd()
