@@ -26,7 +26,6 @@ public class Planet : Army
         }
     }
 
-    //public Dictionary<int, GameObject> cannonPivotDict { get; private set; }
     protected List<int> _allDegrees = new List<int>();
     [SerializeField] Text _hpText;
     [SerializeField] GameObject _PoisionPivot;
@@ -53,8 +52,6 @@ public class Planet : Army
 
     public void Awake()
     {
-        //cannonPivotDict = new Dictionary<int, GameObject>();
-
         // 计算所有能建造的炮塔位置
         int curDegree = 0;
         while (curDegree < 360)
@@ -75,11 +72,6 @@ public class Planet : Army
         MaxHP = 10;
         HP = MaxHP;
         transform.localEulerAngles = Vector3.zero;
-        //foreach (var item in cannonPivotDict)
-        //{
-        //    GameObject.Destroy(item.Value.gameObject);
-        //}
-        //cannonPivotDict.Clear();
         _PoisionPivot.SetActive(_IsInPoisionState); 
     }
 
@@ -206,6 +198,7 @@ public class Planet : Army
 
     void OnTriggerEnter(Collider collider)
     {
+        Debugger.LogRed("OnTriggerEnter=" + collider.name); 
         ExecuteAttack(collider.gameObject.GetComponent<Enemy>());
     }
 

@@ -112,40 +112,6 @@ public class PlanetController : MonoSingleton<PlanetController>
         }
     }
 
-    //public Turret GetCannonByDegree(int degree)
-    //{
-    //    if (_planet.cannonPivotDict.ContainsKey(degree))
-    //    {
-    //        var c = _planet.cannonPivotDict[degree];
-    //        if (c == null)
-    //        {
-    //            return null;
-    //        }
-    //        var comp = c.GetComponentInChildren<Turret>();
-    //        return comp;
-    //    }
-    //    return null;
-    //}
-
-    //public Turret[] GetAllCannons()
-    //{
-    //    List<Turret> cs = new List<Turret>();
-    //    foreach (var item in _planet.cannonPivotDict)
-    //    {
-    //        if (item.Value == null)
-    //        {
-    //            continue;
-    //        }
-    //        var comp = item.Value.GetComponentInChildren<Turret>();
-    //        if (comp == null)
-    //        {
-    //            continue;
-    //        }
-    //        cs.Add(comp);
-    //    }
-    //    return cs.ToArray();
-    //}
-
     public int GetHP()
     {
         if (_planet == null)

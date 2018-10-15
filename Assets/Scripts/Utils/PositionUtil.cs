@@ -33,8 +33,8 @@ public class PositionUtil : MonoBehaviour
         float k1 = 0;
         float k2 = 0;
         int state = 0;
-        Debug.DrawLine(p00, p01, Color.yellow);
-        Debug.DrawLine(p10, p11, Color.yellow);
+        Debugger.DrawLine(p00, p01, Color.yellow);
+        Debugger.DrawLine(p10, p11, Color.yellow);
         // 第一个点是否是非竖线
         if (p00.x != p01.x)
         {

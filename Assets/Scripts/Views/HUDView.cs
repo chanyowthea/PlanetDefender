@@ -44,7 +44,7 @@ class HUDView : BaseUI
 
     internal override void Hide()
     {
-        GameManager.instance.TimeScale = 0; 
+        GameManager.instance.TimeScale = 0;
         base.Hide();
     }
 
@@ -52,7 +52,7 @@ class HUDView : BaseUI
     {
         if (_DelayCallID != 0)
         {
-            Facade.instance.CancelCallEveryFrameInAPeriod(_DelayCallID);
+            GameManager.instance.CancelCallEveryFrameInAPeriod(_DelayCallID);
             _DelayCallID = 0;
         }
 
@@ -68,12 +68,18 @@ class HUDView : BaseUI
 
     public void SetData(int level)
     {
+        _HealImage.material = null;
+        _HealImage.material = GameObject.Instantiate(GameAssets.instance._RatioRectMaterial);
         _CurLevel = level;
         UpdateView();
     }
 
     internal override void ClearData()
     {
+        if (_HealImage.material != null)
+        {
+            GameObject.Destroy(_HealImage.material);
+        }
         _scoreCount = 0;
         _CurLevel = 0;
         base.ClearData();
@@ -109,21 +115,6 @@ class HUDView : BaseUI
         UpdateView();
     }
 
-    public void OnClickOreIllustration()
-    {
-        UIManager.Instance.Open<OreIllustrationUI>();
-    }
-
-    public void OnClickTurretIllustration()
-    {
-        UIManager.Instance.Open<TurretIllustrationUI>();
-    }
-
-    public void OnClickMall()
-    {
-        UIManager.Instance.Open<MallUI>();
-    }
-
     public void OnClickSettings()
     {
         UIManager.Instance.Open<SettingsUI>();
@@ -140,11 +131,6 @@ class HUDView : BaseUI
         EventDispatcher.instance.DispatchEvent(EventID.AttackFromPlanet);
     }
 
-    public void OnClickBuild()
-    {
-        UIManager.Instance.Open<BuildView>();
-    }
-
     public void OnClickPause()
     {
         GameManager.instance.TimeScale = 0;
@@ -159,7 +145,11 @@ class HUDView : BaseUI
     {
         GameManager.instance.TimeScale = 2;
     }
-
+    
+    public void OnClickBuild()
+    {
+        UIManager.Instance.Open<BuildView>();
+    }
     [SerializeField] Image _HealImage;
     uint _DelayCallID;
     public void OnClickAddHealth()
@@ -174,13 +164,12 @@ class HUDView : BaseUI
             {
                 EventDispatcher.instance.DispatchEvent(EventID.AddHealth, 1);
                 EventDispatcher.instance.DispatchEvent(EventID.AddGold, -1);
-
-                float maxTime = 1; 
-                _DelayCallID = Facade.instance.CallEveryFrameInAPeriod(maxTime, (time) =>
+                
+                float maxTime = 1;
+                _DelayCallID = GameManager.instance.CallEveryFrameInAPeriod(maxTime, (time) =>
                 {
                     _HealImage.material.SetFloat("_Ratio", (maxTime - time) / maxTime);
                 }, () => _DelayCallID = 0);
-
             }
             else
             {

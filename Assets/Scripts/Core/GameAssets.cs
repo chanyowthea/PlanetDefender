@@ -9,6 +9,7 @@ public class GameAssets : MonoSingleton<GameAssets>
     public Enemy _rockPrefab;
     public Gold _goldPrefab;
     public GameObject _ExplosionEffect;
+    public Material _RatioRectMaterial;
 
     static GameObject _bulletParent;
     public static GameObject bulletParent

@@ -57,4 +57,19 @@ class SettingsUI : BaseUI
     {
         UIManager.Instance.Close(this);
     }
+
+    public void OnClickOreIllustration()
+    {
+        UIManager.Instance.Open<OreIllustrationUI>();
+    }
+
+    public void OnClickTurretIllustration()
+    {
+        UIManager.Instance.Open<TurretIllustrationUI>();
+    }
+
+    public void OnClickMall()
+    {
+        UIManager.Instance.Open<MallUI>();
+    }
 }
