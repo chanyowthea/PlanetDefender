@@ -145,12 +145,11 @@ class HUDView : BaseUI
     {
         GameManager.instance.TimeScale = 2;
     }
-
+    
     public void OnClickBuild()
     {
         UIManager.Instance.Open<BuildView>();
     }
-
     [SerializeField] Image _HealImage;
     uint _DelayCallID;
     public void OnClickAddHealth()
@@ -165,7 +164,7 @@ class HUDView : BaseUI
             {
                 EventDispatcher.instance.DispatchEvent(EventID.AddHealth, 1);
                 EventDispatcher.instance.DispatchEvent(EventID.AddGold, -1);
-
+                
                 float maxTime = 1;
                 _DelayCallID = GameManager.instance.CallEveryFrameInAPeriod(maxTime, (time) =>
                 {

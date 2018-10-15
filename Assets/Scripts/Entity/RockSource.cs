@@ -16,7 +16,6 @@ public class RockSource : MonoBehaviour
     void Update()
     {
         //return; 
-
         if (GameManager.instance._DelayCallUtil.GameTime - _lastTime < _generateInterval)
         {
             return;

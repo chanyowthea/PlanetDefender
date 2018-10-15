@@ -130,7 +130,6 @@ public class Turret : Army, IShot
         {
             _MaskImage.material.SetFloat("_Ratio", (maxTime - time) / maxTime);
         }, () => _DelayCallID = 0);
-
         _LastFireTime = GameManager.instance._DelayCallUtil.GameTime;
         var bullet = GameObject.Instantiate(GameAssets.instance._bulletPrefab);
         bullet.SetData(FirePos, transform.up, _BulletMoveSpeed, _Attack, EFaction.Ours, TurrectID);
