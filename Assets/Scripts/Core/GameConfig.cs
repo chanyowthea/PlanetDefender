@@ -15,4 +15,8 @@ public class GameConfig : TSingleton<GameConfig>
     public readonly string _AccountName = "Local";
 
     public readonly string _TurretPrefabName = "Turret";
+
+    public readonly string _ = "Turret";
+    public readonly bool _PlanetImmuneDamage = true;
+    public readonly bool _TurretImmuneDamage = true;
 }

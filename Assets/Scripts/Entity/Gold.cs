@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class Gold : Entity
 {
     public float _radius = 1.41f / 2;
-    public override int HP
+    public override float HP
     {
         set
         {
-            _hpText.text = value.ToString();
+            _hpText.text = Mathf.CeilToInt(value).ToString();
             base.HP = value;
             if (HP <= 0)
             {

@@ -8,11 +8,11 @@ public class Enemy : Entity
     public float _radius = 1.41f / 2;
 
     [SerializeField] Text _hpText;
-    public override int HP
+    public override float HP
     {
         set
         {
-            _hpText.text = value.ToString();
+            _hpText.text = Mathf.CeilToInt(value).ToString();
             //Debug.Log("Rock set hp=" + value);
             if (base.HP > 0 && value <= 0)
             {

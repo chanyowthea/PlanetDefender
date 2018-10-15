@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-    public EFaction Faction{ protected set; get;}
-    public virtual int HP { set; get; }
-    public int MaxHP { protected set; get;}
-    protected int _Defense = 2;
+    public EFaction Faction { protected set; get; }
+    public virtual float HP { set; get; }
+    public int MaxHP { protected set; get; }
+    public int _Defense { protected set; get; }
     protected float _MoveSpeed = 2;
     protected Vector3 _MoveDir;
 

@@ -10,6 +10,7 @@ public class GameAssets : MonoSingleton<GameAssets>
     public Gold _goldPrefab;
     public GameObject _ExplosionEffect;
     public Material _RatioRectMaterial;
+    public Material _LightningMaterial;
 
     static GameObject _bulletParent;
     public static GameObject bulletParent

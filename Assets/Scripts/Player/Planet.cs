@@ -30,11 +30,15 @@ public class Planet : Army
     [SerializeField] Text _hpText;
     [SerializeField] GameObject _PoisionPivot;
 
-    public override int HP
+    public override float HP
     {
         set
         {
-            _hpText.text = value + "/" + MaxHP;
+            if (GameConfig.instance._PlanetImmuneDamage)
+            {
+                return;
+            }
+            _hpText.text = Mathf.CeilToInt(value) + "/" + MaxHP;
             base.HP = value;
             if (HP <= 0)
             {
@@ -72,7 +76,7 @@ public class Planet : Army
         MaxHP = 10;
         HP = MaxHP;
         transform.localEulerAngles = Vector3.zero;
-        _PoisionPivot.SetActive(_IsInPoisionState); 
+        _PoisionPivot.SetActive(_IsInPoisionState);
     }
 
     public void DoHurt(int enemyId)
@@ -92,12 +96,12 @@ public class Planet : Army
             {
                 _IsInPoisionState = true;
                 _PoisionPivot.SetActive(true);
-                GameManager.instance.DelayCall(3, () => DoHurtValue(hurt), true); 
+                GameManager.instance.DelayCall(3, () => DoHurtValue(hurt), true);
             }
         }
     }
 
-    public void DoHurtValue(int value)
+    public void DoHurtValue(float value)
     {
         if (value < 0)
         {
@@ -198,7 +202,7 @@ public class Planet : Army
 
     void OnTriggerEnter(Collider collider)
     {
-        Debugger.LogRed("OnTriggerEnter=" + collider.name); 
+        //Debugger.LogRed("OnTriggerEnter=" + collider.name);
         ExecuteAttack(collider.gameObject.GetComponent<Enemy>());
     }
 
@@ -210,6 +214,6 @@ public class Planet : Army
         }
         Debug.Log("ExecuteAttack value=" + BattleUtil.CalcDamage(rock.Attack, _Defense));
         //EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -BattleUtil.CalcDamage(rock.Attack, _Defense));
-        DoHurt(rock.EnemyID); 
+        DoHurt(rock.EnemyID);
     }
 }

@@ -58,7 +58,7 @@ class BuildView : BaseUI
                 int index = cannon._Degree / 60;
                 if (index >= 0 && index < _btns.Length)
                 {
-                    OnBuild(index, cannon.TurrectID);
+                    OnBuild(index, cannon.TurretID);
                 }
             }
         }
