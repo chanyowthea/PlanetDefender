@@ -59,8 +59,8 @@ public class TurretManager : TSingleton<TurretManager>
         c.name = "Pivot_" + degree;
         c.transform.SetParent(PlanetController.instance.transform);
         c.SetActive(true);
-        c.transform.localScale = Vector3.one;
-        Turret turret = ResourcesManager.instance.GetTurret(csv._Path);
+        c.transform.localScale = Vector3.one; 
+        Turret turret = ResourcesManager.instance.GetTurret(GameConfig.instance._TurretPrefabName);
         if (turret == null)
         {
             Debugger.Log(string.Format("turret is empty!"));

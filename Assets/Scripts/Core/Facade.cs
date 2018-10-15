@@ -19,8 +19,6 @@ public class Facade : MonoSingleton<Facade>
             _DelayCallUtil.Timer._TimeScale = value;
         }
     }
-    UniqueIDGenerator _UniqueIDGenerator = new UniqueIDGenerator();
-    Dictionary<uint, IEnumerator> _RoutineDict = new Dictionary<uint, IEnumerator>();
 
     public void Init()
     {
@@ -64,50 +62,6 @@ public class Facade : MonoSingleton<Facade>
     public void CancelDelayCall(uint id)
     {
         _DelayCallUtil.CancelDelayCall(id);
-    }
-
-    public uint CallEveryFrameInAPeriod(float time, Action<float> callEveryFrame, Action onFinish = null)
-    {
-        uint id = _UniqueIDGenerator.GetUniqueID();
-        onFinish += () =>
-        {
-            if (_RoutineDict.ContainsKey(id))
-            {
-                StopCoroutine(_RoutineDict[id]);
-                _RoutineDict.Remove(id);
-            }
-        };
-        var routine = CallEveryFrameRoutine(time, callEveryFrame, onFinish);
-        _RoutineDict.Add(id, routine);
-        StartCoroutine(routine);
-        return id; 
-    }
-
-    public void CancelCallEveryFrameInAPeriod(uint id)
-    {
-        if (_RoutineDict.ContainsKey(id))
-        {
-            StopCoroutine(_RoutineDict[id]);
-            _RoutineDict.Remove(id);
-        }
-    }
-
-    IEnumerator CallEveryFrameRoutine(float expireTime, Action<float> callEveryFrame, Action onFinish)
-    {
-        float time = 0;
-        while (time < expireTime)
-        {
-            yield return null;
-            time += GameManager.instance._DelayCallUtil.Timer.DeltaTime;
-            if (callEveryFrame != null)
-            {
-                callEveryFrame(time);
-            }
-        }
-        if (onFinish != null)
-        {
-            onFinish();
-        }
     }
 
     private void Update()

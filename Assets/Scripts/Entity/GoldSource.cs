@@ -9,6 +9,7 @@ public class GoldSource : MonoBehaviour
 
     void Update()
     {
+        //return;
         if (GameManager.instance._DelayCallUtil.GameTime - _lastTime < _generateInterval)
         {
             return;
@@ -17,6 +18,6 @@ public class GoldSource : MonoBehaviour
         var r = GameObject.Instantiate(GameAssets.instance._goldPrefab);
         var moveDir = Vector3.Normalize(PlanetController.instance.transform.position -
             new Vector3(1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 1 - RandomUtil.instance.random.Next(10000) / 10000f * 2, 0));
-        r.SetData(this.transform.position, moveDir, 0.02f); 
+        r.SetData(this.transform.position, moveDir, 0.02f);
     }
 }

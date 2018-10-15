@@ -12,5 +12,7 @@ public class GameConfig : TSingleton<GameConfig>
 
     // sql
     public readonly string _AccountTableName = "Account";
-    public readonly string _AccountName = "Local"; 
+    public readonly string _AccountName = "Local";
+
+    public readonly string _TurretPrefabName = "Turret";
 }

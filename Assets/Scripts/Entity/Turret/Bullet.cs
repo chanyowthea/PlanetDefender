@@ -7,6 +7,7 @@ public class Bullet : Entity
     public float _radius = 0.075f;
     public int Attack { protected set; get; }
     [SerializeField] GameObject _bulletTf;
+    [SerializeField] SpriteRenderer _SpriteRenderer;
 
     void Awake()
     {
@@ -26,14 +27,35 @@ public class Bullet : Entity
         _bulletTf.transform.localEulerAngles = new Vector3(0, 0, angle);
     }
 
-    public void SetData(Vector3 pos, Vector3 moveDir, float moveSpeed, int attack, EFaction faction)
+    private void OnDestroy()
+    {
+        if (_SpriteRenderer.sprite != null)
+        {
+            GameObject.Destroy(_SpriteRenderer.sprite);
+        }
+    }
+
+    public void SetData(Vector3 pos, Vector3 moveDir, float moveSpeed, int attack, EFaction faction, int turretId)
     {
         transform.position = pos;
         _MoveDir = moveDir;
         _MoveSpeed = moveSpeed;
         Attack = attack;
         Faction = faction;
-        Init(); 
+
+        _SpriteRenderer.sprite = null;
+        TurretCSV csv = ConfigDataManager.instance.GetData<TurretCSV>(turretId.ToString());
+        if (csv != null)
+        {
+            var sprite = ResourcesManager.instance.GetSprite(csv._BulletPicture);
+            if (sprite != null)
+            {
+                var lastSize = _SpriteRenderer.size;
+                _SpriteRenderer.sprite = GameObject.Instantiate(sprite);
+                _SpriteRenderer.size = lastSize;
+            }
+        }
+        Init();
     }
 
     public Vector3 V3RotateAround(Vector3 source, Vector3 axis, float angle)

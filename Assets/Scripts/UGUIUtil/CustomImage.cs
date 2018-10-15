@@ -1,7 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
+
+public enum EScaleType
+{
+    Shrink,
+    Expand
+}
 
 public class CustomImage : MonoBehaviour
 {
@@ -12,23 +18,26 @@ public class CustomImage : MonoBehaviour
     public Sprite sprite
     {
         get { return _Image.sprite; }
-        set{ _Image.sprite = value; }
+        set { SetData(value); }
     }
 
-    public enum EScaleType
+    public Vector2 ImageSize
     {
-        Shrink,
-        Expand
+        get
+        {
+            return _Image.rectTransform.sizeDelta;
+        }
     }
 
     public void SetData(Sprite s)
     {
         if (s == null)
         {
+            _Image.sprite = null;
             return;
         }
         // for the layout component affects the rect transform value. 
-        Canvas.ForceUpdateCanvases(); 
+        Canvas.ForceUpdateCanvases();
         var spriteRect = _Mask.rectTransform.rect.size;
         float maskRatio = _Mask.rectTransform.rect.width / _Mask.rectTransform.rect.height; ;
 

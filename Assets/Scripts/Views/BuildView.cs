@@ -134,6 +134,8 @@ class BuildView : BaseUI
                 return;
             }
             image.sprite = ResourcesManager.instance.GetSprite(csv._Picture); 
+            image.rectTransform.sizeDelta = ImageUtil.ResizeSprite(image.sprite.rect.width / image.sprite.rect.height, 
+                image.rectTransform.rect, EScaleType.Expand); 
         }
     }
 }
