@@ -17,6 +17,7 @@ public class UVChainLightning : MonoBehaviour
     private List<Vector3> _linePosList;
     float _ChangeIntervalTime = 0.1f;
     float _CurTime;
+    Vector3 _TargetDir; 
 
     private void Awake()
     {
@@ -62,7 +63,7 @@ public class UVChainLightning : MonoBehaviour
             {
                 startPos = this.startPos + Vector3.up * yOffset;
             }
-
+            _TargetDir = targetPos - startPos; 
             CollectLinPos(startPos, targetPos, Vector3.Distance(startPos, targetPos) * _LengthFactor);
             _linePosList.Add(targetPos);
 
@@ -87,8 +88,10 @@ public class UVChainLightning : MonoBehaviour
             float midY = (startPos.y + destPos.y) / 2;
             float midZ = (startPos.z + destPos.z) / 2;
 
-            midX += (float)(UnityEngine.Random.value - 0.5) * _Displace;
-            midY += (float)(UnityEngine.Random.value - 0.5) * _Displace;
+            var normal = _TargetDir.normalized;
+            var dir = new Vector3(normal.y, -normal.x); 
+            midX += (float)(UnityEngine.Random.value - 0.5) * _Displace * dir.x;
+            midY += (float)(UnityEngine.Random.value - 0.5) * _Displace * dir.y;
             //midZ += (float)(UnityEngine.Random.value - 0.5) * _Displace;
 
             Vector3 midPos = new Vector3(midX, midY, midZ);

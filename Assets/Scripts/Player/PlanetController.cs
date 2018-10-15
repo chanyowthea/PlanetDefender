@@ -7,6 +7,8 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class PlanetController : MonoSingleton<PlanetController>
 {
+    [SerializeField] Camera _Camera;
+    [SerializeField] float _ScrollFactor = 50; 
     float _HealthLapseSpeed = 5;
     public float HealthLapseSpeed
     {
@@ -23,6 +25,7 @@ public class PlanetController : MonoSingleton<PlanetController>
     [SerializeField] Planet _planet;
     uint _DelayCallID;
     bool _isRotate;
+    // 50 - 106
 
     private void Start()
     {
@@ -91,6 +94,14 @@ public class PlanetController : MonoSingleton<PlanetController>
         if (CrossPlatformInputManager.GetButtonUp("Rotate"))
         {
             Rotate(false);
+        }
+
+        var wheel = Input.GetAxis("Mouse ScrollWheel");
+        Debugger.LogGreen("wheel=" + wheel); 
+        if (wheel != 0)
+        {
+            wheel *= _ScrollFactor; 
+            _Camera.fieldOfView = Mathf.Clamp(_Camera.fieldOfView + wheel, 50, 106);
         }
     }
 
