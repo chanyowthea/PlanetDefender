@@ -94,6 +94,7 @@ public class Turret : Army, IShot
         _Attack = csv._Attack;
         _Defense = csv._Defense;
         TurretID = turrectId;
+        _FireCoolDownTime = 1 / (float)csv._AttackSpeed; 
 
         _MaskImage.material = null;
         _MaskImage.material = GameObject.Instantiate(GameAssets.instance._RatioRectMaterial);
@@ -106,6 +107,8 @@ public class Turret : Army, IShot
             _Lightning.startPos = this.transform.position;
             _Lightning.targetPos = Vector3.zero;
         }
+
+        Debugger.LogRed("Distance=" + (Vector3.Distance(PlanetController.instance.transform.position, transform.position))); 
     }
 
     int GetMaxAngle(float distance)
@@ -317,4 +320,12 @@ public class Turret : Army, IShot
 
         _MaskImage.rectTransform.sizeDelta = new Vector2(size.y, size.x);
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(PlanetController.instance.transform.position, 
+            _FireRange + Vector3.Distance(PlanetController.instance.transform.position, transform.position));
+    }
+#endif
 }

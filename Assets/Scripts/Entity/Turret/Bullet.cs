@@ -39,7 +39,6 @@ public class Bullet : Entity
     {
         transform.position = pos;
         _MoveDir = moveDir;
-        _MoveSpeed = moveSpeed;
         Attack = attack;
         Faction = faction;
 
@@ -47,6 +46,7 @@ public class Bullet : Entity
         TurretCSV csv = ConfigDataManager.instance.GetData<TurretCSV>(turretId.ToString());
         if (csv != null)
         {
+            _MoveSpeed = csv._BulletFlySpeed;
             var sprite = ResourcesManager.instance.GetSprite(csv._BulletPicture);
             if (sprite != null)
             {
@@ -85,8 +85,8 @@ public class Bullet : Entity
         var entity = collider.GetComponent<Entity>();
         if (entity != null && entity.Faction != Faction)
         {
-            Debug.LogFormat("entity.name={0}, faction={1}", entity.name, entity.Faction);
-            Debug.LogFormat("bullet.name={0}, faction={1}", this.gameObject.name, this.Faction);
+            //Debug.LogFormat("entity.name={0}, faction={1}", entity.name, entity.Faction);
+            //Debug.LogFormat("bullet.name={0}, faction={1}", this.gameObject.name, this.Faction);
             GameObject.Destroy(this.gameObject);
         }
     }

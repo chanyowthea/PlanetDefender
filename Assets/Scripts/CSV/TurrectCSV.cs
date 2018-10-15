@@ -13,8 +13,8 @@ public class TurretCSV : CSVBaseData
     public int _TechLevel;
     public string _Picture;
     public string _BulletPicture;
-    public int _AttackSpeed; 
-    public int _BulletFlySpeed; 
+    public float _AttackSpeed; 
+    public float _BulletFlySpeed; 
 
     public override string GetPrimaryKey()
     {
@@ -33,7 +33,7 @@ public class TurretCSV : CSVBaseData
         var ms = ReadString("Materials", headers, values);
         _Materials = ms.GetDictionary(); 
         _TechLevel = ReadInt("TechLevel", headers, values);
-        _AttackSpeed = ReadInt("AttackSpeed", headers, values);
-        _BulletFlySpeed = ReadInt("BulletFlySpeed", headers, values);
+        _AttackSpeed = ReadFloat("AttackSpeed", headers, values);
+        _BulletFlySpeed = ReadFloat("BulletFlySpeed", headers, values);
     }
 }

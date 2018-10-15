@@ -10,6 +10,9 @@ class HUDView : BaseUI
 {
     [SerializeField] Text _targetScoreText;
     [SerializeField] Text _scoreText;
+    [SerializeField] Toggle _PauseToggle;
+    [SerializeField] Toggle _NormalToggle;
+    [SerializeField] Toggle _AccelerateToggle;
     int _scoreCount;
     int _CurLevel;
 
@@ -30,6 +33,9 @@ class HUDView : BaseUI
         }
         EventDispatcher.instance.RegisterEvent(EventID.UpdateScore, this, "UpdateScore");
         _HealImage.material.SetFloat("_Ratio", 0);
+        _PauseToggle.onValueChanged.AddListener(OnClickPause);
+        _NormalToggle.onValueChanged.AddListener(OnClickNormal);
+        _AccelerateToggle.onValueChanged.AddListener(OnClickAccelerate);
     }
 
     internal override void Show()
@@ -50,6 +56,9 @@ class HUDView : BaseUI
 
     internal override void Close()
     {
+        _PauseToggle.onValueChanged.RemoveListener(OnClickPause);
+        _NormalToggle.onValueChanged.RemoveListener(OnClickPause);
+        _AccelerateToggle.onValueChanged.RemoveListener(OnClickAccelerate);
         if (_DelayCallID != 0)
         {
             GameManager.instance.CancelCallEveryFrameInAPeriod(_DelayCallID);
@@ -131,21 +140,33 @@ class HUDView : BaseUI
         EventDispatcher.instance.DispatchEvent(EventID.AttackFromPlanet);
     }
 
-    public void OnClickPause()
+    public void OnClickPause(bool value)
     {
-        GameManager.instance.TimeScale = 0;
+        if (value)
+        {
+            GameManager.instance.TimeScale = 0;
+            Debugger.LogRed("OnClickPause"); 
+        }
     }
 
-    public void OnClickNormal()
+    public void OnClickNormal(bool value)
     {
-        GameManager.instance.TimeScale = 1;
+        if (value)
+        {
+            GameManager.instance.TimeScale = 1;
+            Debugger.LogRed("OnClickNormal");
+        }
     }
 
-    public void OnClickAccelerate()
+    public void OnClickAccelerate(bool value)
     {
-        GameManager.instance.TimeScale = 2;
+        if (value)
+        {
+            GameManager.instance.TimeScale = 2;
+            Debugger.LogRed("OnClickAccelerate");
+        }
     }
-    
+
     public void OnClickBuild()
     {
         UIManager.Instance.Open<BuildView>();
@@ -164,7 +185,7 @@ class HUDView : BaseUI
             {
                 EventDispatcher.instance.DispatchEvent(EventID.AddHealth, 1);
                 EventDispatcher.instance.DispatchEvent(EventID.AddGold, -1);
-                
+
                 float maxTime = 1;
                 _DelayCallID = GameManager.instance.CallEveryFrameInAPeriod(maxTime, (time) =>
                 {
