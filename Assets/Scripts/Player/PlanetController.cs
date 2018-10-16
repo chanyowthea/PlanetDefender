@@ -8,7 +8,7 @@ using UnityStandardAssets.CrossPlatformInput;
 public class PlanetController : MonoSingleton<PlanetController>
 {
     [SerializeField] Camera _Camera;
-    [SerializeField] float _ScrollFactor = 50; 
+    [SerializeField] float _ScrollFactor = 50;
     float _HealthLapseSpeed = 5;
     public float HealthLapseSpeed
     {
@@ -25,18 +25,6 @@ public class PlanetController : MonoSingleton<PlanetController>
     [SerializeField] Planet _planet;
     uint _DelayCallID;
     bool _isRotate;
-    // 50 - 106
-
-    private void Start()
-    {
-        EventDispatcher.instance.RegisterEvent(EventID.CreateTurret, this, "CreateTurret");
-        EventDispatcher.instance.RegisterEvent(EventID.AddHealth, this, "AddHealth");
-        _DelayCallID = GameManager.instance.DelayCall(HealthLapseSpeed, () =>
-        {
-            EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -1);
-            _DelayCallID = 0;
-        }, true);
-    }
 
     private void OnDestroy()
     {
@@ -49,9 +37,16 @@ public class PlanetController : MonoSingleton<PlanetController>
         EventDispatcher.instance.UnRegisterEvent(EventID.CreateTurret, this, "CreateTurret");
     }
 
-    public void _Reset()
+    public void Init()
     {
         _planet.Init();
+        EventDispatcher.instance.RegisterEvent(EventID.CreateTurret, this, "CreateTurret");
+        EventDispatcher.instance.RegisterEvent(EventID.AddHealth, this, "AddHealth");
+        _DelayCallID = GameManager.instance.DelayCall(HealthLapseSpeed, () =>
+        {
+            EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -1);
+            _DelayCallID = 0;
+        }, true);
     }
 
     void Rotate(bool value)
@@ -95,13 +90,21 @@ public class PlanetController : MonoSingleton<PlanetController>
         {
             Rotate(false);
         }
-
+#if UNITY_EDITOR || UNITY_EDITOR_WIN
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            Rotate(true);
+        }
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            Rotate(false);
+        }
+#endif
         var wheel = Input.GetAxis("Mouse ScrollWheel");
-        Debugger.LogGreen("wheel=" + wheel); 
         if (wheel != 0)
         {
-            wheel *= _ScrollFactor; 
-            _Camera.fieldOfView = Mathf.Clamp(_Camera.fieldOfView + wheel, 50, 106);
+            wheel *= _ScrollFactor;
+            _Camera.fieldOfView = Mathf.Clamp(_Camera.fieldOfView + wheel, GameConfig.instance._MinFOV, GameConfig.instance._MaxFOV);
         }
     }
 

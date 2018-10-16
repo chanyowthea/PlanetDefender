@@ -33,7 +33,6 @@ public class Turret : Army, IShot
                 {
                     _onDie(_Degree);
                 }
-                Destroy(this.gameObject);
             }
         }
         get

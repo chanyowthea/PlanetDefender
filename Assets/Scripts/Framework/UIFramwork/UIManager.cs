@@ -70,8 +70,9 @@ namespace UIFramework
             _UIParent = new GameObject("UIParent").transform;
             UnityEngine.Object.DontDestroyOnLoad(_UIParent);
             var eventSystem = new GameObject("EventSystem");
-            eventSystem.AddComponent<EventSystem>();
+            var eventSys = eventSystem.AddComponent<EventSystem>();
             eventSystem.AddComponent<StandaloneInputModule>();
+            eventSys.sendNavigationEvents = false; 
             eventSystem.transform.SetParent(_UIParent);
 
             var ns = Enum.GetNames(typeof(EUILayer));

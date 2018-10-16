@@ -14,9 +14,6 @@ public class Planet : Army
     [SerializeField] protected BaseRotate _rotate;
     public BaseRotate rotate { get { return _rotate; } }
 
-    [SerializeField] protected int _minCannonGap = 60;
-    public int minCannonGap { get { return _minCannonGap; } }
-
     [SerializeField] float _VisualField;
     public override float VisualField
     {
@@ -54,27 +51,18 @@ public class Planet : Army
     }
     bool _IsInPoisionState;
 
-    public void Awake()
-    {
-        // 计算所有能建造的炮塔位置
-        int curDegree = 0;
-        while (curDegree < 360)
-        {
-            _allDegrees.Add(curDegree);
-            curDegree += _minCannonGap;
-        }
-
-        Init();
-    }
-
     public override void Init()
     {
         base.Init();
         Faction = EFaction.Ours;
 
-        // TODO 使用表加载
-        MaxHP = 10;
-        HP = MaxHP;
+        var csv = ConfigDataManager.instance.GetData<PlayerCSV>(ArchiveManager.instance.GetCurrentLevel().ToString());
+        if (csv != null)
+        {
+            MaxHP = csv._MaxHP;
+            HP = MaxHP;
+            _Defense = csv._Defense;
+        }
         transform.localEulerAngles = Vector3.zero;
         _PoisionPivot.SetActive(_IsInPoisionState);
     }

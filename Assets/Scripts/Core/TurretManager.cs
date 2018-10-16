@@ -18,6 +18,15 @@ public class TurretManager : TSingleton<TurretManager>
         return list;
     }
 
+    public Turret GetTurret(int degree)
+    {
+        if (!_OccupiedDegrees.ContainsKey(degree))
+        {
+            return null;
+        }
+        return _OccupiedDegrees[degree];
+    }
+
     public void AddTurret(int degree, int turretId, GameObject pivot, float radius)
     {
         var csv = ConfigDataManager.instance.GetData<TurretCSV>(turretId.ToString());
@@ -59,7 +68,7 @@ public class TurretManager : TSingleton<TurretManager>
         c.name = "Pivot_" + degree;
         c.transform.SetParent(PlanetController.instance.transform);
         c.SetActive(true);
-        c.transform.localScale = Vector3.one; 
+        c.transform.localScale = Vector3.one;
         Turret turret = ResourcesManager.instance.GetTurret(GameConfig.instance._TurretPrefabName);
         if (turret == null)
         {
@@ -126,8 +135,10 @@ public class TurretManager : TSingleton<TurretManager>
 
     public void RemoveTurret(int degree)
     {
-        if (degree >= 0)
+        if (degree >= 0 && _OccupiedDegrees.ContainsKey(degree))
         {
+            var turret = _OccupiedDegrees[degree];
+            GameObject.Destroy(turret.gameObject);
             _OccupiedDegrees.Remove(degree);
         }
     }

@@ -145,7 +145,7 @@ class HUDView : BaseUI
         if (value)
         {
             GameManager.instance.TimeScale = 0;
-            Debugger.LogRed("OnClickPause"); 
+            Debugger.LogRed("OnClickPause");
         }
     }
 
@@ -199,4 +199,14 @@ class HUDView : BaseUI
             }
         }
     }
+
+#if UNITY_EDITOR || UNITY_EDITOR_WIN
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            OnClickAttack();
+        }
+    }
+#endif
 }
