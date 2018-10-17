@@ -10,33 +10,9 @@ public class CameraMove : MonoBehaviour
     //记录上一次手机触摸位置判断用户是在左放大还是缩小手势
     private Vector2 oldPosition1;
     private Vector2 oldPosition2;
-    private Camera m_Camera;
+    [SerializeField] Camera m_Camera;
     float distance;
-
-    //初始化游戏信息设置
-    void Start()
-    {
-        m_Camera = this.GetComponent<Camera>();
-
-        if (Debugger.LogToFile == true)
-        {
-            gameObject.AddComponent<DebuggerFileOutput>();
-        }
-    }
-
-    void OnApplicationQuit()
-    {
-        Debugger.OnApplicationQuit();
-    }
-
-    void OnApplicationPause(bool paused)
-    {
-        if (paused)
-        {
-            Debugger.Flush();
-        }
-    }
-
+    
     //这个变量用来记录单指双指的变换
     private bool m_IsSingleFinger;
 
@@ -68,11 +44,8 @@ public class CameraMove : MonoBehaviour
                 float lastTouchDistance = Vector3.Distance(oldPosition1, oldPosition2);
 
                 //计算上次和这次双指触摸之间的距离差距
-                //然后去更改摄像机的距离
                 distance = (currentTouchDistance - lastTouchDistance) * scaleFactor * Time.deltaTime;
-                _LogString = "currentTouchDistance=" + currentTouchDistance + ", lastTouchDistance=" + lastTouchDistance
-                    + ",currentTouchDistance - lastTouchDistance=" + (currentTouchDistance - lastTouchDistance) + "distance=" + distance;
-                Debugger.Log(_LogString);
+                distance *= -1; 
                 m_Camera.fieldOfView = Mathf.Clamp(m_Camera.fieldOfView + distance, GameConfig.instance._MinFOV, GameConfig.instance._MaxFOV);
 
                 //备份上一次触摸点的位置，用于对比
@@ -81,6 +54,4 @@ public class CameraMove : MonoBehaviour
             }
         }
     }
-
-    string _LogString = ""; 
 }

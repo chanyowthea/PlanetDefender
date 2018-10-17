@@ -133,8 +133,9 @@ class HUDView : BaseUI
     {
         if (TurretManager.instance.GetAllTurrets().Count == 0)
         {
-            var tips = UIManager.Instance.Open<MessageView>();
-            tips.SetData("请建造炮塔后再进行攻击");
+            //var tips = UIManager.Instance.Open<MessageView>();
+            //tips.SetData("请建造炮塔后再进行攻击");
+            COW.TweenTipsManager.instance.ShowTips("请建造炮塔后再进行攻击" + Time.time); 
             return;
         }
         EventDispatcher.instance.DispatchEvent(EventID.AttackFromPlanet);

@@ -45,6 +45,12 @@ public class Facade : MonoSingleton<Facade>
         ConfigDataManager.instance.LoadCSV<UICSV>("UI");
         LocManager.instance.Init(LocLang.English);
         _DelayCallUtil = gameObject.AddComponent<DelayCallUtil>();
+        COW.TweenTipsManager.instance.Init(); 
+    }
+
+    private void OnDestroy()
+    {
+        COW.TweenTipsManager.instance.Clear();
     }
 
     public void ChangeScene(string sceneName)
