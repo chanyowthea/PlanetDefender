@@ -97,7 +97,6 @@ public class Planet : Army
         }
 
         HP -= value;
-        Debugger.Log("do hurt! hurt=" + value, LogColor.Green);
     }
 
     public void CreateCannon(int degree, int turrectId)
