@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UIFramework
 {
-    enum EUILayer
+    public enum EUILayer
     {
         FullScreen = 0,
         Resident = 100,
@@ -12,7 +12,7 @@ namespace UIFramework
         Tips = 300,
     }
 
-    enum EUIType
+    public enum EUIType
     {
         FullScreen,
         Resident,
@@ -21,7 +21,7 @@ namespace UIFramework
     }
 
     [System.Serializable]
-    class NavigationData
+    public class NavigationData
     {
         public EUILayer _Layer;
         public bool _CloseByDestroy; 

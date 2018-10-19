@@ -269,8 +269,7 @@ public class Turret : Army, IShot
             bool inFireRange = GetLightningFireTarget() != null;
             if (!inFireRange)
             {
-                MessageView v = UIFramework.UIManager.Instance.Open<MessageView>();
-                v.SetData("No enemy in fire range! ");
+                MessageManager.instance.ShowTips("No enemy in fire range! ");
                 return;
             }
             CancelLightningFire();

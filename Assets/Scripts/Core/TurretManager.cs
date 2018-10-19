@@ -40,8 +40,7 @@ public class TurretManager : TSingleton<TurretManager>
         degree %= 360;
         if (_OccupiedDegrees.ContainsKey(degree))
         {
-            var v = UIManager.Instance.Open<MessageView>();
-            v.SetData("位置已被占用,建造失败");
+            MessageManager.instance.ShowTips("位置已被占用,建造失败"); 
             Debug.LogFormat("degree {0} has been occupied! ", degree);
             Debugger.Log(string.Format("degree {0} has been occupied! ", degree));
             return;
@@ -51,8 +50,7 @@ public class TurretManager : TSingleton<TurretManager>
         int cost = csv._Price;
         if (ArchiveManager.instance.GetGoldCount() < cost)
         {
-            var v = UIManager.Instance.Open<MessageView>();
-            v.SetData("金币不足,建造失败");
+            MessageManager.instance.ShowTips("金币不足,建造失败");
             return;
         }
 
@@ -104,8 +102,7 @@ public class TurretManager : TSingleton<TurretManager>
         {
             if (ArchiveManager.instance.GetMaterialCount(item.Key) < item.Value)
             {
-                var v = UIManager.Instance.Open<MessageView>();
-                v.SetData("材料不足,建造失败");
+                MessageManager.instance.ShowTips("材料不足,建造失败");
                 return false;
             }
         }

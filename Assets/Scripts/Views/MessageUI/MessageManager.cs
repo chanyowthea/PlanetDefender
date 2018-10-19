@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using UIFramework;
 using UnityEngine;
 
-namespace COW
-{
-    public class TweenTipsManager : TSingleton<TweenTipsManager>
+    public class MessageManager : TSingleton<MessageManager>
     {
         private const int MAX_TIPS = 6;
         private const int BASE_DEPTH = 900;
@@ -77,5 +75,4 @@ namespace COW
             m_RunnigIndex = (m_RunnigIndex + 1) % MAX_TIPS;
         }
     }
-}
 

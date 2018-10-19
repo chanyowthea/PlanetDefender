@@ -28,8 +28,7 @@ public class BuildSlot : MonoBehaviour
             if (turret != null)
             {
                 TurretManager.instance.RemoveTurret(Degree);
-                var view = UIManager.Instance.Open<MessageView>();
-                view.SetData("Dismantled successfully. ");
+                MessageManager.instance.ShowTips("Dismantled successfully. ");
                 OnBuild(0, false);
             }
         });

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UIFramework
 {
-    class BaseUI : MonoBehaviour
+    public class BaseUI : MonoBehaviour
     {
         [SerializeField]
         internal NavigationData _NaviData = new NavigationData();

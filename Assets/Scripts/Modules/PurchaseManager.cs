@@ -45,15 +45,13 @@ public class PurchaseManager : TSingleton<PurchaseManager>
         var csv = ConfigDataManager.instance.GetData<OreCSV>(id.ToString());
         if (csv == null)
         {
-            var v = UIManager.Instance.Open<MessageView>();
-            v.SetData("Unknow error! ");
+            MessageManager.instance.ShowTips("Unknow error! ");
             Debugger.LogError("csv is empty! ");
             return 1;
         }
         if (ArchiveManager.instance.GetGoldCount() < csv._Price)
         {
-            var v = UIManager.Instance.Open<MessageView>();
-            v.SetData("gold is not enough! ");
+            MessageManager.instance.ShowTips("gold is not enough! ");
             Debugger.LogError("gold is not enough! ");
             return 2;
         }

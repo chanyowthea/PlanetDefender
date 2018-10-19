@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UIFramework;
 using UnityEngine.UI;
-using COW;
 
 class MessageView : BaseUI
 {
-    [SerializeField] CanvasGroup _canvasGroup;
+    //[SerializeField] CanvasGroup _canvasGroup;
     [SerializeField] Text _messageText;
-    uint _DelayCallID;
+    //uint _DelayCallID;
 
     public MessageView()
     {
@@ -17,30 +16,30 @@ class MessageView : BaseUI
         _NaviData._Layer = EUILayer.Tips;
     }
 
-    public override void Open(NavigationData data)
-    {
-        base.Open(data);
-        //Facade.instance.DelayCall(1, () =>
-        //{
-        //    UIManager.Instance.Close(this);
-        //    _DelayCallID = 0;
-        //});
-    }
+    //public override void Open(NavigationData data)
+    //{
+    //    base.Open(data);
+    //    //Facade.instance.DelayCall(1, () =>
+    //    //{
+    //    //    UIManager.Instance.Close(this);
+    //    //    _DelayCallID = 0;
+    //    //});
+    //}
 
-    internal override void Close()
-    {
-        if (_DelayCallID != 0)
-        {
-            Facade.instance.CancelDelayCall(_DelayCallID);
-            _DelayCallID = 0;
-        }
-        base.Close();
-    }
+    //internal override void Close()
+    //{
+    //    if (_DelayCallID != 0)
+    //    {
+    //        Facade.instance.CancelDelayCall(_DelayCallID);
+    //        _DelayCallID = 0;
+    //    }
+    //    base.Close();
+    //}
 
-    public void SetData(string s)
-    {
-        _messageText.text = s;
-    }
+    //public void SetData(string s)
+    //{
+    //    _messageText.text = s;
+    //}
 
     private Vector3 m_BasePos;
     private Vector3 m_CurrentPos;
@@ -73,7 +72,7 @@ class MessageView : BaseUI
         m_ParentTP.ResetToBeginning();
         m_ParentTP.transform.localPosition = m_BasePos;
         m_CurrentPos = m_BasePos;
-        TweenTipsManager.instance.UpdateRunningIndex();
+        MessageManager.instance.UpdateRunningIndex();
         Hide(); 
     }
 }

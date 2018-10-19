@@ -45,8 +45,7 @@ class TurretSelectView : BaseUI
             Debugger.Log("cannot find csv data with id " + turretId);
             return;
         }
-        var ui = UIManager.Instance.Open<MessageView>();
-        ui.SetData(string.Format("Build {0} Success in Degree {1}! ", csv._Name, degree));
+        MessageManager.instance.ShowTips(string.Format("Build {0} Success in Degree {1}! ", csv._Name, degree));
         UIManager.Instance.PopupLastFullScreenUI();
     }
 

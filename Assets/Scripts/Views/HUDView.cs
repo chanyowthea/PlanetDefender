@@ -133,9 +133,7 @@ class HUDView : BaseUI
     {
         if (TurretManager.instance.GetAllTurrets().Count == 0)
         {
-            //var tips = UIManager.Instance.Open<MessageView>();
-            //tips.SetData("请建造炮塔后再进行攻击");
-            COW.TweenTipsManager.instance.ShowTips("请建造炮塔后再进行攻击" + Time.time); 
+            MessageManager.instance.ShowTips("请建造炮塔后再进行攻击"); 
             return;
         }
         EventDispatcher.instance.DispatchEvent(EventID.AttackFromPlanet);
@@ -195,8 +193,7 @@ class HUDView : BaseUI
             }
             else
             {
-                var v = UIManager.Instance.Open<MessageView>();
-                v.SetData("金币不足！");
+                MessageManager.instance.ShowTips("金币不足！");
             }
         }
     }
