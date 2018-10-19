@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UIFramework;
 using UnityEngine;
-using UnityEngine.EventSystems; 
+using UnityEngine.EventSystems;
 
 public class CameraInputUI : BaseUI, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -11,7 +11,7 @@ public class CameraInputUI : BaseUI, IDragHandler, IPointerDownHandler, IPointer
     public float _WorldHeight = 100;
 
     // set camera move speed. 
-    public float moveSpeed = 30; 
+    public float moveSpeed = 30;
 
     private Vector2 _curPosition;
     private Vector2 _velocity;
@@ -19,6 +19,13 @@ public class CameraInputUI : BaseUI, IDragHandler, IPointerDownHandler, IPointer
     float _MinGapY;
 
     Vector2 _LastPosition;
+
+    public CameraInputUI()
+    {
+        _NaviData._Type = EUIType.Coexisting;
+        _NaviData._Layer = EUILayer.FullScreen;
+        _NaviData._IsCloseCoexistingUI = false;
+    }
 
     private void Start()
     {
@@ -33,7 +40,10 @@ public class CameraInputUI : BaseUI, IDragHandler, IPointerDownHandler, IPointer
 
     void Update()
     {
-        MiniMapController.Instance.SetPos(CameraController.Instance._MainCamera.transform.position);
+        if (MiniMapController.Instance != null && MiniMapController.Instance.gameObject.activeSelf)
+        {
+            MiniMapController.Instance.SetPos(CameraController.Instance._MainCamera.transform.position);
+        }
         if (_velocity == Vector2.zero)
         {
             return;
@@ -115,7 +125,7 @@ public class CameraInputUI : BaseUI, IDragHandler, IPointerDownHandler, IPointer
     }
 
     public void OnDrag(PointerEventData eventData)
-    { 
+    {
         // 获取鼠标的x和y的值，乘以速度和Time.deltaTime是因为这个可以是运动起来更平滑  
         float h = -Input.GetAxis("Mouse X") * moveSpeed * Time.deltaTime;
         float v = -Input.GetAxis("Mouse Y") * moveSpeed * Time.deltaTime;

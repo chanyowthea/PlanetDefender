@@ -15,6 +15,8 @@ class HUDView : BaseUI
     [SerializeField] Toggle _AccelerateToggle;
     int _scoreCount;
     int _CurLevel;
+    CameraInputUI _CameraInput;
+    bool _IsShowMiniMap;
 
     public HUDView()
     {
@@ -36,6 +38,7 @@ class HUDView : BaseUI
         _PauseToggle.onValueChanged.AddListener(OnClickPause);
         _NormalToggle.onValueChanged.AddListener(OnClickNormal);
         _AccelerateToggle.onValueChanged.AddListener(OnClickAccelerate);
+        _CameraInput = UIManager.Instance.Open<CameraInputUI>();
     }
 
     internal override void Show()
@@ -46,16 +49,25 @@ class HUDView : BaseUI
         {
             ui.UpdateView(true, false);
         }
+        if (_CameraInput != null)
+        {
+            _CameraInput.Show();
+        }
     }
 
     internal override void Hide()
     {
+        if (_CameraInput != null)
+        {
+            _CameraInput.Hide();
+        }
         GameManager.instance.TimeScale = 0;
         base.Hide();
     }
 
     internal override void Close()
     {
+        UIManager.Instance.Close<CameraInputUI>();
         _PauseToggle.onValueChanged.RemoveListener(OnClickPause);
         _NormalToggle.onValueChanged.RemoveListener(OnClickPause);
         _AccelerateToggle.onValueChanged.RemoveListener(OnClickAccelerate);
@@ -133,7 +145,7 @@ class HUDView : BaseUI
     {
         if (TurretManager.instance.GetAllTurrets().Count == 0)
         {
-            MessageManager.instance.ShowTips("请建造炮塔后再进行攻击"); 
+            MessageManager.instance.ShowTips("请建造炮塔后再进行攻击");
             return;
         }
         EventDispatcher.instance.DispatchEvent(EventID.AttackFromPlanet);
@@ -144,7 +156,6 @@ class HUDView : BaseUI
         if (value)
         {
             GameManager.instance.TimeScale = 0;
-            Debugger.LogRed("OnClickPause");
         }
     }
 
@@ -153,7 +164,6 @@ class HUDView : BaseUI
         if (value)
         {
             GameManager.instance.TimeScale = 1;
-            Debugger.LogRed("OnClickNormal");
         }
     }
 
@@ -162,8 +172,20 @@ class HUDView : BaseUI
         if (value)
         {
             GameManager.instance.TimeScale = 2;
-            Debugger.LogRed("OnClickAccelerate");
         }
+    }
+
+    public void OnClickMiniMap()
+    {
+        if (!_IsShowMiniMap)
+        {
+            UIManager.Instance.Open<MiniMapUI>();
+        }
+        else
+        {
+            UIManager.Instance.Close<MiniMapUI>();
+        }
+        _IsShowMiniMap = !_IsShowMiniMap; 
     }
 
     public void OnClickBuild()

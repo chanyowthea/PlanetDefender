@@ -16,3 +16,5 @@ MallUI,MallUI
 SettingsUI,SettingsUI
 MallPurchaseUI,MallPurchaseUI
 InventoryUI,InventoryUI
+CameraInputUI,CameraInputUI
+MiniMapUI,MiniMapUI

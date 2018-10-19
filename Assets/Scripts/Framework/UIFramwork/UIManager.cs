@@ -141,13 +141,14 @@ namespace UIFramework
             }
             ui.transform.SetParent(_UILayers[ui._NaviData._Layer]);
             ui.CanvasComp.sortingOrder = (int)ui._NaviData._Layer;
-            ui.Open(data);
             if (ui._NaviData._Type == EUIType.FullScreen)
             {
                 HideFullScreenUI(CurFullScreenUI);
             }
             AddTargetUI(ui);
 
+            // run open logic and it's base function after adding target ui. 
+            ui.Open(data);
             return ui;
         }
 
@@ -209,6 +210,7 @@ namespace UIFramework
             BaseUI ui = FindLastUI<T>(temp._NaviData._Type);
             if (ui == null)
             {
+                Debugger.LogFormat("cannot find last ui with type {0}", temp._NaviData._Type); 
                 return;
             }
 
