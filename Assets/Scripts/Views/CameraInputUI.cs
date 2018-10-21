@@ -11,7 +11,7 @@ public class CameraInputUI : BaseUI, IDragHandler, IPointerDownHandler, IPointer
     public float _WorldHeight = 100;
 
     // set camera move speed. 
-    public float moveSpeed = 30;
+    public float moveSpeed = 100;
 
     private Vector2 _curPosition;
     private Vector2 _velocity;
@@ -121,6 +121,7 @@ public class CameraInputUI : BaseUI, IDragHandler, IPointerDownHandler, IPointer
     public void OnPointerDown(PointerEventData eventData)
     {
         _curPosition = CameraController.Instance._MainCamera.transform.position;
+        _LastPosition = _curPosition;
         _velocity = Vector3.zero;
     }
 

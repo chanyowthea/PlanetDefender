@@ -44,7 +44,8 @@ class HUDView : BaseUI
     internal override void Show()
     {
         base.Show();
-        GameManager.instance.TimeScale = 1;
+        Debugger.Log(LogUtil.GetCurMethodName());
+        GameManager.instance.RestoreTimeScale();
         var ui = UIManager.Instance.GetCurrentResidentUI<TopResidentUI>(); if (ui != null)
         {
             ui.UpdateView(true, false);
@@ -63,6 +64,7 @@ class HUDView : BaseUI
         }
         GameManager.instance.TimeScale = 0;
         base.Hide();
+        Debugger.Log(LogUtil.GetCurMethodName());
     }
 
     internal override void Close()
@@ -97,6 +99,7 @@ class HUDView : BaseUI
 
     internal override void ClearData()
     {
+        _IsShowMiniMap = false; 
         if (_HealImage.material != null)
         {
             GameObject.Destroy(_HealImage.material);

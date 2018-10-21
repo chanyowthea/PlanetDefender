@@ -189,8 +189,13 @@ public class Planet : Army
 
     void OnTriggerEnter(Collider collider)
     {
-        //Debugger.LogRed("OnTriggerEnter=" + collider.name);
+        // need to use a universal method
         ExecuteAttack(collider.gameObject.GetComponent<Enemy>());
+        var gold = collider.gameObject.GetComponent<Gold>();
+        if (gold != null)
+        {
+            EventDispatcher.instance.DispatchEvent(EventID.AddGold, (int)gold.HP);
+        }
     }
 
     void ExecuteAttack(Enemy rock)
@@ -203,4 +208,11 @@ public class Planet : Army
         //EventDispatcher.instance.DispatchEvent(EventID.AddHealth, -BattleUtil.CalcDamage(rock.Attack, _Defense));
         DoHurt(rock.EnemyID);
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, VisualField);
+    }
+#endif
 }

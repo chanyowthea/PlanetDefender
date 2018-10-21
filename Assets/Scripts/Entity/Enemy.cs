@@ -95,7 +95,7 @@ public class Enemy : Entity
     void OnTriggerEnter(Collider collider)
     {
         // 撞到星球就消失
-        if (collider.gameObject.GetComponent<PlanetController>() != null)
+        if (collider.gameObject.GetComponent<Planet>() != null)
         {
             HP = 0;
         }

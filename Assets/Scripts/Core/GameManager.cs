@@ -8,6 +8,7 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
     public DelayCallUtil _DelayCallUtil { private set; get; }
+    private float _LastTimeScale = 1;
     public float TimeScale
     {
         get
@@ -16,6 +17,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
         set
         {
+            _LastTimeScale = _DelayCallUtil.Timer._TimeScale;
             _DelayCallUtil.Timer._TimeScale = value;
         }
     }
@@ -35,7 +37,7 @@ public class GameManager : MonoSingleton<GameManager>
         ConfigDataManager.instance.LoadCSV<PlayerCSV>("Player");
         ArchiveManager.instance.OnEnterPlay();
         PurchaseManager.instance.Init();
-        PlanetController.instance.Init(); 
+        PlanetController.instance.Init();
         int level = ArchiveManager.instance.GetCurrentLevel();
         var v = UIManager.Instance.Open<HUDView>();
         v.SetData(level);
@@ -43,6 +45,11 @@ public class GameManager : MonoSingleton<GameManager>
         //{
         //    ArchiveManager.instance.ChangeMaterialsCount(i, 100);
         //}
+    }
+
+    public void RestoreTimeScale()
+    {
+        TimeScale = _LastTimeScale;
     }
 
     public void OnEnd()

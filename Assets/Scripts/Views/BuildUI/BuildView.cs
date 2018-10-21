@@ -8,7 +8,6 @@ class BuildView : BaseUI
 {
     [SerializeField] BuildSlot _SlotPrefab;
     [SerializeField] RectTransform _planetRtf;
-    float _lastTimeScale;
     int _GapDegree = 60;
     List<BuildSlot> _Slots = new List<BuildSlot>();
 
@@ -25,8 +24,6 @@ class BuildView : BaseUI
         EventDispatcher.instance.RegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
 
         _planetRtf.localEulerAngles = PlanetController.instance.transform.localEulerAngles;
-        _lastTimeScale = GameManager.instance.TimeScale;
-        GameManager.instance.TimeScale = 0;
 
         _SlotPrefab.gameObject.SetActive(false); 
         for (int i = 0, length = 360 / _GapDegree; i < length; i++)
@@ -89,7 +86,6 @@ class BuildView : BaseUI
         _Slots.Clear();
 
         EventDispatcher.instance.UnRegisterEvent(EventID.CreateTurretSuccess, this, "BuildSuccess");
-        GameManager.instance.TimeScale = _lastTimeScale;
         base.Close();
     }
 

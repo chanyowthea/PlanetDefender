@@ -61,7 +61,7 @@ public class Gold : Entity
     {
         Debug.Log("target collider name=" + collider.name);
         // 撞到星球就消失
-        if (collider.gameObject.GetComponent<PlanetController>() != null)
+        if (collider.gameObject.GetComponent<Planet>() != null)
         {
             Destroy(this.gameObject);
         }

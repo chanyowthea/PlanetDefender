@@ -50,4 +50,17 @@ public class GameAssets : MonoSingleton<GameAssets>
             return _goldParent;
         }
     }
+
+    static GameObject _TurretParent;
+    public static GameObject TurretParent
+    {
+        get
+        {
+            if (_TurretParent == null)
+            {
+                _TurretParent = new GameObject("TurretParent");
+            }
+            return _TurretParent;
+        }
+    }
 }

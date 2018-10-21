@@ -237,14 +237,7 @@ namespace UIFramework
             // 移除栈中各UI
             RemoveTargetUI(ui);
 
-            // 目前只有FullScreen类型的支持导航
-            // 处理全屏界面的共存UI
-            // 显示新的UI
-            if (ui._NaviData._Type == EUIType.FullScreen)
-            {
-                ShowFullScreenUI(CurFullScreenUI);
-            }
-
+            ui.Close();
             // 推入对象池
             // 这里看看有什么优化方案，目前是Push和ui.CloseInternal分别判断了一次_CloseByDestroy
             if (!ui._NaviData._CloseByDestroy)
@@ -252,7 +245,13 @@ namespace UIFramework
                 Push(ui);
             }
 
-            ui.Close();
+            // 目前只有FullScreen类型的支持导航
+            // 处理全屏界面的共存UI
+            // 显示新的UI
+            if (ui._NaviData._Type == EUIType.FullScreen)
+            {
+                ShowFullScreenUI(CurFullScreenUI);
+            }
         }
 
         public void RemoveFromNavigation<T>(T ui)

@@ -24,7 +24,6 @@ public class PlanetController : MonoSingleton<PlanetController>
 
     [SerializeField] Planet _planet;
     uint _DelayCallID;
-    bool _isRotate;
 
     private void OnDestroy()
     {
@@ -99,13 +98,27 @@ public class PlanetController : MonoSingleton<PlanetController>
         {
             Rotate(false);
         }
-#endif
         var wheel = Input.GetAxis("Mouse ScrollWheel");
         if (wheel != 0)
         {
             wheel *= _ScrollFactor;
             _Camera.fieldOfView = Mathf.Clamp(_Camera.fieldOfView + wheel, GameConfig.instance._MinFOV, GameConfig.instance._MaxFOV);
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = CameraController.Instance._MainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, LayerMask.GetMask("Turret")))
+            {
+                var turret = hit.transform.GetComponent<Turret>();
+                if (turret != null)
+                {
+                    turret.OnClick();
+                }
+                Debugger.Log("hit.name=" + hit.transform.name);
+            }
+        }
+#endif
     }
 
     public bool IsInVisualField(Vector3 pos)
@@ -115,15 +128,6 @@ public class PlanetController : MonoSingleton<PlanetController>
             return false;
         }
         return _planet.IsInVisualField(pos);
-    }
-
-    void OnTriggerEnter(Collider collider)
-    {
-        var gold = collider.gameObject.GetComponent<Gold>();
-        if (gold != null)
-        {
-            EventDispatcher.instance.DispatchEvent(EventID.AddGold, (int)gold.HP);
-        }
     }
 
     public float GetHP()
@@ -143,11 +147,4 @@ public class PlanetController : MonoSingleton<PlanetController>
         }
         return _planet.HP < _planet.MaxHP;
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, _planet.VisualField);
-    }
-#endif
 }
