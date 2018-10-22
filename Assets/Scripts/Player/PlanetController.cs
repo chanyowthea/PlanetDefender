@@ -104,7 +104,8 @@ public class PlanetController : MonoSingleton<PlanetController>
             wheel *= _ScrollFactor;
             _Camera.fieldOfView = Mathf.Clamp(_Camera.fieldOfView + wheel, GameConfig.instance._MinFOV, GameConfig.instance._MaxFOV);
         }
-        if (Input.GetMouseButtonDown(0))
+#endif
+        if (Input.touchCount == 1)
         {
             Ray ray = CameraController.Instance._MainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -118,7 +119,6 @@ public class PlanetController : MonoSingleton<PlanetController>
                 Debugger.Log("hit.name=" + hit.transform.name);
             }
         }
-#endif
     }
 
     public bool IsInVisualField(Vector3 pos)
