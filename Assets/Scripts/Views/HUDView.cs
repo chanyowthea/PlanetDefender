@@ -38,7 +38,7 @@ class HUDView : BaseUI
         _PauseToggle.onValueChanged.AddListener(OnClickPause);
         _NormalToggle.onValueChanged.AddListener(OnClickNormal);
         _AccelerateToggle.onValueChanged.AddListener(OnClickAccelerate);
-        _CameraInput = UIManager.Instance.Open<CameraInputUI>();
+        //_CameraInput = UIManager.Instance.Open<CameraInputUI>();
     }
 
     internal override void Show()
@@ -69,7 +69,7 @@ class HUDView : BaseUI
 
     internal override void Close()
     {
-        UIManager.Instance.Close<CameraInputUI>();
+        //UIManager.Instance.Close<CameraInputUI>();
         _PauseToggle.onValueChanged.RemoveListener(OnClickPause);
         _NormalToggle.onValueChanged.RemoveListener(OnClickPause);
         _AccelerateToggle.onValueChanged.RemoveListener(OnClickAccelerate);

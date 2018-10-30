@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GoldSource : MonoBehaviour
 {
-    [SerializeField] float _generateInterval = 2;
+    [SerializeField] float _generateInterval = 1;
     float _lastTime;
 
     void Update()

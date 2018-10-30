@@ -3,7 +3,7 @@
 1,箭塔,2,1,4,1-2,1,SimpleArcher,ArcherBullet,1,0.1
 2,火炮,4,1,6,1-1;2-1,1,Cannon,Bullet,1,0.15
 3,雷电枪,6,2,8,2-1;3-1,1,LightningGun,LightningBullet,1,0.05
-4,电热炮,10,2,10,3-2;4-1,2,LightningGun,Bullet,1,0.2
-5,电磁炮,15,2,14,1-3;2-2;4-1,2,LightningGun,Bullet,2,0.2
-6,微波导弹,50,1,18,4-2;5-2;11-1,3,LightningGun,Bullet,0.5,0.05
-7,粒子束枪,20,1,22,9-2;12-1,3,LightningGun,Bullet,1,0.05
+4,电热炮,10,2,10,3-2;4-1,2,FireGun,FireBullet,1,0.2
+5,电磁炮,15,2,14,1-3;2-2;4-1,2,MagneticGun,Bullet,2,0.2
+6,微波导弹,50,1,18,4-2;5-2;11-1,3,Missile,MissileBullet,0.5,0.05
+7,粒子束枪,20,1,22,9-2;12-1,3,BeamGun,Bullet,1,0.05
